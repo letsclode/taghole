@@ -9,6 +9,11 @@ abstract class BaseAuthRepository {
   Future<void> signInAnonymously();
   User? getCurrentUser();
   Future<void> signOut();
+  Future<void> sendPasswordResetEmail({required String email});
+  Future<void> upgradeUserAccount(String email, String password);
+  Future<String> signInWithEmailAndPassword(String email, String password);
+  Future<String> createUserWithEmailAndPassword(
+      {required String email, required String password, required String name});
 }
 
 final authRepositoryProvider =
@@ -45,9 +50,47 @@ class AuthRepository implements BaseAuthRepository {
   Future<void> signOut() async {
     try {
       await ref.read(firebaseAuthProvider).signOut();
-      await signInAnonymously();
     } on FirebaseAuthException catch (e) {
       throw CustomException(message: e.message);
     }
+  }
+
+  @override
+  Future<String> createUserWithEmailAndPassword(
+      {required String email,
+      required String password,
+      required String name}) async {
+    final authResult = await ref
+        .read(firebaseAuthProvider)
+        .createUserWithEmailAndPassword(email: email, password: password);
+    // await updateUserName(authResult.user!, name);
+    return authResult.user!.uid;
+  }
+
+  @override
+  Future<String> signInWithEmailAndPassword(
+      String email, String password) async {
+    return (await ref
+            .read(firebaseAuthProvider)
+            .signInWithEmailAndPassword(email: email, password: password))
+        .user!
+        .uid;
+  }
+
+  @override
+  Future sendPasswordResetEmail({required String email}) async {
+    return await ref
+        .read(firebaseAuthProvider)
+        .sendPasswordResetEmail(email: email);
+  }
+
+  @override
+  Future upgradeUserAccount(String email, String password) async {
+    AuthCredential? credential =
+        EmailAuthProvider.credential(email: email, password: password);
+    await ref
+        .read(firebaseAuthProvider)
+        .currentUser!
+        .linkWithCredential(credential); //TODO: create account in firestore
   }
 }

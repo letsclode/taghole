@@ -5,6 +5,8 @@ import '../../BottomNavBarPages/views/ComplaintPage.dart';
 import '../../BottomNavBarPages/views/MapPage.dart';
 
 class Home extends StatefulWidget {
+  const Home({super.key});
+
   @override
   _HomeState createState() => _HomeState();
 }
@@ -12,7 +14,11 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _currentIndex = 0;
 
-  final List<Widget> _children = [ComplaintPage(), MapPage(), AccountPage()];
+  final List<Widget> _children = [
+    ComplaintPage(),
+    MapPage(),
+    const AccountPage()
+  ];
 
   void onTabTapped(int index) {
     setState(() {
@@ -29,28 +35,28 @@ class _HomeState extends State<Home> {
         currentIndex: _currentIndex,
         items: [
           BottomNavigationBarItem(
-              activeIcon: new Tab(
-                icon: new Image.asset(
+              activeIcon: Tab(
+                icon: Image.asset(
                   "assets/Navbar/home.png",
                   height: 32,
                 ),
               ),
-              icon: new Tab(
-                icon: new Image.asset(
+              icon: Tab(
+                icon: Image.asset(
                   "assets/Navbar/home.png",
                   height: 22,
                 ),
               ),
               label: 'Home'),
           BottomNavigationBarItem(
-            activeIcon: new Tab(
-              icon: new Image.asset(
+            activeIcon: Tab(
+              icon: Image.asset(
                 "assets/Navbar/map.png",
                 height: 32,
               ),
             ),
-            icon: new Tab(
-              icon: new Image.asset(
+            icon: Tab(
+              icon: Image.asset(
                 "assets/Navbar/map.png",
                 height: 22,
               ),
@@ -58,14 +64,14 @@ class _HomeState extends State<Home> {
             label: 'Map',
           ),
           BottomNavigationBarItem(
-              activeIcon: new Tab(
-                icon: new Image.asset(
+              activeIcon: Tab(
+                icon: Image.asset(
                   "assets/Navbar/user.png",
                   height: 32,
                 ),
               ),
-              icon: new Tab(
-                icon: new Image.asset(
+              icon: Tab(
+                icon: Image.asset(
                   "assets/Navbar/user.png",
                   height: 22,
                 ),

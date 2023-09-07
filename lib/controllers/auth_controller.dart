@@ -6,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../repositories/auth_repository.dart';
 
 final authControllerProvider = StateNotifierProvider<AuthController, User?>(
-  (ref) => AuthController(ref)..appStarted(),
+  (ref) => AuthController(ref),
 );
 
 class AuthController extends StateNotifier<User?> {
@@ -37,5 +37,24 @@ class AuthController extends StateNotifier<User?> {
 
   void signOut() async {
     await ref.read(authRepositoryProvider).signOut();
+  }
+
+  Future signInWithEmailAndPassword(
+      {required String email, required String password}) async {
+    await ref
+        .read(authRepositoryProvider)
+        .signInWithEmailAndPassword(email, password);
+  }
+
+  Future sendPasswordResetEmail({required String email}) async {
+    await ref.read(authRepositoryProvider).sendPasswordResetEmail(email: email);
+  }
+
+  Future createUserWithEmailAndPassword(
+      {required String email,
+      required String name,
+      required String password}) async {
+    await ref.read(authRepositoryProvider).createUserWithEmailAndPassword(
+        email: email, password: password, name: name);
   }
 }

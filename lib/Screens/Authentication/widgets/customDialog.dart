@@ -1,10 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
-class CustomDialog extends StatelessWidget {
-  final primaryColor = const Color(0xFFffbf00);
-  final grayColor = const Color(0xFF939393);
+import '../../../constant/color.dart';
 
+class CustomDialog extends StatelessWidget {
   final String title,
       description,
       primaryButtonText,
@@ -39,7 +38,7 @@ class CustomDialog extends StatelessWidget {
                 borderRadius: BorderRadius.circular(padding),
                 boxShadow: const [
                   BoxShadow(
-                    color: Colors.amberAccent,
+                    color: backShadowColor,
                     blurRadius: 10.0,
                     offset: Offset(0.0, 0.0),
                   ),
@@ -52,8 +51,8 @@ class CustomDialog extends StatelessWidget {
                   title,
                   maxLines: 2,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: primaryColor,
+                  style: const TextStyle(
+                    color: secondaryColor,
                     fontSize: 25.0,
                   ),
                 ),
@@ -62,7 +61,7 @@ class CustomDialog extends StatelessWidget {
                   description,
                   maxLines: 4,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: grayColor,
                     fontSize: 18.0,
                   ),
@@ -70,15 +69,17 @@ class CustomDialog extends StatelessWidget {
                 const SizedBox(height: 24.0),
                 Row(
                   children: [
+                    //skip
                     showSecondaryButton(context),
                     const SizedBox(width: 10.0),
+                    //register
                     ElevatedButton(
                       child: AutoSizeText(
                         primaryButtonText,
                         maxLines: 1,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
-                          color: primaryColor,
+                          color: secondaryColor,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -103,9 +104,9 @@ class CustomDialog extends StatelessWidget {
       child: AutoSizeText(
         secondaryButtonText,
         maxLines: 1,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 18,
-          color: primaryColor,
+          color: secondaryColor,
           fontWeight: FontWeight.w400,
         ),
       ),

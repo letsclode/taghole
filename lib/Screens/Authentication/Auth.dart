@@ -11,6 +11,6 @@ class HomeScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authControllerProvider);
 
-    return user != null ? Home() : const First();
+    return user != null ? const Home() : const First();
   }
 }

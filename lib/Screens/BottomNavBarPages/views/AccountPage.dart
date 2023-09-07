@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../Authentication/services/auth_service.dart';
-import '../../Authentication/widgets/providerWidget.dart';
+import '../../../controllers/auth_controller.dart';
 
-class AccountPage extends StatefulWidget {
+class AccountPage extends ConsumerStatefulWidget {
+  const AccountPage({super.key});
+
   @override
-  _AccountPageState createState() => _AccountPageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _AccountPageState();
 }
 
-class _AccountPageState extends State<AccountPage> {
+class _AccountPageState extends ConsumerState<AccountPage> {
   @override
   Widget build(BuildContext context) {
+    final authProvider = ref.watch(authControllerProvider.notifier);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Account",
           style: TextStyle(color: Colors.amber),
         ),
@@ -21,34 +24,38 @@ class _AccountPageState extends State<AccountPage> {
         backgroundColor: Colors.white,
       ),
       body: Container(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
             Image.asset('assets/Account/account.png'),
-            SizedBox(height: 100.0),
+            const SizedBox(height: 100.0),
             Center(
               child: MaterialButton(
                 color: Colors.amber,
                 onPressed: () async {
                   try {
-                    AuthService auth = Provider.of(context).auth;
-                    await auth.signOut();
+                    authProvider.signOut();
                   } catch (e) {
                     print(e);
                   }
                 },
-
-                //TODO: fix this
-                // icon: Icon(
-                //   Icons.exit_to_app,
-                //   color: Colors.white,
-                // ),
-                // t: Text(
-                //   'Logout',
-                //   style: TextStyle(color: Colors.white, fontSize: 20.0),
-                // ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18.0),
+                ),
+
+                //TODO: fix this
+
+                child: const Row(
+                  children: [
+                    Icon(
+                      Icons.exit_to_app,
+                      color: Colors.white,
+                    ),
+                    Text(
+                      'Logout',
+                      style: TextStyle(color: Colors.white, fontSize: 20.0),
+                    ),
+                  ],
                 ),
               ),
             ),

@@ -1,9 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:taghole/Screens/VisitorsPage/visitors_screen.dart';
 import 'package:taghole/firebase_options.dart';
 
 import 'Screens/Authentication/Auth.dart';
+import 'Screens/Authentication/views/citizenSignup.dart';
+import 'Screens/Authentication/views/signup.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,8 +24,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Taghole',
-      theme: ThemeData(primarySwatch: Colors.blue),
       home: const HomeScreen(),
+      routes: <String, WidgetBuilder>{
+        '/signup': (BuildContext context) =>
+            Signup(authFormType: AuthFormType.signup),
+        '/signin': (BuildContext context) =>
+            Signup(authFormType: AuthFormType.signin),
+        '/home': (BuildContext context) => const HomeScreen(),
+        '/citizenSignup': (BuildContext context) =>
+            CitizenSignup(authFormType: AuthForm.signup),
+        '/anonymousSignIn': (BuildContext context) => const VisitorsScreen(),
+      },
     );
   }
 }

@@ -1,23 +1,22 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:taghole/Screens/Authentication/views/citizenSignup.dart';
 
-import '../services/auth_service.dart';
-import '../widgets/providerWidget.dart';
-
-final primaryColor = Colors.blue;
+import '../../../controllers/auth_controller.dart';
+import '../../../controllers/user_controller.dart';
 
 enum AuthFormType { signin, signup, reset }
 
-class Signup extends StatefulWidget {
+class Signup extends ConsumerStatefulWidget {
   AuthFormType? authFormType;
-
-  Signup({super.key, this.authFormType});
+  Signup({super.key, required this.authFormType});
 
   @override
-  _SignupState createState() => _SignupState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _SignupState();
 }
 
-class _SignupState extends State<Signup> {
+class _SignupState extends ConsumerState<Signup> {
   final formKey = GlobalKey<FormState>();
   String? _email;
   String? _password;
@@ -49,25 +48,27 @@ class _SignupState extends State<Signup> {
   }
 
   void submit() async {
+    final authProvider = ref.watch(authControllerProvider.notifier);
+    final userProvider = ref.watch(userControllerProvider.notifier);
     if (validate()) {
       try {
-        final auth = Provider.of(context).auth;
         if (widget.authFormType == AuthFormType.signin) {
-          String uid =
-              await auth.signInWithEmailAndPassword(_email!, _password!);
+          String uid = await authProvider.signInWithEmailAndPassword(
+              email: _email!, password: _password!);
           print("Signed in with ID $uid");
         } else if (widget.authFormType == AuthFormType.reset) {
-          await auth.sendPasswordResetEmail(_email!);
+          await authProvider.sendPasswordResetEmail(email: _email!);
           setState(() {
             widget.authFormType = AuthFormType.signin;
           });
         } else {
-          String uid = await auth.createUserWithEmailAndPassword(
-              _email!, _password!, _name!);
+          String uid = await authProvider.createUserWithEmailAndPassword(
+              email: _email!, password: _password!, name: _name!);
           print("Signed up with new ID $uid");
           String _role = "Municpal";
-          UserManagement().storeNewUser(_email!, uid, _role, context);
+          await userProvider.storeNewUser(_email!, uid, _role);
         }
+        if (!context.mounted) return;
         Navigator.of(context).pushReplacementNamed("/home");
       } catch (e) {
         setState(() {

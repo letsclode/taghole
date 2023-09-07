@@ -2,8 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../services/auth_service.dart';
-import '../widgets/providerWidget.dart';
+import '../../../controllers/user_controller.dart';
 
 const primaryColor = Colors.amber;
 
@@ -63,8 +62,8 @@ class _CitizenSignupState extends State<CitizenSignup> {
             auth0.signInWithCredential(auth).then((UserCredential result) {
               print("Verified");
               String role = "Citizen";
-              UserManagement().storeNewUser(
-                  "clode@gmail.com", result.user!.uid, role, context);
+              // UserManagement().storeNewUser(
+              //     "clode@gmail.com", result.user!.uid, role, context);
               Navigator.of(key.currentContext!).pushReplacementNamed("/home");
             }).catchError((e) {
               print(e);
@@ -89,7 +88,7 @@ class _CitizenSignupState extends State<CitizenSignup> {
   void submit() async {
     if (validate()) {
       try {
-        final auth = Provider.of(context).auth;
+        // final auth = Provider.of(context).auth;
         if (widget.authFormType == AuthForm.signin) {
           // String uid =
           //     await auth.signInWithEmailAndPassword(_email!, _password!);
