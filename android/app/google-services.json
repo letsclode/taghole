@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "597211368355",
+    "project_id": "taghole",
+    "storage_bucket": "taghole.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:597211368355:android:5ed5f8c7e98259a17ca816",
+        "android_client_info": {
+          "package_name": "calb.taghole.taghole"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "597211368355-6cni8n4gg9eld6slrap0u3kvuevbd995.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_mssS_dXlbzAtnyAaNNJf4LXUcYe1Rlw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "597211368355-6cni8n4gg9eld6slrap0u3kvuevbd995.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
