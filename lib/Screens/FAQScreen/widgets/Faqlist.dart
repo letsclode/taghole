@@ -5,6 +5,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../services/DatabaseFaq.dart';
 
 class Faqlist extends StatefulWidget {
+  const Faqlist({super.key});
+
   @override
   _FaqlistState createState() => _FaqlistState();
 }
@@ -28,7 +30,7 @@ class _FaqlistState extends State<Faqlist> {
       return ListView.builder(
         primary: false,
         itemCount: querySnapshot!.docs.length,
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         itemBuilder: (context, i) {
           return Column(
             children: <Widget>[
@@ -39,7 +41,7 @@ class _FaqlistState extends State<Faqlist> {
                 title: Text(
                     "${querySnapshot!.docs[i].data()}"), //TODO dix this to get the exct value
                 children: <Widget>[
-                  Divider(
+                  const Divider(
                     thickness: 1.0,
                     height: 1.0,
                   ),
@@ -61,7 +63,7 @@ class _FaqlistState extends State<Faqlist> {
         },
       );
     } else {
-      return Center(
+      return const Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

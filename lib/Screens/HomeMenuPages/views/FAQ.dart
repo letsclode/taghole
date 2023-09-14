@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class FAQ extends StatefulWidget {
+  const FAQ({super.key});
+
   @override
   _FAQState createState() => _FAQState();
 }
@@ -8,7 +10,7 @@ class FAQ extends StatefulWidget {
 class _FAQState extends State<FAQ> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Center(

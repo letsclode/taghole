@@ -65,8 +65,8 @@ class _SignupState extends ConsumerState<Signup> {
           String uid = await authProvider.createUserWithEmailAndPassword(
               email: _email!, password: _password!, name: _name!);
           print("Signed up with new ID $uid");
-          String _role = "Municpal";
-          await userProvider.storeNewUser(_email!, uid, _role);
+          String role = "Municpal";
+          await userProvider.storeNewUser(_email!, uid, role);
         }
         if (!context.mounted) return;
         Navigator.of(context).pushReplacementNamed("/home");
@@ -81,27 +81,27 @@ class _SignupState extends ConsumerState<Signup> {
 
   @override
   Widget build(BuildContext context) {
-    final _width = MediaQuery.of(context).size.width;
-    final _height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       body: Container(
         color: primaryColor,
-        height: _height,
-        width: _width,
+        height: height,
+        width: width,
         child: SafeArea(
           child: Column(
             children: <Widget>[
               SizedBox(
-                height: _height * .025,
+                height: height * .025,
               ),
               showAlert(),
               SizedBox(
-                height: _height * .025,
+                height: height * .025,
               ),
               buildHeaderText(),
               SizedBox(
-                height: _height * .05,
+                height: height * .05,
               ),
               Padding(
                 padding: const EdgeInsets.all(20.0),
@@ -124,11 +124,11 @@ class _SignupState extends ConsumerState<Signup> {
       return Container(
         color: Colors.amberAccent,
         width: double.infinity,
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         child: Row(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0),
+            const Padding(
+              padding: EdgeInsets.only(right: 8.0),
               child: Icon(Icons.error_outline),
             ),
             Expanded(
@@ -140,7 +140,7 @@ class _SignupState extends ConsumerState<Signup> {
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
               child: IconButton(
-                icon: Icon(Icons.close),
+                icon: const Icon(Icons.close),
                 onPressed: () {
                   setState(() {
                     _error = null;
@@ -152,24 +152,24 @@ class _SignupState extends ConsumerState<Signup> {
         ),
       );
     }
-    return SizedBox(height: 0);
+    return const SizedBox(height: 0);
   }
 
   AutoSizeText buildHeaderText() {
-    String _headerText;
+    String headerText;
     if (widget.authFormType == AuthFormType.signup) {
-      _headerText = "Create New Account";
+      headerText = "Create New Account";
     } else if (widget.authFormType == AuthFormType.reset) {
-      _headerText = "Reset Password";
+      headerText = "Reset Password";
     } else {
-      _headerText = "Sign In";
+      headerText = "Sign In";
     }
 
     return AutoSizeText(
-      _headerText,
+      headerText,
       maxLines: 1,
       textAlign: TextAlign.center,
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 35,
         color: Colors.white,
       ),
@@ -182,13 +182,13 @@ class _SignupState extends ConsumerState<Signup> {
       filled: true,
       fillColor: Colors.white,
       focusColor: Colors.white,
-      enabledBorder: OutlineInputBorder(
+      enabledBorder: const OutlineInputBorder(
         borderSide: BorderSide(
           color: Colors.white,
           width: 0.0,
         ),
       ),
-      contentPadding: EdgeInsets.only(left: 14, bottom: 10, top: 10),
+      contentPadding: const EdgeInsets.only(left: 14, bottom: 10, top: 10),
     );
   }
 
@@ -199,7 +199,7 @@ class _SignupState extends ConsumerState<Signup> {
       textFields.add(
         TextFormField(
           validator: EmailValidator.validate,
-          style: TextStyle(fontSize: 22),
+          style: const TextStyle(fontSize: 22),
           decoration: buildSignUpInputDecoration("Email"),
           onSaved: (value) {
             _email = value;
@@ -207,7 +207,7 @@ class _SignupState extends ConsumerState<Signup> {
         ),
       );
 
-      textFields.add(SizedBox(height: 20));
+      textFields.add(const SizedBox(height: 20));
       return textFields;
     }
 
@@ -215,7 +215,7 @@ class _SignupState extends ConsumerState<Signup> {
       textFields.add(
         TextFormField(
           validator: NameValidator.validate,
-          style: TextStyle(fontSize: 22),
+          style: const TextStyle(fontSize: 22),
           decoration: buildSignUpInputDecoration("Name"),
           onSaved: (value) {
             _name = value;
@@ -223,12 +223,12 @@ class _SignupState extends ConsumerState<Signup> {
         ),
       );
 
-      textFields.add(SizedBox(height: 20));
+      textFields.add(const SizedBox(height: 20));
     }
     textFields.add(
       TextFormField(
         validator: EmailValidator.validate,
-        style: TextStyle(fontSize: 22),
+        style: const TextStyle(fontSize: 22),
         decoration: buildSignUpInputDecoration("Email"),
         onSaved: (value) {
           _email = value;
@@ -236,12 +236,12 @@ class _SignupState extends ConsumerState<Signup> {
       ),
     );
 
-    textFields.add(SizedBox(height: 20));
+    textFields.add(const SizedBox(height: 20));
 
     textFields.add(
       TextFormField(
         validator: PasswordValidator.validate,
-        style: TextStyle(fontSize: 22),
+        style: const TextStyle(fontSize: 22),
         decoration: buildSignUpInputDecoration("Password"),
         obscureText: true,
         onSaved: (value) {
@@ -256,76 +256,72 @@ class _SignupState extends ConsumerState<Signup> {
   }
 
   List<Widget> buildButtons() {
-    String _switchButtonText;
-    String _newFormState;
-    String _submitButtonText;
-    bool _showForgotPassword = false;
+    String switchButtonText;
+    String newFormState;
+    String submitButtonText;
+    bool showForgotPassword = false;
 
     if (widget.authFormType == AuthFormType.signin) {
-      _switchButtonText = "Create Account";
-      _newFormState = "signup";
-      _submitButtonText = "Sign In";
-      _showForgotPassword = true;
+      switchButtonText = "Create Account";
+      newFormState = "signup";
+      submitButtonText = "Sign In";
+      showForgotPassword = true;
     } else if (widget.authFormType == AuthFormType.reset) {
-      _switchButtonText = "Return to Sign In";
-      _newFormState = "signin";
-      _submitButtonText = "Submit";
+      switchButtonText = "Return to Sign In";
+      newFormState = "signin";
+      submitButtonText = "Submit";
     } else {
-      _switchButtonText = "Have an Account? Sign In";
-      _newFormState = "signin";
-      _submitButtonText = "Sign Up";
+      switchButtonText = "Have an Account? Sign In";
+      newFormState = "signin";
+      submitButtonText = "Sign Up";
     }
 
     return [
-      Container(
+      SizedBox(
         width: MediaQuery.of(context).size.width * 0.70,
         child: MaterialButton(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
           color: Colors.white,
+          onPressed: submit,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              _submitButtonText,
-              style: TextStyle(
+              submitButtonText,
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w400,
               ),
             ),
           ),
-          onPressed: submit,
         ),
       ),
-      showForgotPassword(_showForgotPassword),
+      Visibility(
+        visible: showForgotPassword,
+        child: ElevatedButton(
+          child: const Text(
+            "Forgot Password??",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          onPressed: () {
+            setState(() {
+              widget.authFormType = AuthFormType.reset;
+            });
+          },
+        ),
+      ),
       ElevatedButton(
         child: Text(
-          _switchButtonText,
-          style: TextStyle(color: Colors.white),
+          switchButtonText,
+          style: const TextStyle(color: Colors.white),
         ),
         onPressed: () {
-          switchFormState(_newFormState);
+          switchFormState(newFormState);
         },
       )
     ];
-  }
-
-  Widget showForgotPassword(bool visible) {
-    return Visibility(
-      child: ElevatedButton(
-        child: Text(
-          "Forgot Password??",
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-        onPressed: () {
-          setState(() {
-            widget.authFormType = AuthFormType.reset;
-          });
-        },
-      ),
-      visible: visible,
-    );
   }
 }

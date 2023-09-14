@@ -8,12 +8,14 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapPage extends StatefulWidget {
+  const MapPage({super.key});
+
   @override
   _MapPageState createState() => _MapPageState();
 }
 
 class _MapPageState extends State<MapPage> {
-  Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
+  final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
   LatLng? _initialPosition;
   MapType _currentMapType = MapType.normal;
   List<Placemark> _placemark = [];
@@ -21,7 +23,7 @@ class _MapPageState extends State<MapPage> {
   Position? _position;
   double? _lat;
   double? _lng;
-  Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
+  final Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
 
   @override
   void initState() {
@@ -55,20 +57,18 @@ class _MapPageState extends State<MapPage> {
   Widget mapButton(Function()? function, Icon icon, Color color) {
     return RawMaterialButton(
       onPressed: function,
-      child: icon,
-      shape: CircleBorder(),
+      shape: const CircleBorder(),
       elevation: 2.0,
       fillColor: color,
       padding: const EdgeInsets.all(7.0),
+      child: icon,
     );
   }
 
   Future getAddress(double latitude, double longitude) async {
     _placemark = await placemarkFromCoordinates(latitude, longitude);
     setState(() {
-      _address = _placemark[0].name.toString() +
-          "," +
-          _placemark[0].locality.toString();
+      _address = "${_placemark[0].name},${_placemark[0].locality}";
     });
   }
 
@@ -118,7 +118,7 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Map",
           style: TextStyle(color: Colors.amber),
         ),
@@ -126,7 +126,7 @@ class _MapPageState extends State<MapPage> {
         backgroundColor: Colors.white,
       ),
       body: _initialPosition == null
-          ? Center(
+          ? const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -166,12 +166,12 @@ class _MapPageState extends State<MapPage> {
                 Align(
                   alignment: Alignment.topRight,
                   child: Container(
-                    margin: EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+                    margin: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
                     child: Column(
                       children: <Widget>[
                         mapButton(
                           _onMapTypeButtonPressed,
-                          Icon(Icons.filter_hdr),
+                          const Icon(Icons.filter_hdr),
                           Colors.amber,
                         ),
                       ],

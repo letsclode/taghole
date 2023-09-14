@@ -5,6 +5,8 @@ import '../../HomeMenuPages/views/SelectionPage.dart';
 import '../../StatusAllScreen/views/StatusScreen.dart';
 
 class Cards extends StatefulWidget {
+  const Cards({super.key});
+
   @override
   _CardsState createState() => _CardsState();
 }
@@ -19,16 +21,16 @@ class _CardsState extends State<Cards> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SelectionPage()),
+                MaterialPageRoute(builder: (context) => const SelectionPage()),
               );
             },
-            child: Container(
+            child: SizedBox(
               height: 120,
               child: Stack(
                 alignment: Alignment.bottomLeft,
                 children: [
                   Container(
-                    padding: EdgeInsets.only(left: 160),
+                    padding: const EdgeInsets.only(left: 160),
                     height: 120,
                     width: 350,
                     decoration: BoxDecoration(
@@ -39,7 +41,7 @@ class _CardsState extends State<Cards> {
                     ),
                     child: Center(
                       child: RichText(
-                        text: TextSpan(
+                        text: const TextSpan(
                           text: "Report New Complaint",
                           style: TextStyle(
                               color: Colors.white,
@@ -57,21 +59,21 @@ class _CardsState extends State<Cards> {
               ),
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => StatusScreen()),
+                MaterialPageRoute(builder: (context) => const StatusScreen()),
               );
             },
-            child: Container(
+            child: SizedBox(
               height: 120,
               child: Stack(
                 alignment: Alignment.bottomLeft,
                 children: [
                   Container(
-                    padding: EdgeInsets.only(left: 160),
+                    padding: const EdgeInsets.only(left: 160),
                     height: 120,
                     width: 350,
                     decoration: BoxDecoration(
@@ -82,7 +84,7 @@ class _CardsState extends State<Cards> {
                     ),
                     child: Center(
                       child: RichText(
-                        text: TextSpan(
+                        text: const TextSpan(
                           text: "Status of all reports",
                           style: TextStyle(
                               color: Colors.white,
@@ -100,21 +102,21 @@ class _CardsState extends State<Cards> {
               ),
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => FAQScreen()),
+                MaterialPageRoute(builder: (context) => const FAQScreen()),
               );
             },
-            child: Container(
+            child: SizedBox(
               height: 120,
               child: Stack(
                 alignment: Alignment.bottomLeft,
                 children: [
                   Container(
-                    padding: EdgeInsets.only(left: 160),
+                    padding: const EdgeInsets.only(left: 160),
                     height: 120,
                     width: 350,
                     decoration: BoxDecoration(
@@ -125,7 +127,7 @@ class _CardsState extends State<Cards> {
                     ),
                     child: Center(
                       child: RichText(
-                        text: TextSpan(
+                        text: const TextSpan(
                           text: "FAQ",
                           style: TextStyle(
                               color: Colors.white,

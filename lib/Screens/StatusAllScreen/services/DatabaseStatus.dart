@@ -6,7 +6,7 @@ getStatusList() async {
 }
 
 navigateme(String lat, String long) async {
-  String url = "https://www.google.com/maps?q=" + lat + "," + long;
+  String url = "https://www.google.com/maps?q=$lat,$long";
   if (await canLaunchUrl(Uri(path: url))) {
     await launchUrl(Uri(path: url));
   } else {

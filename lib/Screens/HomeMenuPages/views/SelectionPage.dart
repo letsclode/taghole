@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:taghole/Screens/HomeMenuPages/views/ComplaintForm.dart';
 
 class SelectionPage extends StatefulWidget {
+  const SelectionPage({super.key});
+
   @override
   _SelectionPageState createState() => _SelectionPageState();
 }
@@ -11,10 +13,10 @@ class _SelectionPageState extends State<SelectionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: BackButton(
+          leading: const BackButton(
             color: Colors.amber,
           ),
-          title: Text(
+          title: const Text(
             "New Complaint",
             style: TextStyle(color: Colors.amber),
           ),
@@ -47,25 +49,25 @@ class _SelectionPageState extends State<SelectionPage> {
             //     ],
             //   ),
             // ),
-            SizedBox(height: 200),
+            const SizedBox(height: 200),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 MaterialButton(
                   splashColor: Colors.amber,
                   focusColor: Colors.amber,
-                  child: new Text(
+                  onPressed: null,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  child: const Text(
                     "Capture through camera",
                     style: TextStyle(
                       color: Colors.amber,
                     ),
                   ),
-                  onPressed: null,
-                  shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(30.0),
-                  ),
                 ),
-                Divider(
+                const Divider(
                   color: Color(0xff2e279d),
                   height: 20.0,
                   endIndent: 150,
@@ -75,34 +77,34 @@ class _SelectionPageState extends State<SelectionPage> {
                 MaterialButton(
                   splashColor: Colors.amber,
                   focusColor: Colors.amber,
+                  onPressed: null,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
                   child: GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ComplaintForm()),
+                            builder: (context) => const ComplaintForm()),
                       );
                     },
-                    child: new Text(
+                    child: const Text(
                       "Upload Through Gallery",
                       style: TextStyle(
                         color: Colors.amber,
                       ),
                     ),
                   ),
-                  onPressed: null,
-                  shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(30.0),
-                  ),
                 ),
-                Divider(
+                const Divider(
                   color: Color(0xff2e279d),
                   height: 20.0,
                   endIndent: 150,
                   indent: 150,
                   thickness: 0.5,
                 ),
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     FloatingActionButton(

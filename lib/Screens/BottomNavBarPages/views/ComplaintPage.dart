@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../widgets/cards.dart';
 
 class ComplaintPage extends StatefulWidget {
+  const ComplaintPage({super.key});
+
   @override
   _ComplaintPageState createState() => _ComplaintPageState();
 }
@@ -14,7 +16,7 @@ class _ComplaintPageState extends State<ComplaintPage> {
       home: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             "HomePage",
             style: TextStyle(color: Colors.amber),
           ),
@@ -25,12 +27,12 @@ class _ComplaintPageState extends State<ComplaintPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Center(
-              child: Container(
+              child: SizedBox(
                 height: 200,
                 child: Image.asset('assets/HomePage/home.png'),
               ),
             ),
-            Expanded(
+            const Expanded(
               child: Cards(),
             )
           ],

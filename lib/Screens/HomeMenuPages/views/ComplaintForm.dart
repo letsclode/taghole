@@ -14,6 +14,8 @@ import '../services/focuschanger.dart';
 import '../services/toast.dart';
 
 class ComplaintForm extends StatefulWidget {
+  const ComplaintForm({super.key});
+
   @override
   _ComplaintFormState createState() => _ComplaintFormState();
 }
@@ -21,18 +23,18 @@ class ComplaintForm extends StatefulWidget {
 class _ComplaintFormState extends State<ComplaintForm> {
   final _formKey = GlobalKey<FormState>();
 
-  FocusNode _usernameFocusNode = FocusNode();
-  FocusNode _emailFocusNode = FocusNode();
-  FocusNode _potholetypeFocusNode = FocusNode();
-  FocusNode _departmentFocusNode = FocusNode();
-  FocusNode _addressFocusNode = FocusNode();
-  FocusNode _landmarkFocusNode = FocusNode();
-  FocusNode _commentFocusNode = FocusNode();
-  FocusNode _phonenumFocusNode = FocusNode();
+  final FocusNode _usernameFocusNode = FocusNode();
+  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _potholetypeFocusNode = FocusNode();
+  final FocusNode _departmentFocusNode = FocusNode();
+  final FocusNode _addressFocusNode = FocusNode();
+  final FocusNode _landmarkFocusNode = FocusNode();
+  final FocusNode _commentFocusNode = FocusNode();
+  final FocusNode _phonenumFocusNode = FocusNode();
 
   final _firestore = FirebaseFirestore.instance;
   GeoFlutterFire geo = GeoFlutterFire();
-  Location location = new Location();
+  Location location = Location();
 
   String? _username,
       _email,
@@ -42,7 +44,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
       _landmark,
       _comment;
   int? _phonenum;
-  bool _work = false;
+  final bool _work = false;
   String? imageurl;
   XFile? image;
   final picker = ImagePicker();
@@ -93,47 +95,47 @@ class _ComplaintFormState extends State<ComplaintForm> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        leading: BackButton(
+        leading: const BackButton(
           color: Colors.amber,
         ),
         backgroundColor: Colors.white,
-        title: Text(
+        title: const Text(
           "Complaint Form",
           style: TextStyle(color: Colors.amber),
         ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
         child: Form(
             key: _formKey,
             child: Column(
               children: [
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 ElevatedButton.icon(
                     style:
                         ElevatedButton.styleFrom(backgroundColor: Colors.amber),
                     onPressed: _getImage,
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.add_a_photo,
                       color: Colors.white,
                     ),
-                    label: Text(
+                    label: const Text(
                       'Add Image',
                       style: TextStyle(color: Colors.white),
                     )),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 Center(
                   child: Builder(
                     builder: (context) {
                       if (image == null) {
-                        return Text(
+                        return const Text(
                           'Please choose an image',
                           style: TextStyle(
                               fontSize: 15.0, color: Colors.redAccent),
                         );
                       } else {
-                        return Text(
+                        return const Text(
                           'Image has been selected',
                           style: TextStyle(fontSize: 15.0, color: Colors.green),
                         );
@@ -141,21 +143,21 @@ class _ComplaintFormState extends State<ComplaintForm> {
                     },
                   ),
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 TextFormField(
                   focusNode: _potholetypeFocusNode,
                   autofocus: true,
                   textCapitalization: TextCapitalization.words,
                   keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Pothole Type",
                     hintText: "e.g pothole,cracks,deformation,deep etc",
                     focusColor: Colors.amber,
-                    border: new OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(
-                        const Radius.circular(8.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8.0),
                       ),
-                      borderSide: new BorderSide(
+                      borderSide: BorderSide(
                         color: Colors.amber,
                         width: 1.0,
                       ),
@@ -174,7 +176,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
                         context, _potholetypeFocusNode, _departmentFocusNode);
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20.0,
                 ),
                 TextFormField(
@@ -182,15 +184,15 @@ class _ComplaintFormState extends State<ComplaintForm> {
                   autofocus: true,
                   textCapitalization: TextCapitalization.words,
                   keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Department",
                     hintText: "e.g Nagarpalika",
                     focusColor: Colors.amber,
-                    border: new OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(
-                        const Radius.circular(8.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8.0),
                       ),
-                      borderSide: new BorderSide(
+                      borderSide: BorderSide(
                         color: Colors.amber,
                         width: 1.0,
                       ),
@@ -209,7 +211,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
                         context, _departmentFocusNode, _addressFocusNode);
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20.0,
                 ),
                 TextFormField(
@@ -217,14 +219,14 @@ class _ComplaintFormState extends State<ComplaintForm> {
                   autofocus: true,
                   textCapitalization: TextCapitalization.words,
                   keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Address",
                     hintText: "Address of pothole",
-                    border: new OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(
-                        const Radius.circular(8.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8.0),
                       ),
-                      borderSide: new BorderSide(
+                      borderSide: BorderSide(
                         color: Colors.amber,
                         width: 1.0,
                       ),
@@ -243,7 +245,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
                         context, _addressFocusNode, _landmarkFocusNode);
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20.0,
                 ),
                 TextFormField(
@@ -251,14 +253,14 @@ class _ComplaintFormState extends State<ComplaintForm> {
                   autofocus: true,
                   textCapitalization: TextCapitalization.words,
                   keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Landmark",
                     hintText: "Nearby Landmark",
-                    border: new OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(
-                        const Radius.circular(8.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8.0),
                       ),
-                      borderSide: new BorderSide(
+                      borderSide: BorderSide(
                         color: Colors.amber,
                         width: 1.0,
                       ),
@@ -277,7 +279,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
                         context, _landmarkFocusNode, _commentFocusNode);
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20.0,
                 ),
                 TextFormField(
@@ -285,14 +287,14 @@ class _ComplaintFormState extends State<ComplaintForm> {
                   autofocus: true,
                   textCapitalization: TextCapitalization.words,
                   keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Comment",
                     hintText: "Comment about pothole",
-                    border: new OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(
-                        const Radius.circular(8.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8.0),
                       ),
-                      borderSide: new BorderSide(
+                      borderSide: BorderSide(
                         color: Colors.amber,
                         width: 1.0,
                       ),
@@ -311,7 +313,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
                         context, _commentFocusNode, _usernameFocusNode);
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20.0,
                 ),
                 TextFormField(
@@ -319,12 +321,12 @@ class _ComplaintFormState extends State<ComplaintForm> {
                   autofocus: true,
                   textCapitalization: TextCapitalization.words,
                   keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    border: new OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(
-                        const Radius.circular(8.0),
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8.0),
                       ),
-                      borderSide: new BorderSide(
+                      borderSide: BorderSide(
                         color: Colors.amber,
                         width: 1.0,
                       ),
@@ -336,10 +338,11 @@ class _ComplaintFormState extends State<ComplaintForm> {
                   validator: (name) {
                     String pattern = r'^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$';
                     RegExp regex = RegExp(pattern);
-                    if (!regex.hasMatch(name!))
+                    if (!regex.hasMatch(name!)) {
                       return 'Invalid username';
-                    else
+                    } else {
                       return null;
+                    }
                   },
                   onSaved: (name) => _username = name,
                   onFieldSubmitted: (_) {
@@ -347,18 +350,18 @@ class _ComplaintFormState extends State<ComplaintForm> {
                         context, _usernameFocusNode, _emailFocusNode);
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20.0,
                 ),
                 TextFormField(
                   focusNode: _emailFocusNode,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    border: new OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(
-                        const Radius.circular(8.0),
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8.0),
                       ),
-                      borderSide: new BorderSide(
+                      borderSide: BorderSide(
                         color: Colors.amber,
                         width: 1.0,
                       ),
@@ -376,18 +379,18 @@ class _ComplaintFormState extends State<ComplaintForm> {
                         context, _emailFocusNode, _phonenumFocusNode);
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20.0,
                 ),
                 TextFormField(
                   focusNode: _phonenumFocusNode,
-                  decoration: new InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Enter your number",
-                    border: new OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(
-                        const Radius.circular(8.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8.0),
                       ),
-                      borderSide: new BorderSide(
+                      borderSide: BorderSide(
                         color: Colors.amber,
                         width: 1.0,
                       ),
@@ -401,7 +404,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
                     FilteringTextInputFormatter.digitsOnly
                   ], // Only numbers can be entered
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20.0,
                 ),
                 MaterialButton(
@@ -415,12 +418,12 @@ class _ComplaintFormState extends State<ComplaintForm> {
                         toastMessage(
                             "Thank You Your Response has been submitted");
                         uploadform();
-                        await new Future.delayed(const Duration(seconds: 3));
+                        await Future.delayed(const Duration(seconds: 3));
                         Navigator.pop(context);
                       }
                     }
                   },
-                  child: Text(
+                  child: const Text(
                     "Submit",
                     style: TextStyle(color: Colors.white),
                   ),

@@ -5,6 +5,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../services/DatabaseStatus.dart';
 
 class StatusList extends StatefulWidget {
+  const StatusList({super.key});
+
   @override
   _StatusListState createState() => _StatusListState();
 }
@@ -27,7 +29,7 @@ class _StatusListState extends State<StatusList> {
       return ListView.builder(
         primary: false,
         itemCount: querySnapshot!.docs.length,
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         itemBuilder: (context, i) {
           dynamic data = querySnapshot!.docs[i].data()
               as Map; // TODO: watch this if its working
@@ -42,10 +44,10 @@ class _StatusListState extends State<StatusList> {
                   backgroundColor: Colors.amberAccent,
                   leading: Builder(builder: (context) {
                     if (data['work'] == false) {
-                      return CircleAvatar(
+                      return const CircleAvatar(
                           backgroundColor: Colors.red, radius: 20);
                     } else {
-                      return CircleAvatar(
+                      return const CircleAvatar(
                           backgroundColor: Colors.greenAccent, radius: 20);
                     }
                   }),
@@ -57,7 +59,7 @@ class _StatusListState extends State<StatusList> {
                     ],
                   ),
                   children: <Widget>[
-                    Divider(
+                    const Divider(
                       thickness: 1.0,
                       height: 1.0,
                     ),
@@ -73,15 +75,15 @@ class _StatusListState extends State<StatusList> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text("Comment :${data['comment']}"),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5.0,
                               ),
                               Text("Address :${data['address']}"),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5.0,
                               ),
                               Text("Landmark :${data['landmark']}"),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5.0,
                               ),
                               // Text(
@@ -100,12 +102,12 @@ class _StatusListState extends State<StatusList> {
                           onPressed: () {
                             navigateme(lat, lon);
                           },
-                          child: Column(
+                          child: const Column(
                             children: <Widget>[
                               Icon(Icons.navigate_before),
                               Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(vertical: 2.0),
+                                    EdgeInsets.symmetric(vertical: 2.0),
                               ),
                               Text('Navigate me'),
                             ],
@@ -117,12 +119,12 @@ class _StatusListState extends State<StatusList> {
                           onPressed: () {
                             seepothole(downloadurl);
                           },
-                          child: Column(
+                          child: const Column(
                             children: <Widget>[
                               Icon(Icons.open_in_browser),
                               Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(vertical: 2.0),
+                                    EdgeInsets.symmetric(vertical: 2.0),
                               ),
                               Text('See Pothole !'),
                             ],
@@ -138,7 +140,7 @@ class _StatusListState extends State<StatusList> {
         },
       );
     } else {
-      return Center(
+      return const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
