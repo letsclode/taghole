@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "597211368355-6cni8n4gg9eld6slrap0u3kvuevbd995.apps.googleusercontent.com",
+          "client_id": "597211368355-fvsuffuf4r0tqtvns156r4fl41g968hu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "calb.taghole.taghole",
+            "certificate_hash": "ffd9a3d0abf039d872ef074c97b8f7a8943cc4f1"
+          }
+        },
+        {
+          "client_id": "597211368355-qnmg6d56io3e3apfhojar6gsnn7clbg6.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
