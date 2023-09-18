@@ -60,6 +60,7 @@ dependencies:
   map_picker: ^0.0.3
   flutter_svg: ^2.0.7
   bouncerwidget: ^0.0.5
+  flutter_config: ^2.0.2
  
 
 dev_dependencies:
