@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
+import 'package:taghole/Screens/BottomNavBarPages/views/map_picker.dart';
 
 import '../services/focuschanger.dart';
 import '../services/toast.dart';
@@ -214,37 +215,43 @@ class _ComplaintFormState extends State<ComplaintForm> {
                 const SizedBox(
                   height: 20.0,
                 ),
-                TextFormField(
-                  focusNode: _addressFocusNode,
-                  autofocus: true,
-                  textCapitalization: TextCapitalization.words,
-                  keyboardType: TextInputType.text,
-                  decoration: const InputDecoration(
-                    labelText: "Address",
-                    hintText: "Address of pothole",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8.0),
-                      ),
-                      borderSide: BorderSide(
-                        color: Colors.amber,
-                        width: 1.0,
-                      ),
-                    ),
-                  ),
-                  textInputAction: TextInputAction.next,
-                  validator: (address) {
-                    if (address == null) {
-                      return 'Address is Required';
-                    }
-                    return null;
-                  },
-                  onSaved: (address) => _address = address,
-                  onFieldSubmitted: (_) {
-                    fieldFocusChange(
-                        context, _addressFocusNode, _landmarkFocusNode);
-                  },
-                ),
+                MaterialButton(onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const KMapPicker()),
+                  );
+                }),
+                // TextFormField(
+                //   focusNode: _addressFocusNode,
+                //   autofocus: true,
+                //   textCapitalization: TextCapitalization.words,
+                //   keyboardType: TextInputType.text,
+                //   decoration: const InputDecoration(
+                //     labelText: "Address",
+                //     hintText: "Address of pothole",
+                //     border: OutlineInputBorder(
+                //       borderRadius: BorderRadius.all(
+                //         Radius.circular(8.0),
+                //       ),
+                //       borderSide: BorderSide(
+                //         color: Colors.amber,
+                //         width: 1.0,
+                //       ),
+                //     ),
+                //   ),
+                //   textInputAction: TextInputAction.next,
+                //   validator: (address) {
+                //     if (address == null) {
+                //       return 'Address is Required';
+                //     }
+                //     return null;
+                //   },
+                //   onSaved: (address) => _address = address,
+                //   onFieldSubmitted: (_) {
+                //     fieldFocusChange(
+                //         context, _addressFocusNode, _landmarkFocusNode);
+                //   },
+                // ),
                 const SizedBox(
                   height: 20.0,
                 ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:taghole/Screens/BottomNavBarPages/views/MapPage.dart';
 
 class VisitorsScreen extends ConsumerStatefulWidget {
   const VisitorsScreen({super.key});
@@ -11,10 +12,6 @@ class VisitorsScreen extends ConsumerStatefulWidget {
 class _VisitorsScreenState extends ConsumerState<VisitorsScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: const Center(
-        child: Text("Visitors"),
-      ),
-    );
+    return const MapPage();
   }
 }

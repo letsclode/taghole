@@ -7,6 +7,7 @@ import 'views/home.dart';
 
 class WelcomeScreen extends HookConsumerWidget {
   const WelcomeScreen({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authControllerProvider);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../widgets/cards.dart';
 
 class ComplaintPage extends StatefulWidget {
@@ -37,7 +38,6 @@ class _ComplaintPageState extends State<ComplaintPage> {
             )
           ],
         ),
-        // body: Cards(),
       ),
     );
   }

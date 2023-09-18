@@ -15,7 +15,8 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
+  final Completer<GoogleMapController> _controller =
+      Completer<GoogleMapController>();
   LatLng? _initialPosition;
   MapType _currentMapType = MapType.normal;
   List<Placemark> _placemark = [];
