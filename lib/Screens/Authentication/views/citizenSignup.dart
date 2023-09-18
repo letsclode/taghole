@@ -1,8 +1,8 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../../controllers/user_controller.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+
 
 const primaryColor = Colors.amber;
 
@@ -10,8 +10,8 @@ enum AuthForm { signin, signup }
 
 //TODO: fix redirects
 class CitizenSignup extends StatefulWidget {
-  AuthForm authFormType;
-  CitizenSignup({super.key, required this.authFormType});
+  final AuthForm authFormType;
+  const CitizenSignup({super.key, required this.authFormType});
 
   @override
   State<CitizenSignup> createState() => _CitizenSignupState();
@@ -21,6 +21,8 @@ class _CitizenSignupState extends State<CitizenSignup> {
   final formKey = GlobalKey<FormState>();
   final GlobalKey key = GlobalKey();
 
+  late AuthForm authFormType;
+
   String? _number;
   String? _error;
 
@@ -28,11 +30,11 @@ class _CitizenSignupState extends State<CitizenSignup> {
     formKey.currentState!.reset();
     if (state == "signup") {
       setState(() {
-        widget.authFormType = AuthForm.signup;
+        authFormType = AuthForm.signup;
       });
     } else {
       setState(() {
-        widget.authFormType = AuthForm.signin;
+        authFormType = AuthForm.signin;
       });
     }
   }
@@ -111,6 +113,12 @@ class _CitizenSignupState extends State<CitizenSignup> {
     }
   }
 
+  
+  @override
+  void initState() {
+    authFormType = widget.authFormType;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -325,7 +333,6 @@ class _CitizenSignupState extends State<CitizenSignup> {
           ),
         ),
       ),
-      // showForgotPassword(_showForgotPassword),
       ElevatedButton(
         child: Text(
           switchButtonText,
@@ -337,23 +344,4 @@ class _CitizenSignupState extends State<CitizenSignup> {
       )
     ];
   }
-
-  // Widget showForgotPassword(bool visible) {
-  //   return Visibility(
-  //     child: ElevatedButton(
-  //       child: Text(
-  //         "Forgot Password??",
-  //         style: TextStyle(
-  //           color: Colors.white,
-  //         ),
-  //       ),
-  //       onPressed: () {
-  //         setState(() {
-  //           widget.authFormType = AuthForm.reset;
-  //         });
-  //       },
-  //     ),
-  //     visible: visible,
-  //   );
-  // }
 }
