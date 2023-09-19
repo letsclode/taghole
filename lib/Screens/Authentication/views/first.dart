@@ -24,7 +24,7 @@ class First extends StatelessWidget {
                 SizedBox(
                   height: height / 3,
                   child: Image.asset(
-                    'assets/images/map.png',
+                    'assets/images/taghole.png',
                     fit: BoxFit.fitWidth,
                   ),
                 ),
@@ -33,7 +33,7 @@ class First extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       const AutoSizeText(
-                        "Tag a pothole",
+                        "Welcome to Taghole",
                         maxLines: 2,
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -41,54 +41,55 @@ class First extends StatelessWidget {
                       ),
                       SizedBox(height: height * 0.03),
                       const AutoSizeText(
-                        "Upload a picture and send your location for a pothole you encountered.",
+                        "You now have the option to engage in exploration or assume the role of a responsible citizen to utilize our pothole tagging application for reporting road deficiencies within the city.",
                         maxLines: 2,
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 15, color: grayColor),
                       ),
                       SizedBox(height: height * 0.05),
-                      MaterialButton(
-                        height: 45,
-                        minWidth: width,
-                        color: secondaryColor,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0)),
-                        child: const Padding(
-                          padding: EdgeInsets.only(
-                              top: 10.0, bottom: 10.0, left: 30.0, right: 30.0),
-                          child: Text(
-                            "Get Started",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          OutlinedButton(
+                            child: const Text('Skip'),
+                            onPressed: () {
+                              //TODO: skip
+                            },
                           ),
-                        ),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                const CustomDialog(
-                              title: "Would you like to create a free account?",
-                              description:
-                                  "With an account, your scouting will be rewarded and allow you to access from multiple devices.",
-                              primaryButtonText: "Register",
-                              primaryButtonRoute: "/citizenSignup",
-                              secondaryButtonText: "Skip",
-                              secondaryButtonRoute: "/anonymousSignIn",
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    const CustomDialog(
+                                  title:
+                                      "Would you like to create a free account?",
+                                  description:
+                                      "With an account, your scouting will be rewarded and allow you to access from multiple devices.",
+                                  primaryButtonText: "Register",
+                                  primaryButtonRoute: "/citizenSignup",
+                                  secondaryButtonText: "Skip",
+                                  secondaryButtonRoute: "/anonymousSignIn",
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              "Get Started",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          );
-                        },
-                      ),
-                      const Divider(
-                        thickness: 0.8,
-                        color: secondaryColor,
+                          )
+                        ],
                       ),
                       MaterialButton(
                         color: secondaryColor,
                         height: 45,
-                        minWidth: width,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0)),
                         child: const Padding(

@@ -6,6 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:taghole/constant/color.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -120,11 +121,9 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Map",
-          style: TextStyle(color: Colors.amber),
+          "Location Reports",
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
       ),
       body: _initialPosition == null
           ? const Center(
@@ -132,18 +131,16 @@ class _MapPageState extends State<MapPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SpinKitCubeGrid(
-                    color: Colors.amber,
+                    color: secondaryColor,
                     size: 80.0,
                   ),
                   SizedBox(height: 30.0),
                   Text(
                     'Loading...',
-                    style: TextStyle(color: Colors.amber),
                   ),
                   SizedBox(height: 50.0),
                   Text(
                     'In case it keeps on loading, please enable location.',
-                    style: TextStyle(color: Colors.amber, fontSize: 20.0),
                   ),
                 ],
               ),
@@ -170,11 +167,8 @@ class _MapPageState extends State<MapPage> {
                     margin: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
                     child: Column(
                       children: <Widget>[
-                        mapButton(
-                          _onMapTypeButtonPressed,
-                          const Icon(Icons.filter_hdr),
-                          Colors.amber,
-                        ),
+                        mapButton(_onMapTypeButtonPressed,
+                            const Icon(Icons.filter_hdr), secondaryColor),
                       ],
                     ),
                   ),

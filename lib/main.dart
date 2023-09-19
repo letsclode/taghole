@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:taghole/Screens/VisitorsPage/visitors_screen.dart';
 import 'package:taghole/firebase_options.dart';
 
 import 'Screens/Authentication/Auth.dart';
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
         '/home': (BuildContext context) => const Home(),
         '/citizenSignup': (BuildContext context) =>
             CitizenSignup(authFormType: AuthForm.signup),
-        '/anonymousSignIn': (BuildContext context) => const Home(),
+        '/anonymousSignIn': (BuildContext context) => const VisitorsScreen(),
       },
     );
   }
