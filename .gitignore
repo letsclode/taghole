@@ -49,4 +49,6 @@ app.*.map.json
 
 #keys
 /lib/secret.dart
+/lib/firbase_option
 .env
+
