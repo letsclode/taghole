@@ -1,8 +1,7 @@
+import 'custom_exception.dart';
+import '../general_providers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../general_providers.dart';
-import 'custom_exception.dart';
 
 abstract class BaseAuthRepository {
   Stream<User?> get authStateChanges;

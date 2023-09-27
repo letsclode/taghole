@@ -1,15 +1,15 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'Screens/Authentication/Auth.dart';
+import 'package:taghole/constant/color.dart';
+import 'package:taghole/firebase_options.dart';
+import 'Screens/Authentication/views/home.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'Screens/Authentication/views/signup.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:taghole/Screens/VisitorsPage/visitors_screen.dart';
-import 'package:taghole/firebase_options.dart';
-
-import 'Screens/Authentication/Auth.dart';
 import 'Screens/Authentication/views/citizenSignup.dart';
-import 'Screens/Authentication/views/home.dart';
-import 'Screens/Authentication/views/signup.dart';
+import 'package:taghole/Screens/VisitorsPage/visitors_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +28,27 @@ class MyApp extends StatelessWidget {
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return MaterialApp(
+      theme: ThemeData(
+        useMaterial3: true,
+
+        // Define the default brightness and colors.
+        colorScheme: ColorScheme.fromSeed(
+          primary: secondaryColor,
+          seedColor: secondaryColor,
+          // ···
+          brightness: Brightness.light,
+        ),
+
+        // Define the default `TextTheme`. Use this to specify the default
+        // text styling for headlines, titles, bodies of text, and more.
+        textTheme: const TextTheme(
+          displayLarge: TextStyle(
+            fontSize: 72,
+            fontWeight: FontWeight.bold,
+          ),
+          // ···
+        ),
+      ),
       debugShowCheckedModeBanner: false,
       title: 'Taghole',
       home: const WelcomeScreen(),
@@ -38,8 +59,8 @@ class MyApp extends StatelessWidget {
             Signup(authFormType: AuthFormType.signin),
         '/home': (BuildContext context) => const Home(),
         '/citizenSignup': (BuildContext context) =>
-            CitizenSignup(authFormType: AuthForm.signup),
-        '/anonymousSignIn': (BuildContext context) => const VisitorsScreen(),
+            const CitizenSignup(authFormType: AuthForm.signup),
+        '/visitorsPage': (BuildContext context) => const VisitorsScreen(),
       },
     );
   }

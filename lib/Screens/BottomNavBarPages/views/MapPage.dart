@@ -1,12 +1,10 @@
 import 'dart:async';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:taghole/constant/color.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -57,12 +55,12 @@ class _MapPageState extends State<MapPage> {
   }
 
   Widget mapButton(Function()? function, Icon icon, Color color) {
-    return RawMaterialButton(
+    return MaterialButton(
       onPressed: function,
       shape: const CircleBorder(),
       elevation: 2.0,
-      fillColor: color,
       padding: const EdgeInsets.all(7.0),
+      color: color,
       child: icon,
     );
   }
@@ -121,25 +119,24 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Location Reports",
+          "Location Tags",
         ),
         centerTitle: true,
       ),
       body: _initialPosition == null
-          ? const Center(
+          ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SpinKitCubeGrid(
-                    color: secondaryColor,
                     size: 80.0,
                   ),
-                  SizedBox(height: 30.0),
-                  Text(
+                  const SizedBox(height: 30.0),
+                  const Text(
                     'Loading...',
                   ),
-                  SizedBox(height: 50.0),
-                  Text(
+                  const SizedBox(height: 50.0),
+                  const Text(
                     'In case it keeps on loading, please enable location.',
                   ),
                 ],
@@ -148,6 +145,8 @@ class _MapPageState extends State<MapPage> {
           : Stack(
               children: <Widget>[
                 GoogleMap(
+                  zoomControlsEnabled: false,
+                  // mapToolbarEnabled: false,
                   mapType: _currentMapType,
                   initialCameraPosition: CameraPosition(
                     target: _initialPosition!,
@@ -168,13 +167,15 @@ class _MapPageState extends State<MapPage> {
                     child: Column(
                       children: <Widget>[
                         mapButton(_onMapTypeButtonPressed,
-                            const Icon(Icons.filter_hdr), secondaryColor),
+                            const Icon(Icons.filter_hdr), Colors.white),
                       ],
                     ),
                   ),
                 )
               ],
             ),
+      floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {}, label: const Icon(Icons.report)),
     );
   }
 }

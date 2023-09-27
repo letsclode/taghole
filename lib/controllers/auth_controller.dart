@@ -1,13 +1,10 @@
 import 'dart:async';
-
+import '../repositories/auth_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../repositories/auth_repository.dart';
-
 final authControllerProvider = StateNotifierProvider<AuthController, User?>(
-  (ref) => AuthController(ref)..appStarted(),
+  (ref) => AuthController(ref),
 );
 
 class AuthController extends StateNotifier<User?> {
@@ -29,27 +26,15 @@ class AuthController extends StateNotifier<User?> {
     super.dispose();
   }
 
-  void userVisit() async {
+  Future userVisit() async {
     final user = ref.read(authRepositoryProvider).getCurrentUser();
     if (user == null) {
       await ref.read(authRepositoryProvider).signInAnonymously();
     }
   }
 
-//TODO:
-  void appStarted() async {
-    LocationPermission permission;
-    permission = await Geolocator.requestPermission();
-
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.deniedForever) {
-        return Future.error('Location Not Available');
-      }
-    } else {
-      throw Exception('Error');
-    }
-  }
+//TODO: try to initialize the visitor auth
+  void appStarted() async {}
 
   void signOut() async {
     await ref.read(authRepositoryProvider).signOut();

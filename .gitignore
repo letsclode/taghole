@@ -33,9 +33,6 @@ migrate_working_dir/
 /build/
 
 
-#Flutter file
-./lib/firbase_option.dart
-
 # Symbolication related
 app.*.symbols
 
