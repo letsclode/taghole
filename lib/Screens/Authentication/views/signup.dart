@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:taghole/Screens/Authentication/views/citizenSignup.dart';
+import 'package:taghole/constant/color.dart';
 
 import '../../../controllers/auth_controller.dart';
 import '../../../controllers/user_controller.dart';
@@ -66,7 +66,7 @@ class _SignupState extends ConsumerState<Signup> {
               email: _email!, password: _password!, name: _name!);
           print("Signed up with new ID $uid");
           String role = "Municpal";
-          await userProvider.storeNewUser(_email!, uid, role);
+          await userProvider.storeNewUser(uid: uid, role: role);
         }
         if (!context.mounted) return;
         Navigator.of(context).pushReplacementNamed("/home");
@@ -92,7 +92,7 @@ class _SignupState extends ConsumerState<Signup> {
 
     return Scaffold(
       body: Container(
-        color: primaryColor,
+        color: secondaryColor,
         height: height,
         width: width,
         child: SafeArea(
@@ -265,17 +265,11 @@ class _SignupState extends ConsumerState<Signup> {
     String switchButtonText;
     String newFormState;
     String submitButtonText;
-    bool showForgotPassword = false;
 
     if (widget.authFormType == AuthFormType.signin) {
       switchButtonText = "Create Account";
       newFormState = "signup";
       submitButtonText = "Sign In";
-      showForgotPassword = true;
-    } else if (widget.authFormType == AuthFormType.reset) {
-      switchButtonText = "Return to Sign In";
-      newFormState = "signin";
-      submitButtonText = "Submit";
     } else {
       switchButtonText = "Have an Account? Sign In";
       newFormState = "signin";
@@ -283,40 +277,16 @@ class _SignupState extends ConsumerState<Signup> {
     }
 
     return [
-      SizedBox(
-        width: MediaQuery.of(context).size.width * 0.70,
-        child: MaterialButton(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-          color: Colors.white,
-          onPressed: submit,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              submitButtonText,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ),
+      MaterialButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
         ),
-      ),
-      Visibility(
-        visible: showForgotPassword,
-        child: ElevatedButton(
-          child: const Text(
-            "Forgot Password??",
-            style: TextStyle(
-              color: Colors.white,
-            ),
+        onPressed: submit,
+        child: Text(
+          submitButtonText,
+          style: const TextStyle(
+            fontWeight: FontWeight.w400,
           ),
-          onPressed: () {
-            setState(() {
-              widget.authFormType = AuthFormType.reset;
-            });
-          },
         ),
       ),
       ElevatedButton(

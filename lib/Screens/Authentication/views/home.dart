@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import '../../BottomNavBarPages/views/MapPage.dart';
+
 import '../../BottomNavBarPages/views/AccountPage.dart';
 import '../../BottomNavBarPages/views/ComplaintPage.dart';
+import '../../BottomNavBarPages/views/MapPage.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -26,23 +26,8 @@ class _HomeState extends State<Home> {
     });
   }
 
-  void requestPermission() async {
-    LocationPermission permission;
-    permission = await Geolocator.requestPermission();
-
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.deniedForever) {
-        return Future.error('Location Not Available');
-      }
-    } else {
-      throw Exception('Error');
-    }
-  }
-
   @override
   void initState() {
-    requestPermission();
     super.initState();
   }
 

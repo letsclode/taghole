@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:taghole/constant/color.dart';
 
 import '../../../controllers/auth_controller.dart';
 
@@ -18,7 +19,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
       appBar: AppBar(
         title: const Text(
           "Account",
-          style: TextStyle(color: Colors.amber),
+          style: TextStyle(color: secondaryColor),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -31,7 +32,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
             const SizedBox(height: 100.0),
             Center(
               child: MaterialButton(
-                color: Colors.amber,
+                color: secondaryColor,
                 onPressed: () async {
                   try {
                     authProvider.signOut();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taghole/constant/color.dart';
 
 import '../widgets/cards.dart';
 
@@ -19,7 +20,7 @@ class _ComplaintPageState extends State<ComplaintPage> {
         appBar: AppBar(
           title: const Text(
             "HomePage",
-            style: TextStyle(color: Colors.amber),
+            style: TextStyle(color: secondaryColor),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,

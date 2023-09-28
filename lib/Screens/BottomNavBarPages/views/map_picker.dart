@@ -6,7 +6,9 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart' as loc;
 import 'package:map_picker/map_picker.dart';
+import 'package:taghole/constant/color.dart';
 
 class KMapPicker extends StatefulWidget {
   const KMapPicker({Key? key}) : super(key: key);
@@ -53,18 +55,18 @@ class _KMapPickerState extends State<KMapPicker> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SpinKitCubeGrid(
-                    color: Colors.amber,
+                    color: secondaryColor,
                     size: 80.0,
                   ),
                   SizedBox(height: 30.0),
                   Text(
                     'Loading...',
-                    style: TextStyle(color: Colors.amber),
+                    style: TextStyle(color: secondaryColor),
                   ),
                   SizedBox(height: 50.0),
                   Text(
                     'In case it keeps on loading, please enable location.',
-                    style: TextStyle(color: Colors.amber, fontSize: 20.0),
+                    style: TextStyle(color: secondaryColor, fontSize: 20.0),
                   ),
                 ],
               ),
@@ -96,13 +98,16 @@ class _KMapPickerState extends State<KMapPicker> {
                     onCameraMoveStarted: () {
                       // notify map is moving
                       mapPickerController.mapMoving!();
-                      textController.text = "checking ...";
+                      setState(() {
+                        textController.text = "checking ...";
+                      });
                     },
                     onCameraMove: (cameraPosition) {
                       this.cameraPosition = cameraPosition;
                     },
                     onCameraIdle: () async {
                       // notify map stopped moving
+                      // update the ui with the address
                       mapPickerController.mapFinishedMoving!();
                       //get address name from camera position
                       List<Placemark> placemarks =
@@ -110,10 +115,10 @@ class _KMapPickerState extends State<KMapPicker> {
                         cameraPosition.target.latitude,
                         cameraPosition.target.longitude,
                       );
-
-                      // update the ui with the address
-                      textController.text =
-                          '${placemarks.first.name}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}';
+                      setState(() {
+                        textController.text =
+                            '${placemarks.first.name}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}';
+                      });
                     },
                   ),
                 ),
@@ -121,14 +126,20 @@ class _KMapPickerState extends State<KMapPicker> {
                   top: MediaQuery.of(context).viewPadding.top + 20,
                   width: MediaQuery.of(context).size.width - 50,
                   height: 50,
-                  child: TextFormField(
-                    maxLines: 3,
-                    textAlign: TextAlign.center,
-                    readOnly: true,
-                    decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.zero,
-                        border: InputBorder.none),
-                    controller: textController,
+                  child: Container(
+                    color: const Color.fromARGB(125, 158, 158, 158),
+                    padding: const EdgeInsets.all(8),
+                    child: Center(
+                      child: TextFormField(
+                        maxLines: 3,
+                        textAlign: TextAlign.center,
+                        readOnly: true,
+                        decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.zero,
+                            border: InputBorder.none),
+                        controller: textController,
+                      ),
+                    ),
                   ),
                 ),
                 Positioned(
@@ -137,31 +148,27 @@ class _KMapPickerState extends State<KMapPicker> {
                   right: 24,
                   child: SizedBox(
                     height: 50,
-                    child: TextButton(
-                      onPressed: () {
-                        print(
-                            "Location ${cameraPosition.target.latitude} ${cameraPosition.target.longitude}");
-                        print("Address: ${textController.text}");
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color(0xFFA3080C)),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                        ),
-                      ),
+                    child: MaterialButton(
+                      color: secondaryColor,
+                      disabledColor: Colors.grey,
+                      onPressed: textController.text == "checking ..."
+                          ? null
+                          : () {
+                              loc.LocationData locationData =
+                                  loc.LocationData.fromMap({
+                                "latitude": cameraPosition.target.latitude,
+                                "longitude": cameraPosition.target.longitude,
+                              });
+
+                              Navigator.of(context)
+                                  .pop<loc.LocationData>(locationData);
+                            },
                       child: const Text(
-                        "Submit",
+                        "Submit Location",
                         style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontStyle: FontStyle.normal,
-                          color: Color(0xFFFFFFFF),
-                          fontSize: 19,
-                          // height: 19/19,
-                        ),
+                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.normal,
+                            color: Colors.white),
                       ),
                     ),
                   ),

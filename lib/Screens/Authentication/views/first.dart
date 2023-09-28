@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:taghole/constant/color.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:taghole/constant/color.dart';
 import 'package:taghole/controllers/auth_controller.dart';
 
 class First extends StatelessWidget {
@@ -72,11 +72,7 @@ class First extends StatelessWidget {
                             return OutlinedButton(
                               child: const Text('Skip'),
                               onPressed: () async {
-                                //TODO: skip
-                                //signe in as visitors
                                 await authProvider.userVisit();
-
-                                //redirect sa map page na viewing only
                               },
                             );
                           },
@@ -86,7 +82,7 @@ class First extends StatelessWidget {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            //TODO: redirect to login
+                            Navigator.pushNamed(context, '/citizenSignup');
                           },
                           child: const Text(
                             "Login",

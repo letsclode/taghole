@@ -36,16 +36,7 @@ class _PinCodeScreenState extends ConsumerState<PinCodeScreen> {
               //handle validation or checks here
             },
             //runs when every textfield is filled
-            onSubmit: (String verificationCode) {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text("Verification Code"),
-                      content: Text('Code entered is $verificationCode'),
-                    );
-                  });
-            }, // end onSubmit
+            onSubmit: (String verificationCode) {}, // end onSubmit
           ),
         ],
       ),

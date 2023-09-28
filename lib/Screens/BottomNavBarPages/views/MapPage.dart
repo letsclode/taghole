@@ -1,10 +1,16 @@
 import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:taghole/constant/color.dart';
+import 'package:taghole/controllers/auth_controller.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -24,21 +30,45 @@ class _MapPageState extends State<MapPage> {
   double? _lat;
   double? _lng;
   final Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _getUserLocation();
-    _populateClients();
+    requestPermission();
   }
 
-  void _getUserLocation() async {
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    List<Placemark> placemark =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
+  void requestPermission() async {
+    Permission.location.request().then((permission) async {
+      if (permission.isGranted) {
+        await _getUserLocation();
+        await _populateClients();
+      }
+      if (permission.isDenied) {
+        _setDefaultLocation();
+      }
+    });
+  }
+
+  Future _getUserLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      List<Placemark> placemark =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
+      setState(() {
+        _initialPosition = LatLng(position.latitude, position.longitude);
+      });
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  void _setDefaultLocation() {
     setState(() {
-      _initialPosition = LatLng(position.latitude, position.longitude);
+      _initialPosition = const LatLng(12.0676, 124.5930);
     });
   }
 
@@ -48,10 +78,6 @@ class _MapPageState extends State<MapPage> {
           ? MapType.satellite
           : MapType.normal;
     });
-  }
-
-  _onCameraMove(CameraPosition position) {
-    // Handle camera move
   }
 
   Widget mapButton(Function()? function, Icon icon, Color color) {
@@ -90,6 +116,8 @@ class _MapPageState extends State<MapPage> {
     FirebaseFirestore.instance.collection('reports').get().then((docs) {
       if (docs.docs.isNotEmpty) {
         for (int i = 0; i < docs.docs.length; ++i) {
+          print("DATA HERE");
+          print(docs.docs[i].data());
           initMarker(docs.docs[i].data(), docs.docs[i].id);
         }
       }
@@ -101,6 +129,79 @@ class _MapPageState extends State<MapPage> {
     final MarkerId markerId = MarkerId(markerIdVal);
     // creating a new MARKER
     final Marker marker = Marker(
+      onTap: () {
+        showModalBottomSheet<void>(
+          context: scaffoldKey.currentState!.context,
+          builder: (BuildContext context) {
+            return Container(
+              height: 200,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 80,
+                          height: 80,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Image.network(
+                                  request['imageurl'],
+                                  loadingBuilder: (BuildContext context,
+                                      Widget child,
+                                      ImageChunkEvent? loadingProgress) {
+                                    if (loadingProgress == null) {
+                                      return child;
+                                    } else {
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          value: loadingProgress
+                                                      .expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  (loadingProgress
+                                                          .expectedTotalBytes ??
+                                                      1)
+                                              : null,
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  fit: BoxFit.fill,
+                                ),
+                                const Positioned.fill(
+                                  child: Center(
+                                    child:
+                                        CircularProgressIndicator(), // Facebook-like loader
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            Text("Type: ${request['potholetype']}"),
+                            Text("Address: ${request['address']}")
+                          ],
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
       markerId: markerId,
       position: LatLng(request['position']['geopoint'].latitude,
           request['position']['geopoint'].longitude),
@@ -117,26 +218,40 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         title: const Text(
           "Location Tags",
+          style: TextStyle(color: secondaryColor),
         ),
         centerTitle: true,
+        actions: [
+          Consumer(
+            builder: (context, ref, child) {
+              return IconButton(
+                  onPressed: () {
+                    ref.read(authControllerProvider.notifier).signOut();
+                  },
+                  icon: const Icon(Icons.exit_to_app));
+            },
+          )
+        ],
       ),
       body: _initialPosition == null
-          ? Center(
+          ? const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SpinKitCubeGrid(
-                    size: 80.0,
+                    size: 60.0,
+                    color: secondaryColor,
                   ),
-                  const SizedBox(height: 30.0),
-                  const Text(
+                  SizedBox(height: 30.0),
+                  Text(
                     'Loading...',
                   ),
-                  const SizedBox(height: 50.0),
-                  const Text(
+                  SizedBox(height: 50.0),
+                  Text(
                     'In case it keeps on loading, please enable location.',
                   ),
                 ],
@@ -145,14 +260,13 @@ class _MapPageState extends State<MapPage> {
           : Stack(
               children: <Widget>[
                 GoogleMap(
+                  mapToolbarEnabled: false,
                   zoomControlsEnabled: false,
-                  // mapToolbarEnabled: false,
                   mapType: _currentMapType,
                   initialCameraPosition: CameraPosition(
                     target: _initialPosition!,
                     zoom: 14.4746,
                   ),
-                  onCameraMove: _onCameraMove,
                   myLocationEnabled: true,
                   myLocationButtonEnabled: false,
                   markers: _createMarkers(),
@@ -174,8 +288,49 @@ class _MapPageState extends State<MapPage> {
                 )
               ],
             ),
-      floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {}, label: const Icon(Icons.report)),
+      // floatingActionButton: FloatingActionButton.extended(
+      //     onPressed: () {
+      //       //TODO: try to add
+      //       showDialog(
+      //           context: context,
+      //           builder: (context) {
+      //             return AlertDialog(
+      //               title: const Text("Tag a hole"),
+      //               content: SizedBox(
+      //                 height: MediaQuery.of(context).size.height / 6,
+      //                 child: Column(
+      //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //                   children: [
+      //                     const Text(
+      //                         'In order to tag a hole you must be a registered user.'),
+      //                     Row(
+      //                       mainAxisAlignment: MainAxisAlignment.end,
+      //                       children: [
+      //                         Consumer(
+      //                           builder: (context, ref, child) {
+      //                             return MaterialButton(
+      //                               color: secondaryColor,
+      //                               onPressed: () async {
+      //                                 //  ref.read(authControllerProvider.notifier).signOut();
+      //                                 Navigator.pushNamed(
+      //                                     context, '/citizenSignup');
+      //                               },
+      //                               child: const Text(
+      //                                 "Register Now",
+      //                                 style: TextStyle(color: Colors.white),
+      //                               ),
+      //                             );
+      //                           },
+      //                         )
+      //                       ],
+      //                     )
+      //                   ],
+      //                 ),
+      //               ),
+      //             );
+      //           });
+      //     },
+      //     label: const Icon(Icons.report)),
     );
   }
 }

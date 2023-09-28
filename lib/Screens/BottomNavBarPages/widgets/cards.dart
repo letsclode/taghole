@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taghole/constant/color.dart';
 
 import '../../FAQScreen/views/FAQScreen.dart';
 import '../../HomeMenuPages/views/SelectionPage.dart';
@@ -25,17 +26,17 @@ class _CardsState extends State<Cards> {
               );
             },
             child: SizedBox(
-              height: 120,
+              height: 80,
               child: Stack(
                 alignment: Alignment.bottomLeft,
                 children: [
                   Container(
                     padding: const EdgeInsets.only(left: 160),
-                    height: 120,
+                    height: 80,
                     width: 350,
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Colors.amber[200]!, Colors.amber],
+                      gradient: const LinearGradient(
+                        colors: [Colors.red, secondaryColor],
                       ),
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -59,7 +60,9 @@ class _CardsState extends State<Cards> {
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(
+            height: 20,
+          ),
           GestureDetector(
             onTap: () {
               Navigator.push(
@@ -68,17 +71,17 @@ class _CardsState extends State<Cards> {
               );
             },
             child: SizedBox(
-              height: 120,
+              height: 80,
               child: Stack(
                 alignment: Alignment.bottomLeft,
                 children: [
                   Container(
                     padding: const EdgeInsets.only(left: 160),
-                    height: 120,
+                    height: 80,
                     width: 350,
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Colors.amber[200]!, Colors.amber],
+                      gradient: const LinearGradient(
+                        colors: [Colors.red, secondaryColor],
                       ),
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -102,7 +105,9 @@ class _CardsState extends State<Cards> {
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(
+            height: 20,
+          ),
           GestureDetector(
             onTap: () {
               Navigator.push(
@@ -111,17 +116,17 @@ class _CardsState extends State<Cards> {
               );
             },
             child: SizedBox(
-              height: 120,
+              height: 80,
               child: Stack(
                 alignment: Alignment.bottomLeft,
                 children: [
                   Container(
                     padding: const EdgeInsets.only(left: 160),
-                    height: 120,
+                    height: 80,
                     width: 350,
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Colors.amber[200]!, Colors.amber],
+                      gradient: const LinearGradient(
+                        colors: [Colors.red, secondaryColor],
                       ),
                       borderRadius: BorderRadius.circular(20),
                     ),

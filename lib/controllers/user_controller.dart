@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -25,33 +26,34 @@ class UserController extends StateNotifier<User?> {
   }
 
 //TODO: finish this
-  Future storeNewUser(String email, String uid, String role) async {
-    // FirebaseFirestore.instance.collection('users').add({
-    //   'email': email,
-    //   'uid': uid,
-    //   'role': role,
-    // }).catchError((e) {
-    //   print(e);
-    // });
+  Future storeNewUser(
+      {String? email, required String uid, required String role}) async {
+    FirebaseFirestore.instance.collection('users').add({
+      'email': email,
+      'uid': uid,
+      'role': role,
+    }).catchError((e) {
+      print(e);
+    });
   }
 
 //TODO: finish this
   Future<int?> authorizeAccess() async {
     dynamic user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      // FirebaseFirestore.instance
-      //     .collection('users')
-      //     .where('uid', isEqualTo: user!.uid)
-      //     .get()
-      //     .then((docs) {
-      //   if (docs.docs[0].exists) {
-      //     if (docs.docs[0]['role'] == 'municipal') {
-      //       return 0;
-      //     } else {
-      //       return 1;
-      //     }
-      //   }
-      // });
+      FirebaseFirestore.instance
+          .collection('users')
+          .where('uid', isEqualTo: user!.uid)
+          .get()
+          .then((docs) {
+        if (docs.docs[0].exists) {
+          if (docs.docs[0]['role'] == 'municipal') {
+            return 0;
+          } else {
+            return 1;
+          }
+        }
+      });
     }
     return null;
   }

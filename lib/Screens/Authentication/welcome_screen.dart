@@ -1,9 +1,10 @@
-import 'views/home.dart';
-import 'views/first.dart';
 import 'package:flutter/material.dart';
-import '../../controllers/auth_controller.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:taghole/Screens/VisitorsPage/visitors_screen.dart';
+
+import '../../controllers/auth_controller.dart';
+import 'views/first.dart';
+import 'views/home.dart';
 
 class WelcomeScreen extends HookConsumerWidget {
   const WelcomeScreen({super.key});

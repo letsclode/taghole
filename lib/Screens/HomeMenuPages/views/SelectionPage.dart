@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taghole/Screens/HomeMenuPages/views/ComplaintForm.dart';
+import 'package:taghole/constant/color.dart';
 
 class SelectionPage extends StatefulWidget {
   const SelectionPage({super.key});
@@ -14,56 +15,32 @@ class _SelectionPageState extends State<SelectionPage> {
     return Scaffold(
         appBar: AppBar(
           leading: const BackButton(
-            color: Colors.amber,
+            color: secondaryColor,
           ),
           title: const Text(
             "New Complaint",
-            style: TextStyle(color: Colors.amber),
+            style: TextStyle(color: secondaryColor),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
         ),
         body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Padding(
-            //   padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
-            //   child: Row(
-            //     children: [
-            //       RaisedButton.icon(
-            //         onPressed: () {
-            //           Navigator.pop(context);
-            //         },
-            //         icon: Icon(
-            //           Icons.arrow_back_ios,
-            //           color: Colors.white,
-            //         ),
-            //         color: Colors.amber,
-            //         label: Text("Go on Homepage",
-            //             style: TextStyle(
-            //               color: Colors.white,
-            //             )),
-            //         shape: RoundedRectangleBorder(
-            //             borderRadius: BorderRadius.circular(18.0),
-            //             side: BorderSide(color: Colors.amber)),
-            //       )
-            //     ],
-            //   ),
-            // ),
-            const SizedBox(height: 200),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 MaterialButton(
-                  splashColor: Colors.amber,
-                  focusColor: Colors.amber,
-                  onPressed: null,
+                  splashColor: secondaryColor,
+                  focusColor: secondaryColor,
+                  onPressed: () {},
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
                   ),
                   child: const Text(
                     "Capture through camera",
                     style: TextStyle(
-                      color: Colors.amber,
+                      color: secondaryColor,
                     ),
                   ),
                 ),
@@ -75,8 +52,8 @@ class _SelectionPageState extends State<SelectionPage> {
                   thickness: 0.5,
                 ),
                 MaterialButton(
-                  splashColor: Colors.amber,
-                  focusColor: Colors.amber,
+                  splashColor: secondaryColor,
+                  focusColor: secondaryColor,
                   onPressed: null,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
@@ -92,7 +69,7 @@ class _SelectionPageState extends State<SelectionPage> {
                     child: const Text(
                       "Upload Through Gallery",
                       style: TextStyle(
-                        color: Colors.amber,
+                        color: secondaryColor,
                       ),
                     ),
                   ),
@@ -109,13 +86,13 @@ class _SelectionPageState extends State<SelectionPage> {
                   children: <Widget>[
                     FloatingActionButton(
                       onPressed: null,
-                      backgroundColor: Colors.amber,
+                      backgroundColor: secondaryColor,
                       child: Icon(Icons.question_answer),
                     ),
                     SizedBox(width: 20),
                     Text(
                       "How to Report",
-                      style: TextStyle(color: Colors.amber),
+                      style: TextStyle(color: secondaryColor),
                     ),
                   ],
                 )

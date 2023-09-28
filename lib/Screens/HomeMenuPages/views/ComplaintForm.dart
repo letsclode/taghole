@@ -2,14 +2,14 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:location/location.dart';
+import 'package:location/location.dart' as loc;
 import 'package:taghole/Screens/BottomNavBarPages/views/map_picker.dart';
+import 'package:taghole/constant/color.dart';
 
 import '../services/focuschanger.dart';
 import '../services/toast.dart';
@@ -24,31 +24,21 @@ class ComplaintForm extends StatefulWidget {
 class _ComplaintFormState extends State<ComplaintForm> {
   final _formKey = GlobalKey<FormState>();
 
-  final FocusNode _usernameFocusNode = FocusNode();
-  final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _potholetypeFocusNode = FocusNode();
   final FocusNode _departmentFocusNode = FocusNode();
   final FocusNode _addressFocusNode = FocusNode();
-  final FocusNode _landmarkFocusNode = FocusNode();
-  final FocusNode _commentFocusNode = FocusNode();
-  final FocusNode _phonenumFocusNode = FocusNode();
 
   final _firestore = FirebaseFirestore.instance;
   GeoFlutterFire geo = GeoFlutterFire();
-  Location location = Location();
+  loc.Location location = loc.Location();
 
-  String? _username,
-      _email,
-      _potholetype,
-      _department,
-      _address,
-      _landmark,
-      _comment;
-  int? _phonenum;
+  String? _potholetype, _department, _address;
   final bool _work = false;
   String? imageurl;
   XFile? image;
   final picker = ImagePicker();
+
+  late GeoFirePoint point;
 
   Future _getImage() async {
     var selectedImage =
@@ -72,23 +62,26 @@ class _ComplaintFormState extends State<ComplaintForm> {
     print('url is $imageurl');
   }
 
-  void uploadform() async {
+  void setLocation() async {
     var pos = await location.getLocation();
-    GeoFirePoint point =
-        geo.point(latitude: pos.latitude!, longitude: pos.longitude!);
+    point = geo.point(latitude: pos.latitude!, longitude: pos.longitude!);
+  }
+
+  void uploadform() async {
     _firestore.collection('reports').add({
-      'username': _username,
       'position': point.data,
-      'email': _email,
       'potholetype': _potholetype,
       'department': _department,
       'address': _address,
-      'landmark': _landmark,
-      'comment': _comment,
-      'phonenum': _phonenum,
       'work': _work,
       'imageurl': imageurl,
     });
+  }
+
+  @override
+  void initState() {
+    setLocation();
+    super.initState();
   }
 
   @override
@@ -97,12 +90,12 @@ class _ComplaintFormState extends State<ComplaintForm> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: const BackButton(
-          color: Colors.amber,
+          color: secondaryColor,
         ),
         backgroundColor: Colors.white,
         title: const Text(
           "Complaint Form",
-          style: TextStyle(color: Colors.amber),
+          style: TextStyle(color: secondaryColor),
         ),
         centerTitle: true,
       ),
@@ -114,8 +107,8 @@ class _ComplaintFormState extends State<ComplaintForm> {
               children: [
                 const SizedBox(height: 20.0),
                 ElevatedButton.icon(
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.amber),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: secondaryColor),
                     onPressed: _getImage,
                     icon: const Icon(
                       Icons.add_a_photo,
@@ -153,13 +146,13 @@ class _ComplaintFormState extends State<ComplaintForm> {
                   decoration: const InputDecoration(
                     labelText: "Pothole Type",
                     hintText: "e.g pothole,cracks,deformation,deep etc",
-                    focusColor: Colors.amber,
+                    focusColor: secondaryColor,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(
                         Radius.circular(8.0),
                       ),
                       borderSide: BorderSide(
-                        color: Colors.amber,
+                        color: secondaryColor,
                         width: 1.0,
                       ),
                     ),
@@ -188,13 +181,13 @@ class _ComplaintFormState extends State<ComplaintForm> {
                   decoration: const InputDecoration(
                     labelText: "Department",
                     hintText: "e.g Nagarpalika",
-                    focusColor: Colors.amber,
+                    focusColor: secondaryColor,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(
                         Radius.circular(8.0),
                       ),
                       borderSide: BorderSide(
-                        color: Colors.amber,
+                        color: secondaryColor,
                         width: 1.0,
                       ),
                     ),
@@ -215,204 +208,54 @@ class _ComplaintFormState extends State<ComplaintForm> {
                 const SizedBox(
                   height: 20.0,
                 ),
-                MaterialButton(onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const KMapPicker()),
-                  );
-                }),
-                // TextFormField(
-                //   focusNode: _addressFocusNode,
-                //   autofocus: true,
-                //   textCapitalization: TextCapitalization.words,
-                //   keyboardType: TextInputType.text,
-                //   decoration: const InputDecoration(
-                //     labelText: "Address",
-                //     hintText: "Address of pothole",
-                //     border: OutlineInputBorder(
-                //       borderRadius: BorderRadius.all(
-                //         Radius.circular(8.0),
-                //       ),
-                //       borderSide: BorderSide(
-                //         color: Colors.amber,
-                //         width: 1.0,
-                //       ),
-                //     ),
-                //   ),
-                //   textInputAction: TextInputAction.next,
-                //   validator: (address) {
-                //     if (address == null) {
-                //       return 'Address is Required';
-                //     }
-                //     return null;
-                //   },
-                //   onSaved: (address) => _address = address,
-                //   onFieldSubmitted: (_) {
-                //     fieldFocusChange(
-                //         context, _addressFocusNode, _landmarkFocusNode);
-                //   },
-                // ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                TextFormField(
-                  focusNode: _landmarkFocusNode,
-                  autofocus: true,
-                  textCapitalization: TextCapitalization.words,
-                  keyboardType: TextInputType.text,
-                  decoration: const InputDecoration(
-                    labelText: "Landmark",
-                    hintText: "Nearby Landmark",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8.0),
-                      ),
-                      borderSide: BorderSide(
-                        color: Colors.amber,
-                        width: 1.0,
+                Column(
+                  children: [
+                    _address!.isEmpty
+                        ? const CircularProgressIndicator()
+                        : Text(_address!),
+                    OutlinedButton(
+                      onPressed: () {
+                        _address = '';
+                        Navigator.push<loc.LocationData?>(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const KMapPicker()),
+                        ).then((value) async {
+                          if (value != null) {
+                            print('address');
+                            print(value);
+
+                            point = geo.point(
+                                latitude: value.latitude!,
+                                longitude: value.longitude!);
+
+                            List<Placemark> placemarks =
+                                await placemarkFromCoordinates(
+                              point.latitude,
+                              point.longitude,
+                            );
+
+                            // update the ui with the address
+                            setState(() {
+                              _address =
+                                  '${placemarks.first.name}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}';
+                            });
+                          } else {
+                            print("User didn't select a location");
+                          }
+                        });
+                      },
+                      child: const Row(
+                        children: [
+                          Icon(
+                            Icons.location_on_outlined,
+                            color: secondaryColor,
+                          ),
+                          Text('Pick a location'),
+                        ],
                       ),
                     ),
-                  ),
-                  textInputAction: TextInputAction.next,
-                  validator: (name) {
-                    if (name == null) {
-                      return 'Landmark is Required';
-                    }
-                    return null;
-                  },
-                  onSaved: (name) => _landmark = name,
-                  onFieldSubmitted: (_) {
-                    fieldFocusChange(
-                        context, _landmarkFocusNode, _commentFocusNode);
-                  },
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                TextFormField(
-                  focusNode: _commentFocusNode,
-                  autofocus: true,
-                  textCapitalization: TextCapitalization.words,
-                  keyboardType: TextInputType.text,
-                  decoration: const InputDecoration(
-                    labelText: "Comment",
-                    hintText: "Comment about pothole",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8.0),
-                      ),
-                      borderSide: BorderSide(
-                        color: Colors.amber,
-                        width: 1.0,
-                      ),
-                    ),
-                  ),
-                  textInputAction: TextInputAction.next,
-                  validator: (comment) {
-                    if (comment == null) {
-                      return 'Comment is Required';
-                    }
-                    return null;
-                  },
-                  onSaved: (comment) => _comment = comment,
-                  onFieldSubmitted: (_) {
-                    fieldFocusChange(
-                        context, _commentFocusNode, _usernameFocusNode);
-                  },
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                TextFormField(
-                  focusNode: _usernameFocusNode,
-                  autofocus: true,
-                  textCapitalization: TextCapitalization.words,
-                  keyboardType: TextInputType.text,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8.0),
-                      ),
-                      borderSide: BorderSide(
-                        color: Colors.amber,
-                        width: 1.0,
-                      ),
-                    ),
-                    labelText: "Username",
-                    hintText: "e.g Yash",
-                  ),
-                  textInputAction: TextInputAction.next,
-                  validator: (name) {
-                    String pattern = r'^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$';
-                    RegExp regex = RegExp(pattern);
-                    if (!regex.hasMatch(name!)) {
-                      return 'Invalid username';
-                    } else {
-                      return null;
-                    }
-                  },
-                  onSaved: (name) => _username = name,
-                  onFieldSubmitted: (_) {
-                    fieldFocusChange(
-                        context, _usernameFocusNode, _emailFocusNode);
-                  },
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                TextFormField(
-                  focusNode: _emailFocusNode,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8.0),
-                      ),
-                      borderSide: BorderSide(
-                        color: Colors.amber,
-                        width: 1.0,
-                      ),
-                    ),
-                    labelText: "Email",
-                    hintText: "e.g abc@gmail.com",
-                  ),
-                  textInputAction: TextInputAction.next,
-                  validator: (email) => EmailValidator.validate(email!)
-                      ? null
-                      : "Invalid email address",
-                  onSaved: (email) => _email = email,
-                  onFieldSubmitted: (_) {
-                    fieldFocusChange(
-                        context, _emailFocusNode, _phonenumFocusNode);
-                  },
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                TextFormField(
-                  focusNode: _phonenumFocusNode,
-                  decoration: const InputDecoration(
-                    labelText: "Enter your number",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8.0),
-                      ),
-                      borderSide: BorderSide(
-                        color: Colors.amber,
-                        width: 1.0,
-                      ),
-                    ),
-                  ),
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) {
-                    _phonenum = int.parse(value);
-                  },
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ], // Only numbers can be entered
-                ),
-                const SizedBox(
-                  height: 20.0,
+                  ],
                 ),
                 MaterialButton(
                   color: Theme.of(context).primaryColor,
