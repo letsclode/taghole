@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:taghole/Screens/BottomNavBarPages/widgets/status_button.dart';
-import 'package:taghole/Screens/FAQScreen/views/FAQScreen.dart';
-import 'package:taghole/Screens/HomeMenuPages/views/SelectionPage.dart';
+import 'package:taghole/Screens/HomeMenuPages/views/ComplaintForm.dart';
 import 'package:taghole/constant/color.dart';
 
 class Cards extends ConsumerStatefulWidget {
@@ -22,7 +21,7 @@ class _CardsState extends ConsumerState<Cards> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SelectionPage()),
+                MaterialPageRoute(builder: (context) => const ComplaintForm()),
               );
             },
             child: SizedBox(
@@ -60,51 +59,51 @@ class _CardsState extends ConsumerState<Cards> {
               ),
             ),
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const FAQScreen()),
-              );
-            },
-            child: SizedBox(
-              height: 80,
-              child: Stack(
-                alignment: Alignment.bottomLeft,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(left: 160),
-                    height: 80,
-                    width: 350,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Colors.red, secondaryColor],
-                      ),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Center(
-                      child: RichText(
-                        text: const TextSpan(
-                          text: "FAQ",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17.0),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Image.asset('assets/HomePage/FAQ.png'),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          // const SizedBox(
+          //   height: 20,
+          // ),
+          // GestureDetector(
+          //   onTap: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => const FAQScreen()),
+          //     );
+          //   },
+          //   child: SizedBox(
+          //     height: 80,
+          //     child: Stack(
+          //       alignment: Alignment.bottomLeft,
+          //       children: [
+          //         Container(
+          //           padding: const EdgeInsets.only(left: 160),
+          //           height: 80,
+          //           width: 350,
+          //           decoration: BoxDecoration(
+          //             gradient: const LinearGradient(
+          //               colors: [Colors.red, secondaryColor],
+          //             ),
+          //             borderRadius: BorderRadius.circular(20),
+          //           ),
+          //           child: Center(
+          //             child: RichText(
+          //               text: const TextSpan(
+          //                 text: "FAQ",
+          //                 style: TextStyle(
+          //                     color: Colors.white,
+          //                     fontWeight: FontWeight.bold,
+          //                     fontSize: 17.0),
+          //               ),
+          //             ),
+          //           ),
+          //         ),
+          //         Padding(
+          //           padding: const EdgeInsets.symmetric(horizontal: 15),
+          //           child: Image.asset('assets/HomePage/FAQ.png'),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
           const StatusButton(),
         ],
       ),

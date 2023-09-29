@@ -30,27 +30,27 @@ class _SelectionPageState extends State<SelectionPage> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                MaterialButton(
-                  splashColor: secondaryColor,
-                  focusColor: secondaryColor,
-                  onPressed: () {},
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  child: const Text(
-                    "Capture through camera",
-                    style: TextStyle(
-                      color: secondaryColor,
-                    ),
-                  ),
-                ),
-                const Divider(
-                  color: Color(0xff2e279d),
-                  height: 20.0,
-                  endIndent: 150,
-                  indent: 150,
-                  thickness: 0.5,
-                ),
+                // MaterialButton(
+                //   splashColor: secondaryColor,
+                //   focusColor: secondaryColor,
+                //   onPressed: () {},
+                //   shape: RoundedRectangleBorder(
+                //     borderRadius: BorderRadius.circular(30.0),
+                //   ),
+                //   child: const Text(
+                //     "Capture through camera",
+                //     style: TextStyle(
+                //       color: secondaryColor,
+                //     ),
+                //   ),
+                // ),
+                // const Divider(
+                //   color: Color(0xff2e279d),
+                //   height: 20.0,
+                //   endIndent: 150,
+                //   indent: 150,
+                //   thickness: 0.5,
+                // ),
                 MaterialButton(
                   splashColor: secondaryColor,
                   focusColor: secondaryColor,
@@ -74,28 +74,28 @@ class _SelectionPageState extends State<SelectionPage> {
                     ),
                   ),
                 ),
-                const Divider(
-                  color: Color(0xff2e279d),
-                  height: 20.0,
-                  endIndent: 150,
-                  indent: 150,
-                  thickness: 0.5,
-                ),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    FloatingActionButton(
-                      onPressed: null,
-                      backgroundColor: secondaryColor,
-                      child: Icon(Icons.question_answer),
-                    ),
-                    SizedBox(width: 20),
-                    Text(
-                      "How to Report",
-                      style: TextStyle(color: secondaryColor),
-                    ),
-                  ],
-                )
+                // const Divider(
+                //   color: Color(0xff2e279d),
+                //   height: 20.0,
+                //   endIndent: 150,
+                //   indent: 150,
+                //   thickness: 0.5,
+                // ),
+                // const Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: <Widget>[
+                //     FloatingActionButton(
+                //       onPressed: null,
+                //       backgroundColor: secondaryColor,
+                //       child: Icon(Icons.question_answer),
+                //     ),
+                //     SizedBox(width: 20),
+                //     Text(
+                //       "How to Report",
+                //       style: TextStyle(color: secondaryColor),
+                //     ),
+                //   ],
+                // )
               ],
             ),
           ],

@@ -57,7 +57,8 @@ class _StatusListState extends State<StatusList> {
                     leading: Builder(builder: (context) {
                       if (data['work'] == false) {
                         return CircleAvatar(
-                            backgroundImage: NetworkImage(data['imageurl']),
+                            backgroundImage:
+                                NetworkImage(data['imageurl'] ?? ''),
                             // backgroundColor: Colors.grey,
                             radius: 20);
                       } else {
@@ -108,8 +109,16 @@ class _StatusListState extends State<StatusList> {
                           MaterialButton(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(4.0)),
-                            onPressed: () {
+                            onPressed: () async {
                               //TODO delete
+
+                              deleteReport(querySnapshot!.docs[i].id)
+                                  .then((value) {
+                                setState(() {
+                                  querySnapshot!.docs
+                                      .remove(querySnapshot!.docs[i]);
+                                });
+                              });
                             },
                             child: const Column(
                               children: <Widget>[

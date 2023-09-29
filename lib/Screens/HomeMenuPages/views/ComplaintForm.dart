@@ -41,9 +41,8 @@ class _ComplaintFormState extends State<ComplaintForm> {
 
   late GeoFirePoint point;
 
-  Future _getImage() async {
-    var selectedImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+  Future _getImage({required source}) async {
+    var selectedImage = await ImagePicker().pickImage(source: source);
     setState(() {
       image = selectedImage;
     });
@@ -111,13 +110,29 @@ class _ComplaintFormState extends State<ComplaintForm> {
                 ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                         backgroundColor: secondaryColor),
-                    onPressed: _getImage,
+                    onPressed: () {
+                      _getImage(source: ImageSource.camera);
+                    },
                     icon: const Icon(
                       Icons.add_a_photo,
                       color: Colors.white,
                     ),
                     label: const Text(
-                      'Add Image',
+                      'Capture Image',
+                      style: TextStyle(color: Colors.white),
+                    )),
+                ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: secondaryColor),
+                    onPressed: () {
+                      _getImage(source: ImageSource.gallery);
+                    },
+                    icon: const Icon(
+                      Icons.add_a_photo,
+                      color: Colors.white,
+                    ),
+                    label: const Text(
+                      'Upload Image',
                       style: TextStyle(color: Colors.white),
                     )),
                 const SizedBox(height: 20.0),
