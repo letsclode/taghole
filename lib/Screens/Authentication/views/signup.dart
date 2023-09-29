@@ -38,6 +38,10 @@ class _SignupState extends ConsumerState<Signup> {
 
   bool validate() {
     final form = formKey.currentState;
+    print('validate');
+    print(_email);
+    print(_password);
+    print(_name);
     form!.save();
     if (form.validate()) {
       form.save();
@@ -53,23 +57,28 @@ class _SignupState extends ConsumerState<Signup> {
     if (validate()) {
       try {
         if (widget.authFormType == AuthFormType.signin) {
-          String uid = await authProvider.signInWithEmailAndPassword(
+          print('login in');
+          String? uid = await authProvider.signInWithEmailAndPassword(
               email: _email!, password: _password!);
           print("Signed in with ID $uid");
+          Navigator.of(context).pushReplacementNamed("/home");
         } else if (widget.authFormType == AuthFormType.reset) {
+          print('password update');
           await authProvider.sendPasswordResetEmail(email: _email!);
           setState(() {
             widget.authFormType = AuthFormType.signin;
           });
+          Navigator.pop(context);
         } else {
-          String uid = await authProvider.createUserWithEmailAndPassword(
-              email: _email!, password: _password!, name: _name!);
+          print('creating account');
+          String? uid = await authProvider.createUserWithEmailAndPassword(
+              email: _email!, password: _password!);
           print("Signed up with new ID $uid");
-          String role = "Municpal";
-          await userProvider.storeNewUser(uid: uid, role: role);
+          String role = "admin";
+          await userProvider.storeNewUser(
+              name: _name!, email: _email!, uid: uid!, role: role);
+          Navigator.pop(context);
         }
-        if (!context.mounted) return;
-        Navigator.of(context).pushReplacementNamed("/home");
       } catch (e) {
         setState(() {
           _error = e.toString();
@@ -91,35 +100,37 @@ class _SignupState extends ConsumerState<Signup> {
     final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Admin"),
+      ),
       body: Container(
         color: secondaryColor,
         height: height,
         width: width,
-        child: SafeArea(
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: height * .025,
+        child: Column(
+          children: <Widget>[
+            showAlert(),
+            SizedBox(
+              height: height * .025,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                children: [
+                  buildHeaderText(),
+                ],
               ),
-              showAlert(),
-              SizedBox(
-                height: height * .025,
-              ),
-              buildHeaderText(),
-              SizedBox(
-                height: height * .05,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    children: buildInputs() + buildButtons(),
-                  ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  children: buildInputs() + buildButtons(),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -174,11 +185,8 @@ class _SignupState extends ConsumerState<Signup> {
     return AutoSizeText(
       headerText,
       maxLines: 1,
-      textAlign: TextAlign.center,
-      style: const TextStyle(
-        fontSize: 35,
-        color: Colors.white,
-      ),
+      textAlign: TextAlign.right,
+      style: const TextStyle(fontSize: 25, color: Colors.white),
     );
   }
 
@@ -256,8 +264,6 @@ class _SignupState extends ConsumerState<Signup> {
       ),
     );
 
-    textFields.add(SizedBox(height: MediaQuery.of(context).size.height * 0.3));
-
     return textFields;
   }
 
@@ -277,26 +283,34 @@ class _SignupState extends ConsumerState<Signup> {
     }
 
     return [
-      MaterialButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
-        onPressed: submit,
-        child: Text(
-          submitButtonText,
-          style: const TextStyle(
-            fontWeight: FontWeight.w400,
-          ),
-        ),
+      const SizedBox(
+        height: 20,
       ),
-      ElevatedButton(
-        child: Text(
-          switchButtonText,
-          style: const TextStyle(color: Colors.white),
-        ),
-        onPressed: () {
-          switchFormState(newFormState);
-        },
+      Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          MaterialButton(
+            child: Text(
+              switchButtonText,
+              style: const TextStyle(color: Colors.white),
+            ),
+            onPressed: () {
+              switchFormState(newFormState);
+            },
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          ElevatedButton(
+            onPressed: submit,
+            child: Text(
+              submitButtonText,
+              style: const TextStyle(
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
+        ],
       )
     ];
   }

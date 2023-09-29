@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taghole/constant/color.dart';
 
 import '../widgets/StatusList.dart';
 
@@ -15,11 +16,11 @@ class _StatusScreenState extends State<StatusScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(
-          color: Colors.amber,
+          color: secondaryColor,
         ),
         title: const Text(
           "All Submited Complaints",
-          style: TextStyle(color: Colors.amber),
+          style: TextStyle(color: secondaryColor),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,

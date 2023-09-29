@@ -42,9 +42,9 @@ class AuthController extends StateNotifier<User?> {
     await ref.read(authRepositoryProvider).signOut();
   }
 
-  Future signInWithEmailAndPassword(
+  Future<String?> signInWithEmailAndPassword(
       {required String email, required String password}) async {
-    await ref
+    return await ref
         .read(authRepositoryProvider)
         .signInWithEmailAndPassword(email, password);
   }
@@ -53,11 +53,10 @@ class AuthController extends StateNotifier<User?> {
     await ref.read(authRepositoryProvider).sendPasswordResetEmail(email: email);
   }
 
-  Future createUserWithEmailAndPassword(
-      {required String email,
-      required String name,
-      required String password}) async {
-    await ref.read(authRepositoryProvider).createUserWithEmailAndPassword(
-        email: email, password: password, name: name);
+  Future<String?> createUserWithEmailAndPassword(
+      {required String email, required String password}) async {
+    return await ref
+        .read(authRepositoryProvider)
+        .createUserWithEmailAndPassword(email: email, password: password);
   }
 }

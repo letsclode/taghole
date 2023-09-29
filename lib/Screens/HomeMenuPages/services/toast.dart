@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:taghole/constant/color.dart';
 
 void toastMessage(String message) {
   Fluttertoast.showToast(
@@ -7,7 +8,7 @@ void toastMessage(String message) {
     toastLength: Toast.LENGTH_SHORT,
     gravity: ToastGravity.TOP,
     fontSize: 16.0,
-    textColor: Colors.amber,
+    textColor: secondaryColor,
     backgroundColor: Colors.black,
   );
 }

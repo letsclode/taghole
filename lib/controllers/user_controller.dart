@@ -27,8 +27,12 @@ class UserController extends StateNotifier<User?> {
 
 //TODO: finish this
   Future storeNewUser(
-      {String? email, required String uid, required String role}) async {
+      {String? name,
+      String? email,
+      required String uid,
+      required String role}) async {
     FirebaseFirestore.instance.collection('users').add({
+      'name': name,
       'email': email,
       'uid': uid,
       'role': role,
@@ -38,30 +42,28 @@ class UserController extends StateNotifier<User?> {
   }
 
 //TODO: finish this
-  Future<int?> authorizeAccess() async {
-    dynamic user = FirebaseAuth.instance.currentUser;
+  Future<bool> isAdmin() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    print("USER");
+    print(user);
     if (user != null) {
-      FirebaseFirestore.instance
+      final docs = await FirebaseFirestore.instance
           .collection('users')
-          .where('uid', isEqualTo: user!.uid)
-          .get()
-          .then((docs) {
-        if (docs.docs[0].exists) {
-          if (docs.docs[0]['role'] == 'municipal') {
-            return 0;
-          } else {
-            return 1;
-          }
-        }
-      });
+          .where('uid', isEqualTo: user.uid)
+          .get();
+      if (docs.docs[0].exists) {
+        print(docs.docs[0]['role'] == 'admin');
+        return docs.docs[0]['role'] == 'admin';
+      }
     }
-    return null;
+
+    return false;
   }
 }
 
 class EmailValidator {
   static String? validate(String? value) {
-    if (value == null) {
+    if (value == null || value.isEmpty) {
       return 'Email can\'t be empty';
     }
     return null;
@@ -70,7 +72,7 @@ class EmailValidator {
 
 class PasswordValidator {
   static String? validate(String? value) {
-    if (value == null) {
+    if (value == null || value.isEmpty) {
       return 'Password can\'t be empty';
     }
     return null;

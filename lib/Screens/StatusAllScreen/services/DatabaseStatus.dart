@@ -15,10 +15,9 @@ navigateme(String lat, String long) async {
 }
 
 seepothole(String downloadurl) async {
-  String url = downloadurl;
-  if (await canLaunchUrl(Uri(path: url))) {
-    await launchUrl(Uri(path: url));
+  if (await canLaunchUrl(Uri(path: downloadurl))) {
+    await launchUrl(Uri(path: downloadurl));
   } else {
-    throw 'Could not launch $url';
+    throw 'Could not launch $downloadurl';
   }
 }

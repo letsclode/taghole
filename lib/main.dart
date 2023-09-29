@@ -54,8 +54,6 @@ class MyApp extends StatelessWidget {
       title: 'Taghole',
       home: const WelcomeScreen(),
       routes: <String, WidgetBuilder>{
-        '/signup': (BuildContext context) =>
-            Signup(authFormType: AuthFormType.signup),
         '/signin': (BuildContext context) =>
             Signup(authFormType: AuthFormType.signin),
         '/home': (BuildContext context) => const Home(),

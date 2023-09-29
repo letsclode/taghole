@@ -1,7 +1,8 @@
-import 'custom_exception.dart';
-import '../general_providers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../general_providers.dart';
+import 'custom_exception.dart';
 
 abstract class BaseAuthRepository {
   Stream<User?> get authStateChanges;
@@ -10,9 +11,9 @@ abstract class BaseAuthRepository {
   Future<void> signOut();
   Future<void> sendPasswordResetEmail({required String email});
   Future<void> upgradeUserAccount(String email, String password);
-  Future<String> signInWithEmailAndPassword(String email, String password);
-  Future<String> createUserWithEmailAndPassword(
-      {required String email, required String password, required String name});
+  Future<String?> signInWithEmailAndPassword(String email, String password);
+  Future<String?> createUserWithEmailAndPassword(
+      {required String email, required String password});
 }
 
 final authRepositoryProvider =
@@ -55,10 +56,10 @@ class AuthRepository implements BaseAuthRepository {
   }
 
   @override
-  Future<String> createUserWithEmailAndPassword(
-      {required String email,
-      required String password,
-      required String name}) async {
+  Future<String?> createUserWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
     final authResult = await ref
         .read(firebaseAuthProvider)
         .createUserWithEmailAndPassword(email: email, password: password);
@@ -67,7 +68,7 @@ class AuthRepository implements BaseAuthRepository {
   }
 
   @override
-  Future<String> signInWithEmailAndPassword(
+  Future<String?> signInWithEmailAndPassword(
       String email, String password) async {
     return (await ref
             .read(firebaseAuthProvider)

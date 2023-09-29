@@ -34,6 +34,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
 
   String? _potholetype, _department, _address;
   final bool _work = false;
+
   String? imageurl;
   XFile? image;
   final picker = ImagePicker();
@@ -75,6 +76,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
       'address': _address,
       'work': _work,
       'imageurl': imageurl,
+      'isValidate': false
     });
   }
 
@@ -210,8 +212,8 @@ class _ComplaintFormState extends State<ComplaintForm> {
                 ),
                 Column(
                   children: [
-                    _address!.isEmpty
-                        ? const CircularProgressIndicator()
+                    _address == null
+                        ? const Text('No location yet')
                         : Text(_address!),
                     OutlinedButton(
                       onPressed: () {

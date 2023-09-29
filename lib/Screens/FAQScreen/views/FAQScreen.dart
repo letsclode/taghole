@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taghole/constant/color.dart';
 
 import '../widgets/Faqlist.dart';
 
@@ -15,11 +16,11 @@ class _FAQScreenState extends State<FAQScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(
-          color: Colors.amber,
+          color: secondaryColor,
         ),
         title: const Text(
           "Frequently Asked Questions",
-          style: TextStyle(color: Colors.amber),
+          style: TextStyle(color: secondaryColor),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:taghole/constant/color.dart';
 
 import '../services/DatabaseFaq.dart';
 
@@ -68,13 +69,13 @@ class _FaqlistState extends State<Faqlist> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SpinKitCubeGrid(
-            color: Colors.amber,
+            color: secondaryColor,
             size: 80.0,
           ),
           SizedBox(height: 20.0),
           Text(
             'Loading...',
-            style: TextStyle(color: Colors.amber),
+            style: TextStyle(color: secondaryColor),
           ),
         ],
       ));

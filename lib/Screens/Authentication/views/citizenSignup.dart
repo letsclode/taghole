@@ -63,7 +63,8 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
                 .signInWithCredential(auth)
                 .then((UserCredential result) async {
               print("Verified");
-              String role = "Citizen";
+              print(result.user!.uid);
+              String role = "citizen";
               await userProvider.storeNewUser(
                   uid: result.user!.uid, role: role);
               Navigator.of(key.currentContext!).pushReplacementNamed("/home");
@@ -272,7 +273,7 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
       focusColor: Colors.white,
       enabledBorder: const OutlineInputBorder(
         borderSide: BorderSide(
-          color: Colors.white,
+          color: Colors.black12,
           width: 0.0,
         ),
       ),
@@ -283,10 +284,14 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
   List<Widget> buildInputs() {
     List<Widget> textFields = [];
 
+    textFields.add(Image.asset('assets/images/logintop.jpg'));
+    textFields.add(const SizedBox(
+      height: 10,
+    ));
+
     textFields.add(
       TextFormField(
         validator: NameValidator.validate,
-        style: const TextStyle(fontSize: 22),
         decoration: buildSignUpInputDecoration("Mobile #"),
         onSaved: (value) {
           _number = value;
@@ -309,7 +314,7 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
     } else {
       switchButtonText = "Have an Account? Sign In";
       newFormState = "signin";
-      submitButtonText = "Sign Up";
+      submitButtonText = "Sign In";
     }
 
     return [
@@ -334,14 +339,14 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
           ),
         ),
       ),
-      TextButton(
-        child: Text(
-          switchButtonText,
-        ),
-        onPressed: () {
-          switchFormState(newFormState);
-        },
-      ),
+      // TextButton(
+      //   child: Text(
+      //     switchButtonText,
+      //   ),
+      //   onPressed: () {
+      //     switchFormState(newFormState);
+      //   },
+      // ),
     ];
   }
 }

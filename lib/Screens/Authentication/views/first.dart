@@ -31,7 +31,7 @@ class First extends StatelessWidget {
                           color: Colors.black),
                     ),
                     onPressed: () {
-                      Navigator.of(context).pushReplacementNamed('/signin');
+                      Navigator.of(context).pushNamed('/signin');
                     },
                   ),
                 ],

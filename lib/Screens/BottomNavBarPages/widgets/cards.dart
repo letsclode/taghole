@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:taghole/Screens/BottomNavBarPages/widgets/status_button.dart';
+import 'package:taghole/Screens/FAQScreen/views/FAQScreen.dart';
+import 'package:taghole/Screens/HomeMenuPages/views/SelectionPage.dart';
 import 'package:taghole/constant/color.dart';
 
-import '../../FAQScreen/views/FAQScreen.dart';
-import '../../HomeMenuPages/views/SelectionPage.dart';
-import '../../StatusAllScreen/views/StatusScreen.dart';
-
-class Cards extends StatefulWidget {
+class Cards extends ConsumerStatefulWidget {
   const Cards({super.key});
 
   @override
   _CardsState createState() => _CardsState();
 }
 
-class _CardsState extends State<Cards> {
+class _CardsState extends ConsumerState<Cards> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -43,7 +43,7 @@ class _CardsState extends State<Cards> {
                     child: Center(
                       child: RichText(
                         text: const TextSpan(
-                          text: "Report New Complaint",
+                          text: "Tag a pothole",
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -55,51 +55,6 @@ class _CardsState extends State<Cards> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Image.asset('assets/HomePage/report.png'),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const StatusScreen()),
-              );
-            },
-            child: SizedBox(
-              height: 80,
-              child: Stack(
-                alignment: Alignment.bottomLeft,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(left: 160),
-                    height: 80,
-                    width: 350,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Colors.red, secondaryColor],
-                      ),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Center(
-                      child: RichText(
-                        text: const TextSpan(
-                          text: "Status of all reports",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17.0),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Image.asset('assets/HomePage/status.png'),
                   ),
                 ],
               ),
@@ -150,6 +105,7 @@ class _CardsState extends State<Cards> {
               ),
             ),
           ),
+          const StatusButton(),
         ],
       ),
     );

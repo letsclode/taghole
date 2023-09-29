@@ -12,14 +12,14 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:taghole/constant/color.dart';
 import 'package:taghole/controllers/auth_controller.dart';
 
-class MapPage extends StatefulWidget {
+class MapPage extends ConsumerStatefulWidget {
   const MapPage({super.key});
 
   @override
   _MapPageState createState() => _MapPageState();
 }
 
-class _MapPageState extends State<MapPage> {
+class _MapPageState extends ConsumerState<MapPage> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   LatLng? _initialPosition;
@@ -113,7 +113,11 @@ class _MapPageState extends State<MapPage> {
   }
 
   _populateClients() {
-    FirebaseFirestore.instance.collection('reports').get().then((docs) {
+    FirebaseFirestore.instance
+        .collection('reports')
+        .where('isValidate', isEqualTo: true)
+        .get()
+        .then((docs) {
       if (docs.docs.isNotEmpty) {
         for (int i = 0; i < docs.docs.length; ++i) {
           print("DATA HERE");
@@ -134,8 +138,8 @@ class _MapPageState extends State<MapPage> {
           context: scaffoldKey.currentState!.context,
           builder: (BuildContext context) {
             return Container(
-              height: 200,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.all(8),
+              height: 150,
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -148,50 +152,48 @@ class _MapPageState extends State<MapPage> {
                           height: 80,
                           child: Container(
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5)),
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Image.network(
-                                  request['imageurl'],
-                                  loadingBuilder: (BuildContext context,
-                                      Widget child,
-                                      ImageChunkEvent? loadingProgress) {
-                                    if (loadingProgress == null) {
-                                      return child;
-                                    } else {
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          value: loadingProgress
-                                                      .expectedTotalBytes !=
-                                                  null
-                                              ? loadingProgress
-                                                      .cumulativeBytesLoaded /
-                                                  (loadingProgress
-                                                          .expectedTotalBytes ??
-                                                      1)
-                                              : null,
-                                        ),
-                                      );
-                                    }
-                                  },
-                                  fit: BoxFit.fill,
-                                ),
-                                const Positioned.fill(
-                                  child: Center(
-                                    child:
-                                        CircularProgressIndicator(), // Facebook-like loader
-                                  ),
-                                ),
-                              ],
-                            ),
+                                image: DecorationImage(
+                                    image: NetworkImage(request['imageurl']),
+                                    fit: BoxFit.cover),
+                                borderRadius: BorderRadius.circular(10)),
                           ),
                         ),
-                        Column(
-                          children: [
-                            Text("Type: ${request['potholetype']}"),
-                            Text("Address: ${request['address']}")
-                          ],
+                        Container(
+                          width: MediaQuery.of(context).size.width - 100,
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              RichText(
+                                text: TextSpan(
+                                  style: DefaultTextStyle.of(context).style,
+                                  children: <TextSpan>[
+                                    const TextSpan(
+                                        text: 'Type: ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                    TextSpan(text: '${request['potholetype']}'),
+                                  ],
+                                ),
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                  style: DefaultTextStyle.of(context).style,
+                                  children: <TextSpan>[
+                                    const TextSpan(
+                                        text: 'Address: ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                    TextSpan(
+                                      text: '${request['address']}',
+                                      style: const TextStyle(),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         )
                       ],
                     )
@@ -217,6 +219,7 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(authControllerProvider);
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
@@ -288,49 +291,50 @@ class _MapPageState extends State<MapPage> {
                 )
               ],
             ),
-      // floatingActionButton: FloatingActionButton.extended(
-      //     onPressed: () {
-      //       //TODO: try to add
-      //       showDialog(
-      //           context: context,
-      //           builder: (context) {
-      //             return AlertDialog(
-      //               title: const Text("Tag a hole"),
-      //               content: SizedBox(
-      //                 height: MediaQuery.of(context).size.height / 6,
-      //                 child: Column(
-      //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //                   children: [
-      //                     const Text(
-      //                         'In order to tag a hole you must be a registered user.'),
-      //                     Row(
-      //                       mainAxisAlignment: MainAxisAlignment.end,
-      //                       children: [
-      //                         Consumer(
-      //                           builder: (context, ref, child) {
-      //                             return MaterialButton(
-      //                               color: secondaryColor,
-      //                               onPressed: () async {
-      //                                 //  ref.read(authControllerProvider.notifier).signOut();
-      //                                 Navigator.pushNamed(
-      //                                     context, '/citizenSignup');
-      //                               },
-      //                               child: const Text(
-      //                                 "Register Now",
-      //                                 style: TextStyle(color: Colors.white),
-      //                               ),
-      //                             );
-      //                           },
-      //                         )
-      //                       ],
-      //                     )
-      //                   ],
-      //                 ),
-      //               ),
-      //             );
-      //           });
-      //     },
-      //     label: const Icon(Icons.report)),
+      floatingActionButton: user!.isAnonymous
+          ? const SizedBox()
+          : FloatingActionButton.extended(
+              onPressed: () {
+                //TODO: try to add
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text("Tag a hole"),
+                        content: SizedBox(
+                          height: MediaQuery.of(context).size.height / 6,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                  'In order to tag a hole you must be a registered user.'),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Consumer(
+                                    builder: (context, ref, child) {
+                                      return MaterialButton(
+                                        color: secondaryColor,
+                                        onPressed: () async {
+                                          Navigator.pushNamed(
+                                              context, '/citizenSignup');
+                                        },
+                                        child: const Text(
+                                          "Register Now",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      );
+                                    },
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    });
+              },
+              label: const Icon(Icons.report)),
     );
   }
 }
