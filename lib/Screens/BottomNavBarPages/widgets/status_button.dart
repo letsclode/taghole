@@ -18,7 +18,7 @@ class StatusButton extends StatelessWidget {
             future: userProvider.isAdmin(),
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const SizedBox(); // Show a loading indicator while waiting
+                return const Text(''); // Show a loading indicator while waiting
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else {

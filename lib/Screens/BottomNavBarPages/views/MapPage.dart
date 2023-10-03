@@ -39,15 +39,14 @@ class _MapPageState extends ConsumerState<MapPage> {
   }
 
   void requestPermission() async {
-    Permission.location.request().then((permission) async {
+    await Permission.location.request().then((permission) async {
       if (permission.isGranted) {
         await _getUserLocation();
         await _populateClients();
       }
-      if (permission.isDenied) {
-        _setDefaultLocation();
-      }
     });
+
+    _setDefaultLocation();
   }
 
   Future _getUserLocation() async {
@@ -291,7 +290,7 @@ class _MapPageState extends ConsumerState<MapPage> {
                 )
               ],
             ),
-      floatingActionButton: user!.isAnonymous
+      floatingActionButton: !user!.isAnonymous
           ? const SizedBox()
           : FloatingActionButton.extended(
               onPressed: () {

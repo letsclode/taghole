@@ -213,7 +213,6 @@ class _SignupState extends ConsumerState<Signup> {
       textFields.add(
         TextFormField(
           validator: EmailValidator.validate,
-          style: const TextStyle(fontSize: 22),
           decoration: buildSignUpInputDecoration("Email"),
           onSaved: (value) {
             _email = value;
@@ -229,7 +228,6 @@ class _SignupState extends ConsumerState<Signup> {
       textFields.add(
         TextFormField(
           validator: NameValidator.validate,
-          style: const TextStyle(fontSize: 22),
           decoration: buildSignUpInputDecoration("Name"),
           onSaved: (value) {
             _name = value;
@@ -242,7 +240,6 @@ class _SignupState extends ConsumerState<Signup> {
     textFields.add(
       TextFormField(
         validator: EmailValidator.validate,
-        style: const TextStyle(fontSize: 22),
         decoration: buildSignUpInputDecoration("Email"),
         onSaved: (value) {
           _email = value;
@@ -255,7 +252,6 @@ class _SignupState extends ConsumerState<Signup> {
     textFields.add(
       TextFormField(
         validator: PasswordValidator.validate,
-        style: const TextStyle(fontSize: 22),
         decoration: buildSignUpInputDecoration("Password"),
         obscureText: true,
         onSaved: (value) {

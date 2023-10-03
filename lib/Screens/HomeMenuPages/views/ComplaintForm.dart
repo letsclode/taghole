@@ -11,7 +11,6 @@ import 'package:location/location.dart' as loc;
 import 'package:taghole/Screens/BottomNavBarPages/views/map_picker.dart';
 import 'package:taghole/constant/color.dart';
 
-import '../services/focuschanger.dart';
 import '../services/toast.dart';
 
 class ComplaintForm extends StatefulWidget {
@@ -25,14 +24,12 @@ class _ComplaintFormState extends State<ComplaintForm> {
   final _formKey = GlobalKey<FormState>();
 
   final FocusNode _potholetypeFocusNode = FocusNode();
-  final FocusNode _departmentFocusNode = FocusNode();
-  final FocusNode _addressFocusNode = FocusNode();
 
   final _firestore = FirebaseFirestore.instance;
   GeoFlutterFire geo = GeoFlutterFire();
   loc.Location location = loc.Location();
 
-  String? _potholetype, _department, _address;
+  String? _potholetype, _address;
   final bool _work = false;
 
   String? imageurl;
@@ -71,7 +68,6 @@ class _ComplaintFormState extends State<ComplaintForm> {
     _firestore.collection('reports').add({
       'position': point.data,
       'potholetype': _potholetype,
-      'department': _department,
       'address': _address,
       'work': _work,
       'imageurl': imageurl,
@@ -176,51 +172,12 @@ class _ComplaintFormState extends State<ComplaintForm> {
                   ),
                   textInputAction: TextInputAction.next,
                   validator: (value) {
-                    if (value == null) {
+                    if (value == null || value.isEmpty) {
                       return 'Please enter some text';
                     }
                     return null;
                   },
                   onSaved: (value) => _potholetype = value,
-                  onFieldSubmitted: (_) {
-                    fieldFocusChange(
-                        context, _potholetypeFocusNode, _departmentFocusNode);
-                  },
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                TextFormField(
-                  focusNode: _departmentFocusNode,
-                  autofocus: true,
-                  textCapitalization: TextCapitalization.words,
-                  keyboardType: TextInputType.text,
-                  decoration: const InputDecoration(
-                    labelText: "Department",
-                    hintText: "e.g Nagarpalika",
-                    focusColor: secondaryColor,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8.0),
-                      ),
-                      borderSide: BorderSide(
-                        color: secondaryColor,
-                        width: 1.0,
-                      ),
-                    ),
-                  ),
-                  textInputAction: TextInputAction.next,
-                  validator: (department) {
-                    if (department == null) {
-                      return 'Department is Required';
-                    }
-                    return null;
-                  },
-                  onSaved: (department) => _department = department,
-                  onFieldSubmitted: (_) {
-                    fieldFocusChange(
-                        context, _departmentFocusNode, _addressFocusNode);
-                  },
                 ),
                 const SizedBox(
                   height: 20.0,
@@ -253,9 +210,10 @@ class _ComplaintFormState extends State<ComplaintForm> {
                             );
 
                             // update the ui with the address
+
                             setState(() {
                               _address =
-                                  '${placemarks.first.name}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}';
+                                  '${placemarks.first.street}, ${placemarks.first.locality}';
                             });
                           } else {
                             print("User didn't select a location");
@@ -275,13 +233,17 @@ class _ComplaintFormState extends State<ComplaintForm> {
                   ],
                 ),
                 MaterialButton(
-                  color: Theme.of(context).primaryColor,
+                  color: secondaryColor,
                   onPressed: () async {
+                    _formKey.currentState!.save();
                     if (image == null) {
                       toastMessage('Please Select an Image');
+                    } else if (_potholetype == null || _potholetype!.isEmpty) {
+                      toastMessage('Please provide a pothole type');
+                    } else if (_address == null) {
+                      toastMessage('Please set a location');
                     } else {
                       if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
                         toastMessage(
                             "Thank You Your Response has been submitted");
                         uploadform();

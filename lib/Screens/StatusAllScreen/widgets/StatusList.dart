@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:taghole/constant/color.dart';
 
 import '../services/DatabaseStatus.dart';
@@ -20,152 +19,132 @@ class _StatusListState extends State<StatusList> {
   }
 
   @override
-  void initState() {
-    getStatusList().then((res) {
-      setState(() {
-        querySnapshot = res;
-      });
-    });
-    super.initState();
-  }
-
-  QuerySnapshot? querySnapshot;
-  @override
   Widget build(BuildContext context) {
-    if (querySnapshot != null) {
-      return ListView.builder(
-        primary: false,
-        itemCount: querySnapshot!.docs.length,
-        padding: const EdgeInsets.all(12),
-        itemBuilder: (context, i) {
-          dynamic data = querySnapshot!.docs[i].data()
-              as Map<Object, Object?>; // TODO: watch this if its working
+    return FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+      future: getStatusList(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+              child: CircularProgressIndicator(
+            color: secondaryColor,
+          )); // Show a loading indicator while waiting for data
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          if (snapshot.data!.docs.isEmpty) {
+            return const Center(child: Text("No tags found"));
+          }
+          return ListView.builder(
+            primary: false,
+            itemCount: snapshot.data!.docs.length,
+            padding: const EdgeInsets.all(12),
+            itemBuilder: (context, i) {
+              dynamic data = snapshot.data!.docs[i].data()
+                  as Map<Object, Object?>; // TODO: watch this if its working
 
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 0),
-            child: Column(
-              children: <Widget>[
-                Card(
-                  elevation: 4, // Adjust the elevation as needed
-                  margin:
-                      const EdgeInsets.all(8.0), // Adjust the margin as needed
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        8.0), // Adjust the border radius as needed
-                  ),
-                  child: ExpansionTile(
-                    leading: Builder(builder: (context) {
-                      if (data['work'] == false) {
-                        return CircleAvatar(
-                            backgroundImage:
-                                NetworkImage(data['imageurl'] ?? ''),
-                            // backgroundColor: Colors.grey,
-                            radius: 20);
-                      } else {
-                        return const CircleAvatar(
-                            backgroundColor: Colors.grey, radius: 20);
-                      }
-                    }),
-                    textColor: secondaryColor,
-                    title: Text("Type :${data['potholetype']}"),
-                    subtitle: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Text("${data['department']}"),
-                      ],
-                    ),
-                    children: <Widget>[
-                      const Divider(
-                        thickness: 1.0,
-                        height: 1.0,
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 0),
+                child: Column(
+                  children: <Widget>[
+                    Card(
+                      elevation: 4, // Adjust the elevation as needed
+                      margin: const EdgeInsets.all(
+                          8.0), // Adjust the margin as needed
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            8.0), // Adjust the border radius as needed
                       ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0,
-                              vertical: 8.0,
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Type :${data['comment']}"),
-                                const SizedBox(
-                                  height: 5.0,
-                                ),
-                                Text("Address :${data['address']}"),
-                                const SizedBox(
-                                  height: 5.0,
-                                ),
-                              ],
-                            )),
-                      ),
-                      ButtonBar(
-                        alignment: MainAxisAlignment.spaceAround,
-                        buttonHeight: 52.0,
-                        buttonMinWidth: 90.0,
+                      child: ExpansionTile(
+                        leading: Builder(builder: (context) {
+                          if (data['work'] == false) {
+                            return CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage(data['imageurl'] ?? ''),
+                                // backgroundColor: Colors.grey,
+                                radius: 20);
+                          } else {
+                            return const CircleAvatar(
+                                backgroundColor: Colors.grey, radius: 20);
+                          }
+                        }),
+                        textColor: secondaryColor,
+                        title: Text("Type :${data['potholetype']}"),
                         children: <Widget>[
-                          MaterialButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4.0)),
-                            onPressed: () async {
-                              //TODO delete
-
-                              deleteReport(querySnapshot!.docs[i].id)
-                                  .then((value) {
-                                setState(() {
-                                  querySnapshot!.docs
-                                      .remove(querySnapshot!.docs[i]);
-                                });
-                              });
-                            },
-                            child: const Column(
-                              children: <Widget>[
-                                Icon(Icons.delete),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 2.0),
-                                ),
-                                Text('Delete Tag'),
-                              ],
-                            ),
+                          const Divider(
+                            thickness: 1.0,
+                            height: 1.0,
                           ),
-                          const Column(
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                  vertical: 8.0,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Type :${data['potholetype']}"),
+                                    const SizedBox(
+                                      height: 5.0,
+                                    ),
+                                    Text("Address :${data['address']}"),
+                                    const SizedBox(
+                                      height: 5.0,
+                                    ),
+                                  ],
+                                )),
+                          ),
+                          ButtonBar(
+                            alignment: MainAxisAlignment.spaceAround,
+                            buttonHeight: 52.0,
+                            buttonMinWidth: 90.0,
                             children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 2.0),
+                              MaterialButton(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(4.0)),
+                                onPressed: () async {
+                                  //TODO delete
+
+                                  await deleteReport(snapshot.data!.docs[i].id);
+                                  setState(() {});
+                                },
+                                child: const Column(
+                                  children: <Widget>[
+                                    Icon(Icons.delete),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 2.0),
+                                    ),
+                                    Text('Delete Tag'),
+                                  ],
+                                ),
                               ),
+                              const Column(
+                                children: <Widget>[
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 2.0),
+                                  ),
+                                ],
+                              ),
+                              Switcher(
+                                  data: data, uid: snapshot.data!.docs[i].id),
                             ],
                           ),
-                          Switcher(data: data, uid: querySnapshot!.docs[i].id),
                         ],
                       ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+                    )
+                  ],
+                ),
+              );
+            },
           );
-        },
-      );
-    } else {
-      return const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SpinKitCubeGrid(
-              color: secondaryColor,
-              size: 80.0,
-            ),
-            SizedBox(height: 20.0),
-            Text(
-              'Loading...',
-              style: TextStyle(color: secondaryColor),
-            ),
-          ],
-        ),
-      );
-    }
+        }
+      },
+    );
   }
 }
 

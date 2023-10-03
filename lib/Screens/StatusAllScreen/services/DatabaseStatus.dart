@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-getStatusList() async {
+Future<QuerySnapshot<Map<String, dynamic>>> getStatusList() async {
   return await FirebaseFirestore.instance.collection('reports').get();
 }
 

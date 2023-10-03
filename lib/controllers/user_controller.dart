@@ -32,8 +32,8 @@ class UserController extends StateNotifier<User?> {
       required String uid,
       required String role}) async {
     FirebaseFirestore.instance.collection('users').add({
-      'name': name,
-      'email': email,
+      'name': name ?? '',
+      'email': email ?? '',
       'uid': uid,
       'role': role,
     }).catchError((e) {

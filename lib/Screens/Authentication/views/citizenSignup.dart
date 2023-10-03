@@ -23,6 +23,8 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
 
   late AuthForm localAuthFormType;
 
+  bool isLoading = false;
+
   String? _number;
   String? _error;
 
@@ -59,18 +61,17 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
         forceResendingToken: 2,
         verificationCompleted: (AuthCredential auth) {
           try {
-            auth0
-                .signInWithCredential(auth)
-                .then((UserCredential result) async {
-              print("Verified");
-              print(result.user!.uid);
-              String role = "citizen";
-              await userProvider.storeNewUser(
-                  uid: result.user!.uid, role: role);
-              Navigator.of(key.currentContext!).pushReplacementNamed("/home");
-            }).catchError((e) {
-              print(e);
-            });
+            print('verificationCompleted');
+            // auth0
+            //     .signInWithCredential(auth)
+            //     .then((UserCredential result) async {
+            //   String role = "citizen";
+            //   await userProvider.storeNewUser(
+            //       uid: result.user!.uid, role: role);
+            //   Navigator.of(key.currentContext!).pushReplacementNamed("/home");
+            // }).catchError((e) {
+            //   print(e);
+            // });
           } catch (e) {
             print(e);
           }
@@ -121,8 +122,15 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
                                       smsCode: smsCode);
 
                               // Sign the user in (or link) with the credential
-                              await auth0.signInWithCredential(credential);
-                              Navigator.pop(context);
+                              auth0
+                                  .signInWithCredential(credential)
+                                  .then((result) async {
+                                String role = "citizen";
+                                await userProvider.storeNewUser(
+                                    uid: result.user!.uid, role: role);
+                                Navigator.of(key.currentContext!)
+                                    .pushReplacementNamed("/home");
+                              });
                             }, // end onSubmit
                           ),
                         ],
@@ -152,7 +160,14 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
           // Navigator.of(key.currentContext!).pushReplacementNamed("/home");
         } else {
           //TODO: create user
+          setState(() {
+            isLoading = true;
+          });
           await registerUser(mobile: _number!);
+
+          setState(() {
+            isLoading = false;
+          });
         }
       } catch (e) {
         setState(() {
@@ -193,16 +208,18 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
                   buildHeaderText(),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: buildInputs() + buildButtons(),
-                  ),
-                ),
-              ),
+              isLoading
+                  ? const CircularProgressIndicator()
+                  : Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Form(
+                        key: formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: buildInputs() + buildButtons(),
+                        ),
+                      ),
+                    ),
             ],
           ),
         ),
@@ -291,6 +308,8 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
 
     textFields.add(
       TextFormField(
+        maxLength: 11,
+        keyboardType: TextInputType.number,
         validator: NameValidator.validate,
         decoration: buildSignUpInputDecoration("Mobile #"),
         onSaved: (value) {
