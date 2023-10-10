@@ -25,6 +25,21 @@ class UserController extends StateNotifier<User?> {
     await user.reload();
   }
 
+  Future<QuerySnapshot<Map<String, dynamic>>> getStatusList() async {
+    final user = ref.read(authRepositoryProvider).getCurrentUser();
+    if (await isAdmin()) {
+      return await FirebaseFirestore.instance.collection('reports').get();
+    }
+    return FirebaseFirestore.instance
+        .collection('reports')
+        .where('userId', isEqualTo: user!.uid)
+        .get();
+  }
+
+  Future deleteReport(String uid) async {
+    await FirebaseFirestore.instance.collection('reports').doc(uid).delete();
+  }
+
 //TODO: finish this
   Future storeNewUser(
       {String? name,

@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:taghole/constant/color.dart';
 
 import '../../../controllers/auth_controller.dart';
 import '../../../controllers/user_controller.dart';
@@ -61,7 +60,7 @@ class _SignupState extends ConsumerState<Signup> {
           String? uid = await authProvider.signInWithEmailAndPassword(
               email: _email!, password: _password!);
           print("Signed in with ID $uid");
-          Navigator.of(context).pushReplacementNamed("/home");
+          Navigator.of(context).pushReplacementNamed("/adminHome");
         } else if (widget.authFormType == AuthFormType.reset) {
           print('password update');
           await authProvider.sendPasswordResetEmail(email: _email!);
@@ -100,37 +99,38 @@ class _SignupState extends ConsumerState<Signup> {
     final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Admin"),
-      ),
-      body: Container(
-        color: secondaryColor,
-        height: height,
-        width: width,
-        child: Column(
-          children: <Widget>[
-            showAlert(),
-            SizedBox(
-              height: height * .025,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                children: [
-                  buildHeaderText(),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  children: buildInputs() + buildButtons(),
+      body: Center(
+        child: SizedBox(
+          width: 600,
+          height: 300,
+          child: Card(
+            elevation: 2,
+            child: Column(
+              children: <Widget>[
+                showAlert(),
+                SizedBox(
+                  height: height * .025,
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      buildHeaderText(),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      children: buildInputs() + buildButtons(),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -186,7 +186,7 @@ class _SignupState extends ConsumerState<Signup> {
       headerText,
       maxLines: 1,
       textAlign: TextAlign.right,
-      style: const TextStyle(fontSize: 25, color: Colors.white),
+      style: const TextStyle(fontSize: 25, color: Colors.black),
     );
   }
 
@@ -194,8 +194,8 @@ class _SignupState extends ConsumerState<Signup> {
     return InputDecoration(
       hintText: hint,
       filled: true,
-      fillColor: Colors.white,
-      focusColor: Colors.white,
+      fillColor: Colors.black12,
+      focusColor: Colors.black12,
       enabledBorder: const OutlineInputBorder(
         borderSide: BorderSide(
           color: Colors.white,

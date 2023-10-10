@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -51,6 +48,15 @@ class DefaultFirebaseOptions {
         );
     }
   }
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyAhIHu117wlB2-WVkwFMv30fZUbqFTuPhk',
+    appId: '1:597211368355:web:b9ce7cbffa76b1e17ca816',
+    messagingSenderId: '597211368355',
+    projectId: 'taghole',
+    authDomain: 'taghole.firebaseapp.com',
+    storageBucket: 'taghole.appspot.com',
+  );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyD_mssS_dXlbzAtnyAaNNJf4LXUcYe1Rlw',

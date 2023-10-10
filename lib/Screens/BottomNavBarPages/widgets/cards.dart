@@ -42,7 +42,7 @@ class _CardsState extends ConsumerState<Cards> {
                     child: Center(
                       child: RichText(
                         text: const TextSpan(
-                          text: "Tag a pothole",
+                          text: "Road Damage Report",
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,

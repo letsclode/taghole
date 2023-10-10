@@ -18,6 +18,8 @@ class _ComplaintPageState extends State<ComplaintPage> {
       home: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          iconTheme: const IconThemeData(color: secondaryColor),
+          automaticallyImplyLeading: true,
           title: const Text(
             "HomePage",
             style: TextStyle(color: secondaryColor),

@@ -63,6 +63,8 @@ dependencies:
   permission_handler: ^11.0.0
   location: ^5.0.3
   material_floating_search_bar_2: ^0.5.0
+  dotted_border: ^2.1.0
+  font_awesome_flutter: ^10.5.0
  
 
 dev_dependencies:

@@ -7,11 +7,8 @@ import 'package:taghole/constant/color.dart';
 
 import '../../../controllers/user_controller.dart';
 
-enum AuthForm { signin, signup }
-
 class CitizenSignup extends ConsumerStatefulWidget {
-  final AuthForm authFormType;
-  const CitizenSignup({super.key, required this.authFormType});
+  const CitizenSignup({super.key});
 
   @override
   ConsumerState<CitizenSignup> createState() => _CitizenSignupState();
@@ -21,25 +18,10 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
   final formKey = GlobalKey<FormState>();
   final GlobalKey key = GlobalKey();
 
-  late AuthForm localAuthFormType;
-
   bool isLoading = false;
 
   String? _number;
   String? _error;
-
-  void switchFormState(String state) {
-    print(state);
-    if (state == "signup") {
-      setState(() {
-        localAuthFormType = AuthForm.signup;
-      });
-    } else {
-      setState(() {
-        localAuthFormType = AuthForm.signin;
-      });
-    }
-  }
 
   bool validate() {
     final form = formKey.currentState;
@@ -153,22 +135,14 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
   void submit() async {
     if (validate()) {
       try {
-        if (localAuthFormType == AuthForm.signin) {
-          //TODO: SignIn
-          // String uid = await auth.createUserWithEmailAndPassword(
-          //     _email!, _password!, _name!);
-          // Navigator.of(key.currentContext!).pushReplacementNamed("/home");
-        } else {
-          //TODO: create user
-          setState(() {
-            isLoading = true;
-          });
-          await registerUser(mobile: _number!);
+        setState(() {
+          isLoading = true;
+        });
+        await registerUser(mobile: _number!);
 
-          setState(() {
-            isLoading = false;
-          });
-        }
+        setState(() {
+          isLoading = false;
+        });
       } catch (e) {
         setState(() {
           _error = e.toString();
@@ -179,48 +153,44 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
   }
 
   @override
-  void initState() {
-    localAuthFormType = widget.authFormType;
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      body: SizedBox(
-        height: height,
-        width: width,
-        child: SafeArea(
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: height * .025,
-              ),
-              showAlert(),
-              SizedBox(
-                height: height * .025,
-              ),
-              Row(
-                children: [
-                  buildHeaderText(),
-                ],
-              ),
-              isLoading
-                  ? const CircularProgressIndicator()
-                  : Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Form(
-                        key: formKey,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: buildInputs() + buildButtons(),
+      body: SingleChildScrollView(
+        child: SizedBox(
+          height: height,
+          width: width,
+          child: SafeArea(
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: height * .025,
+                ),
+                showAlert(),
+                SizedBox(
+                  height: height * .025,
+                ),
+                Row(
+                  children: [
+                    buildHeaderText(),
+                  ],
+                ),
+                isLoading
+                    ? const CircularProgressIndicator()
+                    : Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Form(
+                          key: formKey,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: buildInputs() + buildButtons(),
+                          ),
                         ),
                       ),
-                    ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -265,11 +235,7 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
 
   AutoSizeText buildHeaderText() {
     String headerText;
-    if (localAuthFormType == AuthForm.signup) {
-      headerText = "Create New Account";
-    } else {
-      headerText = "Sign In";
-    }
+    headerText = "Sign In";
 
     return AutoSizeText(
       headerText,
@@ -326,15 +292,9 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
     String newFormState;
     String submitButtonText;
 
-    if (localAuthFormType == AuthForm.signin) {
-      switchButtonText = "Create Account";
-      newFormState = "signup";
-      submitButtonText = "Sign In";
-    } else {
-      switchButtonText = "Have an Account? Sign In";
-      newFormState = "signin";
-      submitButtonText = "Sign In";
-    }
+    switchButtonText = "Have an Account? Sign In";
+    newFormState = "signin";
+    submitButtonText = "Sign In";
 
     return [
       SizedBox(
@@ -358,14 +318,6 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
           ),
         ),
       ),
-      // TextButton(
-      //   child: Text(
-      //     switchButtonText,
-      //   ),
-      //   onPressed: () {
-      //     switchFormState(newFormState);
-      //   },
-      // ),
     ];
   }
 }

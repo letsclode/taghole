@@ -1,27 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:taghole/constant/color.dart';
+import 'package:taghole/controllers/user_controller.dart';
 
-import '../services/DatabaseStatus.dart';
-
-class StatusList extends StatefulWidget {
+class StatusList extends ConsumerStatefulWidget {
   const StatusList({super.key});
 
   @override
   _StatusListState createState() => _StatusListState();
 }
 
-class _StatusListState extends State<StatusList> {
-  final _firestore = FirebaseFirestore.instance;
-
-  Future deleteReport(String uid) async {
-    await _firestore.collection('reports').doc(uid).delete();
-  }
-
+class _StatusListState extends ConsumerState<StatusList> {
   @override
   Widget build(BuildContext context) {
+    final userProvider = ref.watch(userControllerProvider.notifier);
     return FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
-      future: getStatusList(),
+      future: userProvider.getStatusList(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
@@ -94,46 +89,70 @@ class _StatusListState extends State<StatusList> {
                                     const SizedBox(
                                       height: 5.0,
                                     ),
+                                    const Text("Description :"),
+                                    Text(
+                                      data['description'],
+                                      maxLines: 4,
+                                    )
                                   ],
                                 )),
                           ),
-                          ButtonBar(
-                            alignment: MainAxisAlignment.spaceAround,
-                            buttonHeight: 52.0,
-                            buttonMinWidth: 90.0,
-                            children: <Widget>[
-                              MaterialButton(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(4.0)),
-                                onPressed: () async {
-                                  //TODO delete
+                          FutureBuilder<bool>(
+                              future: userProvider.isAdmin(),
+                              builder: (_, snapshot2) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator();
+                                }
+                                if (snapshot.hasData) {
+                                  return snapshot2.data!
+                                      ? ButtonBar(
+                                          alignment:
+                                              MainAxisAlignment.spaceAround,
+                                          buttonHeight: 52.0,
+                                          buttonMinWidth: 90.0,
+                                          children: <Widget>[
+                                            MaterialButton(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          4.0)),
+                                              onPressed: () async {
+                                                //TODO delete
 
-                                  await deleteReport(snapshot.data!.docs[i].id);
-                                  setState(() {});
-                                },
-                                child: const Column(
-                                  children: <Widget>[
-                                    Icon(Icons.delete),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 2.0),
-                                    ),
-                                    Text('Delete Tag'),
-                                  ],
-                                ),
-                              ),
-                              const Column(
-                                children: <Widget>[
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 2.0),
-                                  ),
-                                ],
-                              ),
-                              Switcher(
-                                  data: data, uid: snapshot.data!.docs[i].id),
-                            ],
-                          ),
+                                                await userProvider.deleteReport(
+                                                    snapshot.data!.docs[i].id);
+                                                setState(() {});
+                                              },
+                                              child: const Column(
+                                                children: <Widget>[
+                                                  Icon(Icons.delete),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 2.0),
+                                                  ),
+                                                  Text('Delete Tag'),
+                                                ],
+                                              ),
+                                            ),
+                                            const Column(
+                                              children: <Widget>[
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 2.0),
+                                                ),
+                                              ],
+                                            ),
+                                            Switcher(
+                                                data: data,
+                                                uid: snapshot.data!.docs[i].id),
+                                          ],
+                                        )
+                                      : Container();
+                                }
+                                return const CircularProgressIndicator();
+                              }),
                         ],
                       ),
                     )

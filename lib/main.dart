@@ -9,7 +9,6 @@ import 'package:taghole/firebase_options.dart';
 
 import 'Screens/Authentication/views/citizenSignup.dart';
 import 'Screens/Authentication/views/home.dart';
-import 'Screens/Authentication/views/signup.dart';
 import 'Screens/Authentication/welcome_screen.dart';
 
 void main() async {
@@ -31,34 +30,24 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         useMaterial3: true,
-
-        // Define the default brightness and colors.
         colorScheme: ColorScheme.fromSeed(
           primary: secondaryColor,
           seedColor: secondaryColor,
-          // ···
           brightness: Brightness.light,
         ),
-
-        // Define the default `TextTheme`. Use this to specify the default
-        // text styling for headlines, titles, bodies of text, and more.
         textTheme: const TextTheme(
           displayLarge: TextStyle(
             fontSize: 72,
             fontWeight: FontWeight.bold,
           ),
-          // ···
         ),
       ),
       debugShowCheckedModeBanner: false,
       title: 'Taghole',
       home: const WelcomeScreen(),
       routes: <String, WidgetBuilder>{
-        '/signin': (BuildContext context) =>
-            Signup(authFormType: AuthFormType.signin),
         '/home': (BuildContext context) => const Home(),
-        '/citizenSignup': (BuildContext context) =>
-            const CitizenSignup(authFormType: AuthForm.signup),
+        '/citizenSignup': (BuildContext context) => const CitizenSignup(),
         '/visitorsPage': (BuildContext context) => const VisitorsScreen(),
       },
     );

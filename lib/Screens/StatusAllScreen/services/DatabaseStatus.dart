@@ -1,9 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-Future<QuerySnapshot<Map<String, dynamic>>> getStatusList() async {
-  return await FirebaseFirestore.instance.collection('reports').get();
-}
 
 navigateme(String lat, String long) async {
   String url = "https://www.google.com/maps?q=$lat,$long";
