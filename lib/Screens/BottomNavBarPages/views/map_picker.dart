@@ -233,9 +233,13 @@ class _KMapPickerState extends State<KMapPicker> {
                         cameraPosition.target.longitude,
                       );
 
+                      print("LOCATION ONTAP");
+
+                      print(placemarks.first);
+
                       setState(() {
                         textController.text =
-                            '${placemarks.first.street}, ${placemarks.first.locality}';
+                            '${placemarks.first.thoroughfare} ${placemarks.first.street}';
                       });
                     },
                   ),

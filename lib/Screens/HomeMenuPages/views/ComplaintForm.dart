@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart' as loc;
 import 'package:taghole/Screens/BottomNavBarPages/views/map_picker.dart';
 import 'package:taghole/constant/color.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../repositories/auth_repository.dart';
 import '../services/toast.dart';
@@ -28,12 +29,14 @@ class _ComplaintFormState extends State<ComplaintForm> {
 
   final FocusNode _potholetypeFocusNode = FocusNode();
   final FocusNode _descriptionFocusNode = FocusNode();
+  final FocusNode _landmarkFocusNode = FocusNode();
 
   final _firestore = FirebaseFirestore.instance;
   GeoFlutterFire geo = GeoFlutterFire();
   loc.Location location = loc.Location();
+  var uuid = const Uuid();
 
-  String? _potholetype, _address, _description;
+  String? _potholetype, _address, _description, _landmark;
 
   final bool _work = false;
 
@@ -70,15 +73,18 @@ class _ComplaintFormState extends State<ComplaintForm> {
   }
 
   void uploadform(String userId) async {
-    _firestore.collection('reports').add({
+    final generatedId = uuid.v1();
+    _firestore.collection('reports').doc(generatedId).set({
+      'id': generatedId,
       'position': point.data,
-      'potholetype': _potholetype,
+      'type': _potholetype,
       'address': _address,
-      'work': _work,
-      'imageurl': imageurl,
-      'isValidate': false,
+      'status': _work,
+      'imageUrl': imageurl,
+      'isVisible': false,
       'description': _description,
-      'userId': userId
+      'userId': userId,
+      'landmark': _landmark
     });
   }
 
@@ -267,6 +273,37 @@ class _ComplaintFormState extends State<ComplaintForm> {
                 const SizedBox(
                   height: 20.0,
                 ),
+                TextFormField(
+                  focusNode: _landmarkFocusNode,
+                  autofocus: true,
+                  textCapitalization: TextCapitalization.words,
+                  keyboardType: TextInputType.text,
+                  decoration: const InputDecoration(
+                    labelText: "Landmark",
+                    hintText: "Landmark",
+                    focusColor: secondaryColor,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8.0),
+                      ),
+                      borderSide: BorderSide(
+                        color: secondaryColor,
+                        width: 1.0,
+                      ),
+                    ),
+                  ),
+                  textInputAction: TextInputAction.next,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the land mark';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => _landmark = value,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 Column(
                   children: [
                     _address == null
@@ -298,7 +335,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
 
                             setState(() {
                               _address =
-                                  '${placemarks.first.street}, ${placemarks.first.locality}';
+                                  '${placemarks.first.thoroughfare} ${placemarks.first.street}';
                             });
                           } else {
                             print("User didn't select a location");

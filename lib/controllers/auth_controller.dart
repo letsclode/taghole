@@ -38,7 +38,7 @@ class AuthController extends StateNotifier<User?> {
 //TODO: try to initialize the visitor auth
   void appStarted() async {}
 
-  void signOut() async {
+  Future signOut() async {
     await ref.read(authRepositoryProvider).signOut();
   }
 

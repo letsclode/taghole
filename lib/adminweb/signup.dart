@@ -2,8 +2,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../controllers/auth_controller.dart';
-import '../../../controllers/user_controller.dart';
+import '../controllers/auth_controller.dart';
+import '../controllers/user_controller.dart';
 
 enum AuthFormType { signin, signup, reset }
 
@@ -21,6 +21,8 @@ class _SignupState extends ConsumerState<Signup> {
   String? _password;
   String? _name;
   String? _error;
+
+  bool _loader = false;
 
   void switchFormState(String state) {
     formKey.currentState!.reset();
@@ -53,6 +55,9 @@ class _SignupState extends ConsumerState<Signup> {
   void submit() async {
     final authProvider = ref.watch(authControllerProvider.notifier);
     final userProvider = ref.watch(userControllerProvider.notifier);
+    setState(() {
+      _loader = true;
+    });
     if (validate()) {
       try {
         if (widget.authFormType == AuthFormType.signin) {
@@ -60,7 +65,6 @@ class _SignupState extends ConsumerState<Signup> {
           String? uid = await authProvider.signInWithEmailAndPassword(
               email: _email!, password: _password!);
           print("Signed in with ID $uid");
-          Navigator.of(context).pushReplacementNamed("/adminHome");
         } else if (widget.authFormType == AuthFormType.reset) {
           print('password update');
           await authProvider.sendPasswordResetEmail(email: _email!);
@@ -84,6 +88,9 @@ class _SignupState extends ConsumerState<Signup> {
         });
         print(e);
       }
+      setState(() {
+        _loader = false;
+      });
     }
   }
 
@@ -105,31 +112,35 @@ class _SignupState extends ConsumerState<Signup> {
           height: 300,
           child: Card(
             elevation: 2,
-            child: Column(
-              children: <Widget>[
-                showAlert(),
-                SizedBox(
-                  height: height * .025,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    children: [
-                      buildHeaderText(),
+            child: _loader
+                ? const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  )
+                : Column(
+                    children: <Widget>[
+                      showAlert(),
+                      SizedBox(
+                        height: height * .025,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          children: [
+                            buildHeaderText(),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Form(
+                          key: formKey,
+                          child: Column(
+                            children: buildInputs() + buildButtons(),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Form(
-                    key: formKey,
-                    child: Column(
-                      children: buildInputs() + buildButtons(),
-                    ),
-                  ),
-                ),
-              ],
-            ),
           ),
         ),
       ),

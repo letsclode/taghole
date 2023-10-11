@@ -43,9 +43,6 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18.0),
                 ),
-
-                //TODO: fix this
-
                 child: const Row(
                   children: [
                     Icon(

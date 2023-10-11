@@ -1,0 +1,24 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '../position/position_model.dart';
+
+part 'report_model.freezed.dart';
+part 'report_model.g.dart';
+
+@freezed
+class ReportModel with _$ReportModel {
+  factory ReportModel(
+      {required String id,
+      required String userId,
+      required String description,
+      required bool status,
+      required bool isVisible,
+      required String type,
+      String? imageUrl,
+      required String address,
+      required String landmark,
+      required PositionModel position}) = _ReportModel;
+
+  factory ReportModel.fromJson(Map<String, dynamic> json) =>
+      _$ReportModelFromJson(json);
+}

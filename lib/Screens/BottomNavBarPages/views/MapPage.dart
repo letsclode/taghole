@@ -35,18 +35,27 @@ class _MapPageState extends ConsumerState<MapPage> {
   @override
   void initState() {
     super.initState();
-    requestPermission();
+
+    if (!kIsWeb) {
+      requestPermission();
+    } else {
+      getUserLocation();
+      _setDefaultLocation();
+    }
   }
 
   void requestPermission() async {
     await Permission.location.request().then((permission) async {
       if (permission.isGranted) {
-        await _getUserLocation();
-        await _populateClients();
+        getUserLocation();
       }
     });
-
     _setDefaultLocation();
+  }
+
+  void getUserLocation() async {
+    await _getUserLocation();
+    await _populateClients();
   }
 
   Future _getUserLocation() async {
@@ -221,24 +230,26 @@ class _MapPageState extends ConsumerState<MapPage> {
     final user = ref.watch(authControllerProvider);
     return Scaffold(
       key: scaffoldKey,
-      appBar: AppBar(
-        title: const Text(
-          "Location Tags",
-          style: TextStyle(color: secondaryColor),
-        ),
-        centerTitle: true,
-        actions: [
-          Consumer(
-            builder: (context, ref, child) {
-              return IconButton(
-                  onPressed: () {
-                    ref.read(authControllerProvider.notifier).signOut();
+      appBar: kIsWeb
+          ? null
+          : AppBar(
+              title: const Text(
+                "Location Tags",
+                style: TextStyle(color: secondaryColor),
+              ),
+              centerTitle: true,
+              actions: [
+                Consumer(
+                  builder: (context, ref, child) {
+                    return IconButton(
+                        onPressed: () {
+                          ref.read(authControllerProvider.notifier).signOut();
+                        },
+                        icon: const Icon(Icons.exit_to_app));
                   },
-                  icon: const Icon(Icons.exit_to_app));
-            },
-          )
-        ],
-      ),
+                )
+              ],
+            ),
       body: _initialPosition == null
           ? const Center(
               child: Column(
