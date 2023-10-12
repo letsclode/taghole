@@ -5,4 +5,4 @@ final filterReportTypeProvider = StateProvider<ReportFilterType>(
   (ref) => ReportFilterType.all,
 );
 
-enum ReportFilterType { ongoing, complete, all }
+enum ReportFilterType { ongoing, complete, all, visible }

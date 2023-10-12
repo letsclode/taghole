@@ -14,10 +14,10 @@ class ReportsScreen extends ConsumerStatefulWidget {
 class _ReportsScreenState extends ConsumerState<ReportsScreen> {
   @override
   Widget build(BuildContext context) {
-    final userProvider = ref.watch(reportProviderProvider);
+    final reportProvider = ref.watch(reportProviderProvider);
 
     // Let's render the todos in a scrollable list view
-    return switch (userProvider) {
+    return switch (reportProvider) {
       AsyncData(:final value) => TableScreen(
           title: KString.reportsTitle,
           headers: const ['Status', 'Type', 'Address', 'Controls'],

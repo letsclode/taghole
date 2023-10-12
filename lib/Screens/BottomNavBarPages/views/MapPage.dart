@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -9,8 +8,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:taghole/adminweb/models/report/report_model.dart';
+import 'package:taghole/adminweb/providers/report_provider.dart';
 import 'package:taghole/constant/color.dart';
 import 'package:taghole/controllers/auth_controller.dart';
+
+import '../../../adminweb/providers/report/report_filter_type_provider.dart';
 
 class MapPage extends ConsumerStatefulWidget {
   const MapPage({super.key});
@@ -55,7 +58,7 @@ class _MapPageState extends ConsumerState<MapPage> {
 
   void getUserLocation() async {
     await _getUserLocation();
-    await _populateClients();
+    _filterVisibleReports();
   }
 
   Future _getUserLocation() async {
@@ -120,26 +123,13 @@ class _MapPageState extends ConsumerState<MapPage> {
     return _markers.values.toSet();
   }
 
-  _populateClients() {
-    FirebaseFirestore.instance
-        .collection('reports')
-        .where('isValidate', isEqualTo: true)
-        .get()
-        .then((docs) {
-      if (docs.docs.isNotEmpty) {
-        for (int i = 0; i < docs.docs.length; ++i) {
-          print("DATA HERE");
-          print(docs.docs[i].data());
-          initMarker(docs.docs[i].data(), docs.docs[i].id);
-        }
-      }
-    });
+  _filterVisibleReports() async {
+    ref.read(filterReportTypeProvider.notifier).state =
+        ReportFilterType.visible;
   }
 
-  void initMarker(request, requestId) {
-    var markerIdVal = requestId;
-    final MarkerId markerId = MarkerId(markerIdVal);
-    // creating a new MARKER
+  void initMarker({required ReportModel data}) {
+    final MarkerId markerId = MarkerId(data.id);
     final Marker marker = Marker(
       onTap: () {
         showModalBottomSheet<void>(
@@ -161,7 +151,7 @@ class _MapPageState extends ConsumerState<MapPage> {
                           child: Container(
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                                    image: NetworkImage(request['imageurl']),
+                                    image: NetworkImage(data.imageUrl ?? ''),
                                     fit: BoxFit.cover),
                                 borderRadius: BorderRadius.circular(10)),
                           ),
@@ -181,7 +171,7 @@ class _MapPageState extends ConsumerState<MapPage> {
                                         text: 'Type: ',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold)),
-                                    TextSpan(text: '${request['potholetype']}'),
+                                    TextSpan(text: data.type),
                                   ],
                                 ),
                               ),
@@ -194,7 +184,7 @@ class _MapPageState extends ConsumerState<MapPage> {
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold)),
                                     TextSpan(
-                                      text: '${request['address']}',
+                                      text: data.address,
                                       style: const TextStyle(),
                                     ),
                                   ],
@@ -213,11 +203,11 @@ class _MapPageState extends ConsumerState<MapPage> {
         );
       },
       markerId: markerId,
-      position: LatLng(request['position']['geopoint'].latitude,
-          request['position']['geopoint'].longitude),
+      position: LatLng(
+          data.position.geopoint.latitude, data.position.geopoint.longitude),
       infoWindow: InfoWindow(
-        title: request['potholetype'],
-        snippet: request['address'],
+        title: data.type,
+        snippet: data.address,
       ),
     );
     setState(() {
@@ -228,6 +218,7 @@ class _MapPageState extends ConsumerState<MapPage> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(authControllerProvider);
+    final reportProvider = ref.watch(reportProviderProvider);
     return Scaffold(
       key: scaffoldKey,
       appBar: kIsWeb

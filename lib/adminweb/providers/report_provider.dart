@@ -10,12 +10,17 @@ part 'report_provider.g.dart';
 
 @riverpod
 class ReportProvider extends _$ReportProvider {
-  Future<List<ReportModel>> _fetchTodo() async {
+  Future<List<ReportModel>> _fetchReports() async {
     final filter = ref.watch(filterReportTypeProvider);
     final json = await FirebaseFirestore.instance.collection('reports').get();
     final reports = json.docs;
 
     switch (filter) {
+      case ReportFilterType.visible:
+        return reports
+            .map((e) => ReportModel.fromJson(e.data()))
+            .where((element) => element.isVisible)
+            .toList();
       case ReportFilterType.complete:
         return reports
             .map((e) => ReportModel.fromJson(e.data()))
@@ -34,7 +39,7 @@ class ReportProvider extends _$ReportProvider {
   @override
   FutureOr<List<ReportModel>> build() async {
     // Load initial todo list from the remote repository
-    return _fetchTodo();
+    return _fetchReports();
   }
 
   Future<void> addTodo(ReportModel report) async {
@@ -65,7 +70,7 @@ class ReportProvider extends _$ReportProvider {
           .collection('reports')
           .doc(reportId)
           .update({'status': value});
-      return _fetchTodo();
+      return _fetchReports();
     });
   }
 }

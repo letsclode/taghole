@@ -15,24 +15,24 @@ class Switcher extends StatefulWidget {
 class _SwitcherState extends State<Switcher> {
   final _firestore = FirebaseFirestore.instance;
 
-  Future<bool> updateReport(bool isValidate, String uid) async {
-    Map<Object, Object?> newData = {'isValidate': isValidate};
+  Future<bool> updateReport(bool isVisible, String uid) async {
+    Map<Object, Object?> newData = {'isVisible': isVisible};
     final data = await _firestore
         .collection('reports')
         .doc(uid)
         .update(newData)
-        .then((value) => isValidate);
+        .then((value) => isVisible);
     return data;
   }
 
-  bool isValidate = false;
+  bool isVisible = false;
   late String uid;
 
   @override
   void initState() {
     // TODO: implement initState
     setState(() {
-      isValidate = widget.data.status;
+      isVisible = widget.data.isVisible;
     });
     super.initState();
   }
@@ -41,7 +41,7 @@ class _SwitcherState extends State<Switcher> {
   Widget build(BuildContext context) {
     return FutureBuilder<bool>(
       future: updateReport(
-          isValidate, widget.uid), // This is the Future you want to listen to
+          isVisible, widget.uid), // This is the Future you want to listen to
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
@@ -50,7 +50,7 @@ class _SwitcherState extends State<Switcher> {
             value: snapshot.data ?? false,
             onChanged: (value) {
               setState(() {
-                isValidate = value;
+                isVisible = value;
               });
             });
       },
