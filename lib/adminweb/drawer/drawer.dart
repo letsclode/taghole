@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:taghole/adminweb/drawer/drawer_index_provider.dart';
+import 'package:taghole/adminweb/providers/report/report_filter_type_provider.dart';
 import 'package:taghole/constant/color.dart';
 import 'package:taghole/responsive.dart';
 
@@ -17,6 +18,13 @@ class KDrawer extends ConsumerStatefulWidget {
 class _KDrawerState extends ConsumerState<KDrawer> {
   void onTabTapped(int index) {
     ref.read(drawerIndexProvider.notifier).state = index;
+    if (index == 0) {
+      ref.read(filterReportTypeProvider.notifier).state =
+          ReportFilterType.visible;
+    }
+    if (index == 1) {
+      ref.read(filterReportTypeProvider.notifier).state = ReportFilterType.all;
+    }
     if (Responsive.isMobile(context)) {
       Navigator.pop(context);
     }

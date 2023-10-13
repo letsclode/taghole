@@ -19,23 +19,6 @@ class First extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: <Widget>[
-              Row(
-                children: [
-                  TextButton(
-                    child: const Text(
-                      'Admin V1',
-                      style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pushNamed('/signin');
-                    },
-                  ),
-                ],
-              ),
               SizedBox(
                 height: height / 3,
                 child: Image.asset(

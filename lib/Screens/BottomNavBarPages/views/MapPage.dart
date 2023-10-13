@@ -13,8 +13,6 @@ import 'package:taghole/adminweb/providers/report_provider.dart';
 import 'package:taghole/constant/color.dart';
 import 'package:taghole/controllers/auth_controller.dart';
 
-import '../../../adminweb/providers/report/report_filter_type_provider.dart';
-
 class MapPage extends ConsumerStatefulWidget {
   const MapPage({super.key});
 
@@ -33,7 +31,7 @@ class _MapPageState extends ConsumerState<MapPage> {
   double? _lat;
   double? _lng;
   final Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
-  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  GlobalKey scaffoldKey = GlobalKey();
 
   @override
   void initState() {
@@ -57,8 +55,8 @@ class _MapPageState extends ConsumerState<MapPage> {
   }
 
   void getUserLocation() async {
-    await _getUserLocation();
     _filterVisibleReports();
+    await _getUserLocation();
   }
 
   Future _getUserLocation() async {
@@ -124,8 +122,12 @@ class _MapPageState extends ConsumerState<MapPage> {
   }
 
   _filterVisibleReports() async {
-    ref.read(filterReportTypeProvider.notifier).state =
-        ReportFilterType.visible;
+    final data =
+        await ref.read(reportProviderProvider.notifier).getVisibleReports();
+
+    for (ReportModel report in data) {
+      initMarker(data: report);
+    }
   }
 
   void initMarker({required ReportModel data}) {
@@ -136,8 +138,8 @@ class _MapPageState extends ConsumerState<MapPage> {
           context: scaffoldKey.currentState!.context,
           builder: (BuildContext context) {
             return Container(
-              padding: const EdgeInsets.all(8),
-              height: 150,
+              padding: const EdgeInsets.all(20),
+              height: kIsWeb ? 200 : 150,
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -146,26 +148,28 @@ class _MapPageState extends ConsumerState<MapPage> {
                     Row(
                       children: [
                         SizedBox(
-                          width: 80,
-                          height: 80,
+                          width: 150,
+                          height: 150,
                           child: Container(
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                                    image: NetworkImage(data.imageUrl ?? ''),
+                                    image: Image.network(
+                                      data.imageUrl ?? '',
+                                    ).image,
                                     fit: BoxFit.cover),
                                 borderRadius: BorderRadius.circular(10)),
                           ),
                         ),
                         Container(
-                          width: MediaQuery.of(context).size.width - 100,
-                          padding: const EdgeInsets.all(8.0),
+                          height: 150,
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               RichText(
                                 text: TextSpan(
-                                  style: DefaultTextStyle.of(context).style,
+                                  style: const TextStyle(color: Colors.black),
                                   children: <TextSpan>[
                                     const TextSpan(
                                         text: 'Type: ',
@@ -177,15 +181,30 @@ class _MapPageState extends ConsumerState<MapPage> {
                               ),
                               RichText(
                                 text: TextSpan(
-                                  style: DefaultTextStyle.of(context).style,
+                                  style: const TextStyle(color: Colors.black),
                                   children: <TextSpan>[
                                     const TextSpan(
                                         text: 'Address: ',
                                         style: TextStyle(
+                                            color: Colors.black,
                                             fontWeight: FontWeight.bold)),
                                     TextSpan(
                                       text: data.address,
-                                      style: const TextStyle(),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                  style: const TextStyle(color: Colors.black),
+                                  children: <TextSpan>[
+                                    const TextSpan(
+                                        text: 'Landmark: ',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold)),
+                                    TextSpan(
+                                      text: data.landmark,
                                     ),
                                   ],
                                 ),
@@ -218,7 +237,8 @@ class _MapPageState extends ConsumerState<MapPage> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(authControllerProvider);
-    final reportProvider = ref.watch(reportProviderProvider);
+    ref.watch(reportProviderProvider);
+
     return Scaffold(
       key: scaffoldKey,
       appBar: kIsWeb

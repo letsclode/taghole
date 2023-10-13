@@ -39,6 +39,7 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
     final userProvider = ref.read(userControllerProvider.notifier);
 
     auth0.verifyPhoneNumber(
+        // phoneNumber: "+44 $mobile", 7444 555666 code: 123456
         phoneNumber: "+63 $mobile",
         forceResendingToken: 2,
         verificationCompleted: (AuthCredential auth) {

@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_config/flutter_config.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:taghole/Screens/VisitorsPage/visitors_screen.dart';
 import 'package:taghole/constant/color.dart';
@@ -13,6 +14,7 @@ import 'Screens/Authentication/welcome_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   await FlutterConfig.loadEnvVariables();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

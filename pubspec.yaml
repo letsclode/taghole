@@ -69,6 +69,7 @@ dependencies:
   dotenv: ^4.1.0
   flutter_dotenv: ^5.1.0
   uuid: ^3.0.7
+  drag_and_drop_lists: ^0.3.3
  
 
 dev_dependencies:
@@ -110,6 +111,7 @@ flutter:
     - assets/Navbar/
     - assets/FAQ/
     - assets/images/
+    - .env
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

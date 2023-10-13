@@ -11,6 +11,7 @@ part 'report_provider.g.dart';
 @riverpod
 class ReportProvider extends _$ReportProvider {
   Future<List<ReportModel>> _fetchReports() async {
+    print('fetch reports');
     final filter = ref.watch(filterReportTypeProvider);
     final json = await FirebaseFirestore.instance.collection('reports').get();
     final reports = json.docs;
@@ -62,6 +63,11 @@ class ReportProvider extends _$ReportProvider {
   }
 
   // Let's mark a todo as completed
+
+  Future<List<ReportModel>> getVisibleReports() async {
+    return _fetchReports();
+  }
+
   Future<void> updateStatus(
       {required String reportId, required bool value}) async {
     state = const AsyncValue.loading();

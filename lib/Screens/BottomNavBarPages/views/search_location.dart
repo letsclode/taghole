@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
 
 import '../../../constant/grid.dart';
 import '../../../constant/size.dart';
-import '../../../provider/location_provider.dart';
+import '../../../providers/location_provider.dart';
 
 class SearchLocationContainerWidget extends StatefulWidget {
   final FloatingSearchBarController controller;
