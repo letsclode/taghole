@@ -17,20 +17,25 @@ class ReportProvider extends _$ReportProvider {
     final reports = json.docs;
 
     switch (filter) {
-      case ReportFilterType.visible:
+      case ReportFilterType.verified:
         return reports
             .map((e) => ReportModel.fromJson(e.data()))
-            .where((element) => element.isVisible)
+            .where((element) => element.isVerified)
+            .toList();
+      case ReportFilterType.unverified:
+        return reports
+            .map((e) => ReportModel.fromJson(e.data()))
+            .where((element) => !element.isVerified)
             .toList();
       case ReportFilterType.complete:
         return reports
             .map((e) => ReportModel.fromJson(e.data()))
-            .where((element) => element.status)
+            .where((element) => element.status && element.isVerified)
             .toList();
       case ReportFilterType.ongoing:
         return reports
             .map((e) => ReportModel.fromJson(e.data()))
-            .where((element) => !element.status)
+            .where((element) => !element.status && element.isVerified)
             .toList();
       case ReportFilterType.all:
         return reports.map((e) => ReportModel.fromJson(e.data())).toList();
@@ -43,39 +48,41 @@ class ReportProvider extends _$ReportProvider {
     return _fetchReports();
   }
 
-  Future<void> addTodo(ReportModel report) async {
-    // Set the state to loading
-    // state = const AsyncValue.loading();
-    // // Add the new todo and reload the todo list from the remote repository
-    // state = await AsyncValue.guard(() async {
-    //   await http.post('api/todos', todo.toJson());
-    //   return _fetchTodo();
-    // });
-  }
-
-  // Let's allow removing todos
-  Future<void> removeTodo(String todoId) async {
-    // state = const AsyncValue.loading();
-    // state = await AsyncValue.guard(() async {
-    //   await http.delete('api/todos/$todoId');
-    //   return _fetchTodo();
-    // });
-  }
-
-  // Let's mark a todo as completed
-
   Future<List<ReportModel>> getVisibleReports() async {
     return _fetchReports();
   }
 
   Future<void> updateStatus(
       {required String reportId, required bool value}) async {
+    print('reportid');
+    print(reportId);
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await FirebaseFirestore.instance
           .collection('reports')
           .doc(reportId)
           .update({'status': value});
+      return _fetchReports();
+    });
+  }
+
+  Future<void> verifyReport(bool isVisible, String uid) async {
+    Map<Object, Object?> newData = {'isVerified': isVisible};
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      FirebaseFirestore.instance
+          .collection('reports')
+          .doc(uid)
+          .update(newData)
+          .then((value) => isVisible);
+      return _fetchReports();
+    });
+  }
+
+  Future<void> deleteReport(String uid) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      await FirebaseFirestore.instance.collection('reports').doc(uid).delete();
       return _fetchReports();
     });
   }

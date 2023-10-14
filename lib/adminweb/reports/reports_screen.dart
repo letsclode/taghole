@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:taghole/adminweb/constants.dart';
 import 'package:taghole/adminweb/providers/report_provider.dart';
 import 'package:taghole/adminweb/reports/table.dart';
 
 class ReportsScreen extends ConsumerStatefulWidget {
-  const ReportsScreen({super.key});
+  final int pageIndex;
+  final String title;
+  const ReportsScreen(
+      {super.key, required this.pageIndex, required this.title});
 
   @override
   ConsumerState<ReportsScreen> createState() => _ReportsScreenState();
@@ -17,8 +19,8 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
     final reportProvider = ref.watch(reportProviderProvider);
     return switch (reportProvider) {
       AsyncData(:final value) => TableScreen(
-          title: KString.reportsTitle,
-          headers: const ['Status', 'Type', 'Address', 'Controls'],
+          title: widget.title,
+          headers: const ['Status', 'Type', 'Address', 'Actions'],
           data: value,
         ),
       AsyncError(:final error) => Text('Error: $error'),

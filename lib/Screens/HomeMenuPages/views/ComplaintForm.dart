@@ -74,6 +74,9 @@ class _ComplaintFormState extends State<ComplaintForm> {
 
   void uploadform(String userId) async {
     final generatedId = uuid.v1();
+
+    //TODO: make it reportmodel
+
     _firestore.collection('reports').doc(generatedId).set({
       'id': generatedId,
       'position': point.data,
@@ -81,7 +84,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
       'address': _address,
       'status': _work,
       'imageUrl': imageurl,
-      'isVisible': false,
+      'isVerified': false,
       'description': _description,
       'userId': userId,
       'landmark': _landmark

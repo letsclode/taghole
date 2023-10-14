@@ -1,13 +1,16 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:taghole/adminweb/providers/report/report_filter_type_provider.dart';
+import 'package:taghole/adminweb/widgets/update_form.dart';
 
-import '../../controllers/user_controller.dart';
+import '../../constant/color.dart';
+import '../drawer/drawer_index_provider.dart';
 import '../models/report/report_model.dart';
-import '../widgets/switcher_widget.dart';
+import '../providers/report_provider.dart';
 
 class TableScreen extends ConsumerStatefulWidget {
   final String title;
+
   final List<String> headers;
   final List<ReportModel> data;
 
@@ -29,22 +32,6 @@ class _TableScreenState extends ConsumerState<TableScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(widget.title),
-          Row(
-            children: [
-              const Icon(Icons.filter_alt),
-              DropdownButton<ReportFilterType>(
-                value: ref.watch(filterReportTypeProvider),
-                onChanged: (value) =>
-                    ref.read(filterReportTypeProvider.notifier).state = value!,
-                items: ReportFilterType.values.map((type) {
-                  return DropdownMenuItem<ReportFilterType>(
-                    value: type,
-                    child: Text(type.name.toString()),
-                  );
-                }).toList(),
-              ),
-            ],
-          )
         ],
       ),
       columns: widget.headers
@@ -54,7 +41,10 @@ class _TableScreenState extends ConsumerState<TableScreen> {
                 style: const TextStyle(fontWeight: FontWeight.bold),
               )))
           .toList(),
-      source: MyDataTableSource(data: widget.data),
+      source: MyDataTableSource(
+        context: context,
+        data: widget.data,
+      ),
       rowsPerPage: 10, // Adjust the number of rows per page
     );
   }
@@ -62,37 +52,350 @@ class _TableScreenState extends ConsumerState<TableScreen> {
 
 class MyDataTableSource extends DataTableSource {
   final List<ReportModel> data;
-  MyDataTableSource({required this.data});
+  final BuildContext context;
+  MyDataTableSource({required this.data, required this.context});
 
   @override
   DataRow getRow(int index) {
     final ReportModel row = data[index];
-    final id = data[index].id;
     return DataRow(cells: [
-      DataCell(row.status
+      DataCell(!row.isVerified
           ? const Text(
-              'complete',
-              style: TextStyle(color: Colors.green),
+              'Unverified',
+              style: TextStyle(color: Colors.grey),
             )
-          : const Text(
-              'ongoing',
-              style: TextStyle(color: Colors.orange),
-            )),
+          : row.status
+              ? const Text(
+                  'Complete',
+                  style: TextStyle(color: Colors.green),
+                )
+              : const Text(
+                  'Ongoing',
+                  style: TextStyle(color: Colors.orange),
+                )),
       DataCell(Text(row.type)),
       DataCell(Text(row.address)),
       DataCell(Row(
         children: [
-          Consumer(
-            builder: (context, ref, child) {
-              final userProvider = ref.watch(userControllerProvider.notifier);
-              return IconButton(
-                  onPressed: () async {
-                    await userProvider.deleteReport(id);
-                  },
-                  icon: const Icon(Icons.delete));
-            },
+          OutlinedButton(
+              onPressed: () {
+                //TODO: show deatils
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Center(child: Text("Report Details")),
+                        content: SizedBox(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Column(
+                                children: [
+                                  Container(
+                                    height: 200,
+                                    width: 500,
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: Image.network(
+                                              row.imageUrl ?? '',
+                                            ).image,
+                                            fit: BoxFit.cover),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                  ),
+                                  Container(
+                                    height: 450,
+                                    width: 500,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 20, horizontal: 20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        RichText(
+                                          text: TextSpan(
+                                            style: const TextStyle(
+                                                color: Colors.black),
+                                            children: <TextSpan>[
+                                              const TextSpan(
+                                                  text: 'Type: ',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              TextSpan(text: row.type),
+                                            ],
+                                          ),
+                                        ),
+                                        RichText(
+                                          text: TextSpan(
+                                            style: const TextStyle(
+                                                color: Colors.black),
+                                            children: <TextSpan>[
+                                              const TextSpan(
+                                                  text: 'Address: ',
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              TextSpan(
+                                                text: row.address,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        RichText(
+                                          text: TextSpan(
+                                            style: const TextStyle(
+                                                color: Colors.black),
+                                            children: <TextSpan>[
+                                              const TextSpan(
+                                                  text: 'Landmark: ',
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              TextSpan(
+                                                text: row.landmark,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                            height: 300,
+                                            width: 500,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 10),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      const Text(
+                                                        'Ongoing Updates',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color:
+                                                                Colors.orange),
+                                                      ),
+                                                      Consumer(builder:
+                                                          (context, ref,
+                                                              child) {
+                                                        final reportProvider =
+                                                            ref.read(
+                                                                reportProviderProvider
+                                                                    .notifier);
+                                                        final currentIndex =
+                                                            ref.watch(
+                                                                drawerIndexProvider);
+                                                        return MaterialButton(
+                                                          color: primaryColor,
+                                                          onPressed: () {
+                                                            //TODO: verify
+                                                            Navigator.pop(
+                                                                context);
+                                                            if (currentIndex ==
+                                                                1) {
+                                                              reportProvider
+                                                                  .verifyReport(
+                                                                      true,
+                                                                      row.id);
+                                                            } else {
+                                                              showDialog(
+                                                                  context:
+                                                                      context,
+                                                                  builder:
+                                                                      (context) {
+                                                                    return AlertDialog(
+                                                                      content:
+                                                                          UpdateForm(
+                                                                        report:
+                                                                            row,
+                                                                      ),
+                                                                    );
+                                                                  });
+                                                            }
+                                                          },
+                                                          child: const Row(
+                                                            children: [
+                                                              Icon(
+                                                                Icons.add,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                              Text(
+                                                                'Update',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        );
+                                                      })
+                                                    ],
+                                                  ),
+                                                ),
+                                                CarouselSlider(
+                                                  options: CarouselOptions(
+                                                      enableInfiniteScroll:
+                                                          false,
+                                                      height: 250.0),
+                                                  items: row.updates!
+                                                      .map((updateValue) {
+                                                    return Builder(
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return Container(
+                                                            decoration: BoxDecoration(
+                                                                image: DecorationImage(
+                                                                    image: NetworkImage(
+                                                                        updateValue
+                                                                            .image),
+                                                                    fit: BoxFit
+                                                                        .cover)),
+                                                            width: MediaQuery
+                                                                    .of(context)
+                                                                .size
+                                                                .width,
+                                                            margin:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        5.0),
+                                                            child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .end,
+                                                              children: [
+                                                                Container(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          10),
+                                                                  color: Colors
+                                                                      .black26,
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Text(
+                                                                        updateValue
+                                                                            .description,
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                Colors.white,
+                                                                            fontSize: 16.0),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ));
+                                                      },
+                                                    );
+                                                  }).toList(),
+                                                )
+                                              ],
+                                            )),
+                                        Expanded(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Consumer(builder:
+                                                  (context, ref, child) {
+                                                final reportProvider = ref.read(
+                                                    reportProviderProvider
+                                                        .notifier);
+                                                final currentIndex = ref
+                                                    .watch(drawerIndexProvider);
+
+                                                return Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    OutlinedButton(
+                                                      onPressed: () async {
+                                                        //TODO: delete report
+                                                        Navigator.pop(context);
+                                                        reportProvider
+                                                            .deleteReport(
+                                                                row.id);
+                                                      },
+                                                      child: const Text(
+                                                        "Delete Report",
+                                                        style: TextStyle(
+                                                            color: Colors.red),
+                                                      ),
+                                                    ),
+                                                    row.status == true
+                                                        ? const SizedBox()
+                                                        : Row(
+                                                            children: [
+                                                              const SizedBox(
+                                                                width: 10,
+                                                              ),
+                                                              MaterialButton(
+                                                                color: Colors
+                                                                    .green,
+                                                                onPressed: () {
+                                                                  //TODO: verify
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                  if (currentIndex ==
+                                                                      1) {
+                                                                    reportProvider
+                                                                        .verifyReport(
+                                                                            true,
+                                                                            row.id);
+                                                                  } else {
+                                                                    reportProvider.updateStatus(
+                                                                        reportId: row
+                                                                            .id,
+                                                                        value:
+                                                                            true);
+                                                                  }
+                                                                },
+                                                                child: Text(
+                                                                  currentIndex ==
+                                                                          1
+                                                                      ? 'Verify'
+                                                                      : 'Complete Report',
+                                                                  style: const TextStyle(
+                                                                      color: Colors
+                                                                          .white),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          )
+                                                  ],
+                                                );
+                                              }),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    });
+              },
+              child: const Text("Details")),
+          const SizedBox(
+            width: 10,
           ),
-          Switcher(data: row, uid: id),
         ],
       )),
     ]);

@@ -1,59 +1,49 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
+// import 'package:hooks_riverpod/hooks_riverpod.dart';
+// import 'package:taghole/adminweb/providers/report_provider.dart';
 
-import '../models/report/report_model.dart';
+// import '../models/report/report_model.dart';
 
-class Switcher extends StatefulWidget {
-  const Switcher({super.key, required this.data, required this.uid});
-  final ReportModel data;
-  final String uid;
+// class Switcher extends ConsumerStatefulWidget {
+//   const Switcher({super.key, required this.data, required this.uid});
+//   final ReportModel data;
+//   final String uid;
 
-  @override
-  State<Switcher> createState() => _SwitcherState();
-}
+//   @override
+//   ConsumerState<Switcher> createState() => _SwitcherState();
+// }
 
-class _SwitcherState extends State<Switcher> {
-  final _firestore = FirebaseFirestore.instance;
+// class _SwitcherState extends ConsumerState<Switcher> {
+//   bool isVisible = false;
+//   late String uid;
 
-  Future<bool> updateReport(bool isVisible, String uid) async {
-    Map<Object, Object?> newData = {'isVisible': isVisible};
-    final data = await _firestore
-        .collection('reports')
-        .doc(uid)
-        .update(newData)
-        .then((value) => isVisible);
-    return data;
-  }
+//   @override
+//   void initState() {
+//     // TODO: implement initState
+//     setState(() {
+//       isVisible = widget.data.isVerified;
+//     });
+//     super.initState();R
+//   }
 
-  bool isVisible = false;
-  late String uid;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    setState(() {
-      isVisible = widget.data.isVisible;
-    });
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: updateReport(
-          isVisible, widget.uid), // This is the Future you want to listen to
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        }
-        return Switch(
-            value: snapshot.data ?? false,
-            onChanged: (value) {
-              setState(() {
-                isVisible = value;
-              });
-            });
-      },
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     final reportProvider = ref.watch(reportProviderProvider.notifier);
+//     return FutureBuilder<bool>(
+//       future: reportProvider.verifyReport(
+//           isVisible, widget.uid), // This is the Future you want to listen to
+//       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+//         if (snapshot.hasError) {
+//           return Text('Error: ${snapshot.error}');
+//         }
+//         return Switch(
+//             value: snapshot.data ?? false,
+//             onChanged: (value) {
+//               setState(() {
+//                 isVisible = value;
+//               });
+//             });
+//       },
+//     );
+//   }
+// }

@@ -36,10 +36,6 @@ class UserController extends StateNotifier<User?> {
         .get();
   }
 
-  Future deleteReport(String uid) async {
-    await FirebaseFirestore.instance.collection('reports').doc(uid).delete();
-  }
-
 //TODO: finish this
   Future storeNewUser(
       {String? name,

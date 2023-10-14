@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:taghole/adminweb/models/update_model/update_model.dart';
 
 import '../position/position_model.dart';
 
@@ -12,9 +13,10 @@ class ReportModel with _$ReportModel {
       required String userId,
       required String description,
       required bool status,
-      required bool isVisible,
+      required bool isVerified,
       required String type,
       String? imageUrl,
+      List<UpdateModel>? updates,
       required String address,
       required String landmark,
       required PositionModel position}) = _ReportModel;

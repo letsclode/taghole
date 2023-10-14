@@ -24,9 +24,10 @@ mixin _$ReportModel {
   String get userId => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   bool get status => throw _privateConstructorUsedError;
-  bool get isVisible => throw _privateConstructorUsedError;
+  bool get isVerified => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
+  List<UpdateModel>? get updates => throw _privateConstructorUsedError;
   String get address => throw _privateConstructorUsedError;
   String get landmark => throw _privateConstructorUsedError;
   PositionModel get position => throw _privateConstructorUsedError;
@@ -48,9 +49,10 @@ abstract class $ReportModelCopyWith<$Res> {
       String userId,
       String description,
       bool status,
-      bool isVisible,
+      bool isVerified,
       String type,
       String? imageUrl,
+      List<UpdateModel>? updates,
       String address,
       String landmark,
       PositionModel position});
@@ -75,9 +77,10 @@ class _$ReportModelCopyWithImpl<$Res, $Val extends ReportModel>
     Object? userId = null,
     Object? description = null,
     Object? status = null,
-    Object? isVisible = null,
+    Object? isVerified = null,
     Object? type = null,
     Object? imageUrl = freezed,
+    Object? updates = freezed,
     Object? address = null,
     Object? landmark = null,
     Object? position = null,
@@ -99,9 +102,9 @@ class _$ReportModelCopyWithImpl<$Res, $Val extends ReportModel>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as bool,
-      isVisible: null == isVisible
-          ? _value.isVisible
-          : isVisible // ignore: cast_nullable_to_non_nullable
+      isVerified: null == isVerified
+          ? _value.isVerified
+          : isVerified // ignore: cast_nullable_to_non_nullable
               as bool,
       type: null == type
           ? _value.type
@@ -111,6 +114,10 @@ class _$ReportModelCopyWithImpl<$Res, $Val extends ReportModel>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      updates: freezed == updates
+          ? _value.updates
+          : updates // ignore: cast_nullable_to_non_nullable
+              as List<UpdateModel>?,
       address: null == address
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
@@ -148,9 +155,10 @@ abstract class _$$_ReportModelCopyWith<$Res>
       String userId,
       String description,
       bool status,
-      bool isVisible,
+      bool isVerified,
       String type,
       String? imageUrl,
+      List<UpdateModel>? updates,
       String address,
       String landmark,
       PositionModel position});
@@ -174,9 +182,10 @@ class __$$_ReportModelCopyWithImpl<$Res>
     Object? userId = null,
     Object? description = null,
     Object? status = null,
-    Object? isVisible = null,
+    Object? isVerified = null,
     Object? type = null,
     Object? imageUrl = freezed,
+    Object? updates = freezed,
     Object? address = null,
     Object? landmark = null,
     Object? position = null,
@@ -198,9 +207,9 @@ class __$$_ReportModelCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as bool,
-      isVisible: null == isVisible
-          ? _value.isVisible
-          : isVisible // ignore: cast_nullable_to_non_nullable
+      isVerified: null == isVerified
+          ? _value.isVerified
+          : isVerified // ignore: cast_nullable_to_non_nullable
               as bool,
       type: null == type
           ? _value.type
@@ -210,6 +219,10 @@ class __$$_ReportModelCopyWithImpl<$Res>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      updates: freezed == updates
+          ? _value._updates
+          : updates // ignore: cast_nullable_to_non_nullable
+              as List<UpdateModel>?,
       address: null == address
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
@@ -234,12 +247,14 @@ class _$_ReportModel implements _ReportModel {
       required this.userId,
       required this.description,
       required this.status,
-      required this.isVisible,
+      required this.isVerified,
       required this.type,
       this.imageUrl,
+      final List<UpdateModel>? updates,
       required this.address,
       required this.landmark,
-      required this.position});
+      required this.position})
+      : _updates = updates;
 
   factory _$_ReportModel.fromJson(Map<String, dynamic> json) =>
       _$$_ReportModelFromJson(json);
@@ -253,11 +268,21 @@ class _$_ReportModel implements _ReportModel {
   @override
   final bool status;
   @override
-  final bool isVisible;
+  final bool isVerified;
   @override
   final String type;
   @override
   final String? imageUrl;
+  final List<UpdateModel>? _updates;
+  @override
+  List<UpdateModel>? get updates {
+    final value = _updates;
+    if (value == null) return null;
+    if (_updates is EqualUnmodifiableListView) return _updates;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   final String address;
   @override
@@ -267,7 +292,7 @@ class _$_ReportModel implements _ReportModel {
 
   @override
   String toString() {
-    return 'ReportModel(id: $id, userId: $userId, description: $description, status: $status, isVisible: $isVisible, type: $type, imageUrl: $imageUrl, address: $address, landmark: $landmark, position: $position)';
+    return 'ReportModel(id: $id, userId: $userId, description: $description, status: $status, isVerified: $isVerified, type: $type, imageUrl: $imageUrl, updates: $updates, address: $address, landmark: $landmark, position: $position)';
   }
 
   @override
@@ -280,11 +305,12 @@ class _$_ReportModel implements _ReportModel {
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.isVisible, isVisible) ||
-                other.isVisible == isVisible) &&
+            (identical(other.isVerified, isVerified) ||
+                other.isVerified == isVerified) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
+            const DeepCollectionEquality().equals(other._updates, _updates) &&
             (identical(other.address, address) || other.address == address) &&
             (identical(other.landmark, landmark) ||
                 other.landmark == landmark) &&
@@ -294,8 +320,19 @@ class _$_ReportModel implements _ReportModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, userId, description, status,
-      isVisible, type, imageUrl, address, landmark, position);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      userId,
+      description,
+      status,
+      isVerified,
+      type,
+      imageUrl,
+      const DeepCollectionEquality().hash(_updates),
+      address,
+      landmark,
+      position);
 
   @JsonKey(ignore: true)
   @override
@@ -317,9 +354,10 @@ abstract class _ReportModel implements ReportModel {
       required final String userId,
       required final String description,
       required final bool status,
-      required final bool isVisible,
+      required final bool isVerified,
       required final String type,
       final String? imageUrl,
+      final List<UpdateModel>? updates,
       required final String address,
       required final String landmark,
       required final PositionModel position}) = _$_ReportModel;
@@ -336,11 +374,13 @@ abstract class _ReportModel implements ReportModel {
   @override
   bool get status;
   @override
-  bool get isVisible;
+  bool get isVerified;
   @override
   String get type;
   @override
   String? get imageUrl;
+  @override
+  List<UpdateModel>? get updates;
   @override
   String get address;
   @override

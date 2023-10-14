@@ -19,11 +19,19 @@ class _KDrawerState extends ConsumerState<KDrawer> {
   void onTabTapped(int index) {
     ref.read(drawerIndexProvider.notifier).state = index;
     if (index == 0) {
-      ref.read(filterReportTypeProvider.notifier).state =
-          ReportFilterType.visible;
+      ref.read(filterReportTypeProvider.notifier).state = ReportFilterType.all;
     }
     if (index == 1) {
-      ref.read(filterReportTypeProvider.notifier).state = ReportFilterType.all;
+      ref.read(filterReportTypeProvider.notifier).state =
+          ReportFilterType.unverified;
+    }
+    if (index == 2) {
+      ref.read(filterReportTypeProvider.notifier).state =
+          ReportFilterType.ongoing;
+    }
+    if (index == 3) {
+      ref.read(filterReportTypeProvider.notifier).state =
+          ReportFilterType.complete;
     }
     if (Responsive.isMobile(context)) {
       Navigator.pop(context);
@@ -71,10 +79,37 @@ class _KDrawerState extends ConsumerState<KDrawer> {
           ListTile(
             selected: currentIndex == 2,
             selectedTileColor: Colors.grey[100],
+            leading: const Icon(Icons.assignment),
+            title: const Text(KString.reportsOngoingTitle),
+            onTap: () {
+              onTabTapped(2);
+            },
+          ),
+          ListTile(
+            selected: currentIndex == 3,
+            selectedTileColor: Colors.grey[100],
+            leading: const Icon(Icons.assignment),
+            title: const Text(KString.reportsCompletedTitle),
+            onTap: () {
+              onTabTapped(3);
+            },
+          ),
+          ListTile(
+            selected: currentIndex == 4,
+            selectedTileColor: Colors.grey[100],
+            leading: const Icon(Icons.feedback),
+            title: const Text('Feedbacks'),
+            onTap: () {
+              onTabTapped(4);
+            },
+          ),
+          ListTile(
+            selected: currentIndex == 5,
+            selectedTileColor: Colors.grey[100],
             leading: const Icon(Icons.settings),
             title: const Text('Settings'),
             onTap: () {
-              onTabTapped(2);
+              onTabTapped(5);
             },
           ),
           ListTile(
