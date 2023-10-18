@@ -9,9 +9,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:taghole/adminweb/models/report/report_model.dart';
-import 'package:taghole/adminweb/providers/report_provider.dart';
 import 'package:taghole/constant/color.dart';
 import 'package:taghole/controllers/auth_controller.dart';
+
+import '../../../adminweb/providers/report/report_provider.dart';
 
 class MapPage extends ConsumerStatefulWidget {
   const MapPage({super.key});
@@ -167,6 +168,31 @@ class _MapPageState extends ConsumerState<MapPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
+                              RichText(
+                                text: TextSpan(
+                                  style: const TextStyle(color: Colors.black),
+                                  children: <TextSpan>[
+                                    const TextSpan(
+                                        text: 'Status: ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                    !data.isVerified
+                                        ? const TextSpan(
+                                            text: 'Unverfied',
+                                            style:
+                                                TextStyle(color: Colors.grey))
+                                        : TextSpan(
+                                            text: !data.status
+                                                ? 'Ongoing'
+                                                : 'Completed',
+                                            style: TextStyle(
+                                              color: data.status
+                                                  ? Colors.green
+                                                  : Colors.orange,
+                                            )),
+                                  ],
+                                ),
+                              ),
                               RichText(
                                 text: TextSpan(
                                   style: const TextStyle(color: Colors.black),

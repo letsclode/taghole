@@ -30,6 +30,7 @@ mixin _$ReportModel {
   List<UpdateModel>? get updates => throw _privateConstructorUsedError;
   String get address => throw _privateConstructorUsedError;
   String get landmark => throw _privateConstructorUsedError;
+  double? get ratings => throw _privateConstructorUsedError;
   PositionModel get position => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -55,6 +56,7 @@ abstract class $ReportModelCopyWith<$Res> {
       List<UpdateModel>? updates,
       String address,
       String landmark,
+      double? ratings,
       PositionModel position});
 
   $PositionModelCopyWith<$Res> get position;
@@ -83,6 +85,7 @@ class _$ReportModelCopyWithImpl<$Res, $Val extends ReportModel>
     Object? updates = freezed,
     Object? address = null,
     Object? landmark = null,
+    Object? ratings = freezed,
     Object? position = null,
   }) {
     return _then(_value.copyWith(
@@ -126,6 +129,10 @@ class _$ReportModelCopyWithImpl<$Res, $Val extends ReportModel>
           ? _value.landmark
           : landmark // ignore: cast_nullable_to_non_nullable
               as String,
+      ratings: freezed == ratings
+          ? _value.ratings
+          : ratings // ignore: cast_nullable_to_non_nullable
+              as double?,
       position: null == position
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
@@ -161,6 +168,7 @@ abstract class _$$_ReportModelCopyWith<$Res>
       List<UpdateModel>? updates,
       String address,
       String landmark,
+      double? ratings,
       PositionModel position});
 
   @override
@@ -188,6 +196,7 @@ class __$$_ReportModelCopyWithImpl<$Res>
     Object? updates = freezed,
     Object? address = null,
     Object? landmark = null,
+    Object? ratings = freezed,
     Object? position = null,
   }) {
     return _then(_$_ReportModel(
@@ -231,6 +240,10 @@ class __$$_ReportModelCopyWithImpl<$Res>
           ? _value.landmark
           : landmark // ignore: cast_nullable_to_non_nullable
               as String,
+      ratings: freezed == ratings
+          ? _value.ratings
+          : ratings // ignore: cast_nullable_to_non_nullable
+              as double?,
       position: null == position
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
@@ -253,6 +266,7 @@ class _$_ReportModel implements _ReportModel {
       final List<UpdateModel>? updates,
       required this.address,
       required this.landmark,
+      this.ratings,
       required this.position})
       : _updates = updates;
 
@@ -288,11 +302,13 @@ class _$_ReportModel implements _ReportModel {
   @override
   final String landmark;
   @override
+  final double? ratings;
+  @override
   final PositionModel position;
 
   @override
   String toString() {
-    return 'ReportModel(id: $id, userId: $userId, description: $description, status: $status, isVerified: $isVerified, type: $type, imageUrl: $imageUrl, updates: $updates, address: $address, landmark: $landmark, position: $position)';
+    return 'ReportModel(id: $id, userId: $userId, description: $description, status: $status, isVerified: $isVerified, type: $type, imageUrl: $imageUrl, updates: $updates, address: $address, landmark: $landmark, ratings: $ratings, position: $position)';
   }
 
   @override
@@ -314,6 +330,7 @@ class _$_ReportModel implements _ReportModel {
             (identical(other.address, address) || other.address == address) &&
             (identical(other.landmark, landmark) ||
                 other.landmark == landmark) &&
+            (identical(other.ratings, ratings) || other.ratings == ratings) &&
             (identical(other.position, position) ||
                 other.position == position));
   }
@@ -332,6 +349,7 @@ class _$_ReportModel implements _ReportModel {
       const DeepCollectionEquality().hash(_updates),
       address,
       landmark,
+      ratings,
       position);
 
   @JsonKey(ignore: true)
@@ -360,6 +378,7 @@ abstract class _ReportModel implements ReportModel {
       final List<UpdateModel>? updates,
       required final String address,
       required final String landmark,
+      final double? ratings,
       required final PositionModel position}) = _$_ReportModel;
 
   factory _ReportModel.fromJson(Map<String, dynamic> json) =
@@ -385,6 +404,8 @@ abstract class _ReportModel implements ReportModel {
   String get address;
   @override
   String get landmark;
+  @override
+  double? get ratings;
   @override
   PositionModel get position;
   @override

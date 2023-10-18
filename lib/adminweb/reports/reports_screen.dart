@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:taghole/adminweb/providers/report_provider.dart';
 import 'package:taghole/adminweb/reports/table.dart';
+
+import '../providers/report/report_provider.dart';
 
 class ReportsScreen extends ConsumerStatefulWidget {
   final int pageIndex;

@@ -6,7 +6,7 @@ import 'package:taghole/adminweb/widgets/update_form.dart';
 import '../../constant/color.dart';
 import '../drawer/drawer_index_provider.dart';
 import '../models/report/report_model.dart';
-import '../providers/report_provider.dart';
+import '../providers/report/report_provider.dart';
 
 class TableScreen extends ConsumerStatefulWidget {
   final String title;
@@ -28,6 +28,7 @@ class _TableScreenState extends ConsumerState<TableScreen> {
   @override
   Widget build(BuildContext context) {
     return PaginatedDataTable(
+      onPageChanged: (value) {},
       header: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -66,7 +67,7 @@ class MyDataTableSource extends DataTableSource {
             )
           : row.status
               ? const Text(
-                  'Complete',
+                  'Completed',
                   style: TextStyle(color: Colors.green),
                 )
               : const Text(

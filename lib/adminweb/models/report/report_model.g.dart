@@ -20,6 +20,7 @@ _$_ReportModel _$$_ReportModelFromJson(Map<String, dynamic> json) =>
           .toList(),
       address: json['address'] as String,
       landmark: json['landmark'] as String,
+      ratings: (json['ratings'] as num?)?.toDouble(),
       position:
           PositionModel.fromJson(json['position'] as Map<String, dynamic>),
     );
@@ -36,5 +37,6 @@ Map<String, dynamic> _$$_ReportModelToJson(_$_ReportModel instance) =>
       'updates': instance.updates,
       'address': instance.address,
       'landmark': instance.landmark,
+      'ratings': instance.ratings,
       'position': instance.position,
     };

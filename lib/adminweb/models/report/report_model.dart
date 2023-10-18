@@ -19,6 +19,7 @@ class ReportModel with _$ReportModel {
       List<UpdateModel>? updates,
       required String address,
       required String landmark,
+      double? ratings,
       required PositionModel position}) = _ReportModel;
 
   factory ReportModel.fromJson(Map<String, dynamic> json) =>

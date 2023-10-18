@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:taghole/adminweb/providers/report/report_filter_type_provider.dart';
 
-import '../models/report/report_model.dart';
+import '../../models/report/report_model.dart';
 
 part 'report_provider.g.dart';
 
@@ -75,6 +75,15 @@ class ReportProvider extends _$ReportProvider {
           .doc(uid)
           .update(newData)
           .then((value) => isVisible);
+      return _fetchReports();
+    });
+  }
+
+  Future<void> rateReport(double rates, String uid) async {
+    Map<Object, Object?> newData = {'ratings': rates};
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      FirebaseFirestore.instance.collection('reports').doc(uid).update(newData);
       return _fetchReports();
     });
   }
