@@ -138,107 +138,105 @@ class _MapPageState extends ConsumerState<MapPage> {
         showModalBottomSheet<void>(
           context: scaffoldKey.currentState!.context,
           builder: (BuildContext context) {
-            return Container(
-              padding: const EdgeInsets.all(20),
-              height: kIsWeb ? 200 : 150,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+            return SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                width: MediaQuery.of(context).size.width,
+                height: kIsWeb ? 200 : 180,
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 150,
-                          height: 150,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: Image.network(
-                                      data.imageUrl ?? '',
-                                    ).image,
-                                    fit: BoxFit.cover),
-                                borderRadius: BorderRadius.circular(10)),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: kIsWeb ? 150 : 120,
+                      height: kIsWeb ? 150 : 120,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: Image.network(
+                                  data.imageUrl ?? '',
+                                ).image,
+                                fit: BoxFit.cover),
+                            borderRadius: BorderRadius.circular(10)),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              style: const TextStyle(color: Colors.black),
+                              children: <TextSpan>[
+                                const TextSpan(
+                                    text: 'Status: ',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                !data.isVerified
+                                    ? const TextSpan(
+                                        text: 'Unverfied',
+                                        style: TextStyle(color: Colors.grey))
+                                    : TextSpan(
+                                        text: !data.status
+                                            ? 'Ongoing'
+                                            : 'Completed',
+                                        style: TextStyle(
+                                          color: data.status
+                                              ? Colors.green
+                                              : Colors.orange,
+                                        )),
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                          height: 150,
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              RichText(
-                                text: TextSpan(
-                                  style: const TextStyle(color: Colors.black),
-                                  children: <TextSpan>[
-                                    const TextSpan(
-                                        text: 'Status: ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    !data.isVerified
-                                        ? const TextSpan(
-                                            text: 'Unverfied',
-                                            style:
-                                                TextStyle(color: Colors.grey))
-                                        : TextSpan(
-                                            text: !data.status
-                                                ? 'Ongoing'
-                                                : 'Completed',
-                                            style: TextStyle(
-                                              color: data.status
-                                                  ? Colors.green
-                                                  : Colors.orange,
-                                            )),
-                                  ],
-                                ),
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  style: const TextStyle(color: Colors.black),
-                                  children: <TextSpan>[
-                                    const TextSpan(
-                                        text: 'Type: ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    TextSpan(text: data.type),
-                                  ],
-                                ),
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  style: const TextStyle(color: Colors.black),
-                                  children: <TextSpan>[
-                                    const TextSpan(
-                                        text: 'Address: ',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold)),
-                                    TextSpan(
-                                      text: data.address,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  style: const TextStyle(color: Colors.black),
-                                  children: <TextSpan>[
-                                    const TextSpan(
-                                        text: 'Landmark: ',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold)),
-                                    TextSpan(
-                                      text: data.landmark,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                          RichText(
+                            text: TextSpan(
+                              style: const TextStyle(color: Colors.black),
+                              children: <TextSpan>[
+                                const TextSpan(
+                                    text: 'Type: ',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                TextSpan(text: data.type),
+                              ],
+                            ),
                           ),
-                        )
-                      ],
+                          RichText(
+                            text: TextSpan(
+                              style: const TextStyle(color: Colors.black),
+                              children: <TextSpan>[
+                                const TextSpan(
+                                    text: 'Address: ',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold)),
+                                TextSpan(
+                                  text: data.address,
+                                ),
+                              ],
+                            ),
+                          ),
+                          RichText(
+                            overflow: TextOverflow.fade,
+                            text: TextSpan(
+                              style: const TextStyle(color: Colors.black),
+                              children: <TextSpan>[
+                                const TextSpan(
+                                    text: 'Landmark: ',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold)),
+                                TextSpan(
+                                  text: data.landmark,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     )
                   ],
                 ),
