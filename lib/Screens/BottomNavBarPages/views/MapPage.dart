@@ -68,6 +68,9 @@ class _MapPageState extends ConsumerState<MapPage> {
           await placemarkFromCoordinates(position.latitude, position.longitude);
       setState(() {
         _initialPosition = LatLng(position.latitude, position.longitude);
+        if (_initialPosition == null) {
+          _setDefaultLocation();
+        }
       });
     } catch (e) {
       if (kDebugMode) {

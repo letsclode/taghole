@@ -15,6 +15,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
   @override
   Widget build(BuildContext context) {
     final authProvider = ref.watch(authControllerProvider.notifier);
+    final user = ref.watch(authControllerProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -35,7 +36,8 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                 color: secondaryColor,
                 onPressed: () async {
                   try {
-                    authProvider.signOut();
+                    print(user);
+                    await authProvider.signOut();
                   } catch (e) {
                     print(e);
                   }

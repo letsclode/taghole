@@ -95,4 +95,21 @@ class ReportProvider extends _$ReportProvider {
       return _fetchReports();
     });
   }
+
+  Future addUpdate(
+      {required String reportId,
+      required String imageurl,
+      required String description}) async {
+    //TODO: addd update in firestore
+    state = const AsyncValue.loading();
+
+    state = await AsyncValue.guard(() async {
+      FirebaseFirestore.instance.collection('reports').doc(reportId).update({
+        'updates': FieldValue.arrayUnion([
+          {'image': imageurl, 'description': description}
+        ])
+      });
+      return _fetchReports();
+    });
+  }
 }

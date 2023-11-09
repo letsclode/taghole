@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -10,9 +9,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart' as loc;
 import 'package:taghole/adminweb/models/report/report_model.dart';
+import 'package:taghole/adminweb/providers/report/report_provider.dart';
 import 'package:taghole/constant/color.dart';
 
-import '../../../repositories/auth_repository.dart';
 import '../../Screens/HomeMenuPages/services/toast.dart';
 
 class UpdateForm extends StatefulWidget {
@@ -27,7 +26,6 @@ class _UpdateFormState extends State<UpdateForm> {
   final _formKey = GlobalKey<FormState>();
   final FocusNode _descriptionFocusNode = FocusNode();
 
-  final _firestore = FirebaseFirestore.instance;
   GeoFlutterFire geo = GeoFlutterFire();
   loc.Location location = loc.Location();
 
@@ -66,15 +64,6 @@ class _UpdateFormState extends State<UpdateForm> {
   void setLocation() async {
     var pos = await location.getLocation();
     point = geo.point(latitude: pos.latitude!, longitude: pos.longitude!);
-  }
-
-  void addUpdate({required String reportId}) async {
-    //TODO: addd update in firestore
-    _firestore.collection('reports').doc(reportId).update({
-      'updates': FieldValue.arrayUnion([
-        {'image': imageurl, 'description': _description}
-      ])
-    });
   }
 
   @override
@@ -204,10 +193,9 @@ class _UpdateFormState extends State<UpdateForm> {
                 children: [
                   Consumer(
                     builder: (context, ref, child) {
-                      final user =
-                          ref.read(authRepositoryProvider).getCurrentUser();
-                      print('user');
-                      print(user!.uid);
+                      final reportProvider =
+                          ref.read(reportProviderProvider.notifier);
+
                       return MaterialButton(
                         color: secondaryColor,
                         onPressed: () async {
@@ -217,9 +205,12 @@ class _UpdateFormState extends State<UpdateForm> {
                           } else {
                             if (_formKey.currentState!.validate()) {
                               toastMessage("Updates uploaded");
-                              addUpdate(reportId: widget.report.id);
-                              await Future.delayed(const Duration(seconds: 3));
-                              Navigator.pop(context);
+                              reportProvider
+                                  .addUpdate(
+                                      reportId: widget.report.id,
+                                      imageurl: imageurl!,
+                                      description: _description!)
+                                  .then((value) => Navigator.pop(context));
                             }
                           }
                         },

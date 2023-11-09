@@ -80,7 +80,7 @@ class MyDataTableSource extends DataTableSource {
         children: [
           OutlinedButton(
               onPressed: () {
-                //TODO: show deatils
+                //TODO: show details
                 showDialog(
                     context: context,
                     builder: (context) {
@@ -99,14 +99,18 @@ class MyDataTableSource extends DataTableSource {
                                     decoration: BoxDecoration(
                                         image: DecorationImage(
                                             image: Image.network(
-                                              row.imageUrl ?? '',
+                                              row.imageUrl ??
+                                                  'assets/images/map.png',
                                             ).image,
                                             fit: BoxFit.cover),
                                         borderRadius:
                                             BorderRadius.circular(10)),
                                   ),
                                   Container(
-                                    height: 450,
+                                    height:
+                                        row.updates == null && !row.isVerified
+                                            ? 200
+                                            : 450,
                                     width: 500,
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 20, horizontal: 20),
@@ -245,64 +249,61 @@ class MyDataTableSource extends DataTableSource {
                                                     ],
                                                   ),
                                                 ),
-                                                CarouselSlider(
-                                                  options: CarouselOptions(
-                                                      enableInfiniteScroll:
-                                                          false,
-                                                      height: 250.0),
-                                                  items: row.updates!
-                                                      .map((updateValue) {
-                                                    return Builder(
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return Container(
-                                                            decoration: BoxDecoration(
-                                                                image: DecorationImage(
-                                                                    image: NetworkImage(
-                                                                        updateValue
-                                                                            .image),
-                                                                    fit: BoxFit
-                                                                        .cover)),
-                                                            width: MediaQuery
-                                                                    .of(context)
-                                                                .size
-                                                                .width,
-                                                            margin:
-                                                                const EdgeInsets
-                                                                    .symmetric(
-                                                                    horizontal:
-                                                                        5.0),
-                                                            child: Column(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .end,
-                                                              children: [
-                                                                Container(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .all(
-                                                                          10),
-                                                                  color: Colors
-                                                                      .black26,
-                                                                  child: Row(
+                                                row.updates == null
+                                                    ? const SizedBox()
+                                                    : CarouselSlider(
+                                                        options: CarouselOptions(
+                                                            enableInfiniteScroll:
+                                                                false,
+                                                            height: 250.0),
+                                                        items: row.updates!
+                                                            .map((updateValue) {
+                                                          return Builder(
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return Container(
+                                                                  decoration: BoxDecoration(
+                                                                      image: DecorationImage(
+                                                                          image: NetworkImage(updateValue
+                                                                              .image),
+                                                                          fit: BoxFit
+                                                                              .cover)),
+                                                                  width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                                  margin: const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          5.0),
+                                                                  child: Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .end,
                                                                     children: [
-                                                                      Text(
-                                                                        updateValue
-                                                                            .description,
-                                                                        style: const TextStyle(
-                                                                            color:
-                                                                                Colors.white,
-                                                                            fontSize: 16.0),
+                                                                      Container(
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            10),
+                                                                        color: Colors
+                                                                            .black26,
+                                                                        child:
+                                                                            Row(
+                                                                          children: [
+                                                                            Text(
+                                                                              updateValue.description,
+                                                                              style: const TextStyle(color: Colors.white, fontSize: 16.0),
+                                                                            ),
+                                                                          ],
+                                                                        ),
                                                                       ),
                                                                     ],
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ));
-                                                      },
-                                                    );
-                                                  }).toList(),
-                                                )
+                                                                  ));
+                                                            },
+                                                          );
+                                                        }).toList(),
+                                                      )
                                               ],
                                             )),
                                         Expanded(

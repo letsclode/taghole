@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:taghole/Screens/VisitorsPage/visitors_screen.dart';
 
 import '../../controllers/auth_controller.dart';
-import 'views/first.dart';
+import 'views/citizenSignup.dart';
 import 'views/home.dart';
 
 class WelcomeScreen extends HookConsumerWidget {
@@ -16,6 +16,6 @@ class WelcomeScreen extends HookConsumerWidget {
         ? user.isAnonymous
             ? const VisitorsScreen()
             : const Home()
-        : const First();
+        : const CitizenSignup();
   }
 }

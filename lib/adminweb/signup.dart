@@ -71,7 +71,6 @@ class _SignupState extends ConsumerState<Signup> {
           setState(() {
             widget.authFormType = AuthFormType.signin;
           });
-          Navigator.pop(context);
         } else {
           print('creating account');
           String? uid = await authProvider.createUserWithEmailAndPassword(
@@ -80,7 +79,6 @@ class _SignupState extends ConsumerState<Signup> {
           String role = "admin";
           await userProvider.storeNewUser(
               name: _name!, email: _email!, uid: uid!, role: role);
-          Navigator.pop(context);
         }
       } catch (e) {
         setState(() {
@@ -109,38 +107,41 @@ class _SignupState extends ConsumerState<Signup> {
       body: Center(
         child: SizedBox(
           width: 600,
-          height: 300,
-          child: Card(
-            elevation: 2,
-            child: _loader
-                ? const Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  )
-                : Column(
-                    children: <Widget>[
-                      showAlert(),
-                      SizedBox(
-                        height: height * .025,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          children: [
-                            buildHeaderText(),
-                          ],
+          height: widget.authFormType == AuthFormType.signup ? 400 : 320,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Card(
+              elevation: 2,
+              child: _loader
+                  ? const Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    )
+                  : Column(
+                      children: <Widget>[
+                        showAlert(),
+                        SizedBox(
+                          height: height * .025,
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Form(
-                          key: formKey,
-                          child: Column(
-                            children: buildInputs() + buildButtons(),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Row(
+                            children: [
+                              buildHeaderText(),
+                            ],
                           ),
                         ),
-                      ),
-                    ],
-                  ),
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Form(
+                            key: formKey,
+                            child: Column(
+                              children: buildInputs() + buildButtons(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+            ),
           ),
         ),
       ),
@@ -299,7 +300,6 @@ class _SignupState extends ConsumerState<Signup> {
           MaterialButton(
             child: Text(
               switchButtonText,
-              style: const TextStyle(color: Colors.white),
             ),
             onPressed: () {
               switchFormState(newFormState);

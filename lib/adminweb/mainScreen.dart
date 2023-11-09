@@ -37,15 +37,13 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         automaticallyImplyLeading: Responsive.isDesktop(context) ? false : true,
       ),
       drawer: const KDrawer(),
-      body: Container(
-        child: Row(
-          children: [
-            Visibility(
-                visible: Responsive.isDesktop(context),
-                child: const Expanded(child: KDrawer())),
-            Expanded(flex: 4, child: pages[currentIndex])
-          ],
-        ),
+      body: Row(
+        children: [
+          Visibility(
+              visible: Responsive.isDesktop(context),
+              child: const Expanded(child: KDrawer())),
+          Expanded(flex: 4, child: pages[currentIndex])
+        ],
       ),
     );
   }
