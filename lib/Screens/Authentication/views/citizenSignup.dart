@@ -145,6 +145,7 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
                                           uid: value!,
                                           role: role);
                                       print('user created');
+                                      Navigator.pop(context);
                                       Navigator.of(key.currentContext!)
                                           .pushReplacementNamed("/home");
                                     });
@@ -389,7 +390,7 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
         height: KXFontSize.medium,
       ),
       SizedBox(
-        width: MediaQuery.of(context).size.width * 0.70,
+        width: double.infinity,
         child: MaterialButton(
           key: key,
           shape: RoundedRectangleBorder(
@@ -408,6 +409,20 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
             ),
           ),
         ),
+      ),
+      Consumer(
+        builder: (context, ref, child) {
+          final authProvider = ref.watch(authControllerProvider.notifier);
+          return SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              child: const Text('Skip'),
+              onPressed: () async {
+                await authProvider.userVisit();
+              },
+            ),
+          );
+        },
       ),
     ];
   }

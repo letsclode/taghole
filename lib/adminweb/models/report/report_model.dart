@@ -15,6 +15,7 @@ class ReportModel with _$ReportModel {
       required bool status,
       required bool isVerified,
       required String type,
+      required DateTime createdAt,
       String? imageUrl,
       List<UpdateModel>? updates,
       required String address,

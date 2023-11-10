@@ -14,6 +14,7 @@ _$_ReportModel _$$_ReportModelFromJson(Map<String, dynamic> json) =>
       status: json['status'] as bool,
       isVerified: json['isVerified'] as bool,
       type: json['type'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
       imageUrl: json['imageUrl'] as String?,
       updates: (json['updates'] as List<dynamic>?)
           ?.map((e) => UpdateModel.fromJson(e as Map<String, dynamic>))
@@ -33,6 +34,7 @@ Map<String, dynamic> _$$_ReportModelToJson(_$_ReportModel instance) =>
       'status': instance.status,
       'isVerified': instance.isVerified,
       'type': instance.type,
+      'createdAt': instance.createdAt.toIso8601String(),
       'imageUrl': instance.imageUrl,
       'updates': instance.updates,
       'address': instance.address,

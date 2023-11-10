@@ -34,6 +34,14 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     final currentIndex = ref.watch(drawerIndexProvider);
     return Scaffold(
       appBar: AppBar(
+        title: Text([
+          'Home',
+          'Latest Reports',
+          'Ongoing Reports',
+          'Completed Reports',
+          'Feedbacks',
+          'Settings'
+        ][currentIndex]),
         automaticallyImplyLeading: Responsive.isDesktop(context) ? false : true,
       ),
       drawer: const KDrawer(),

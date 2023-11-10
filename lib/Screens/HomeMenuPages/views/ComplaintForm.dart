@@ -87,7 +87,8 @@ class _ComplaintFormState extends State<ComplaintForm> {
       'isVerified': false,
       'description': _description,
       'userId': userId,
-      'landmark': _landmark
+      'landmark': _landmark,
+      'createdAt': DateTime.now().toString()
     });
   }
 

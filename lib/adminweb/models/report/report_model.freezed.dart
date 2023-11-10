@@ -26,6 +26,7 @@ mixin _$ReportModel {
   bool get status => throw _privateConstructorUsedError;
   bool get isVerified => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
   List<UpdateModel>? get updates => throw _privateConstructorUsedError;
   String get address => throw _privateConstructorUsedError;
@@ -52,6 +53,7 @@ abstract class $ReportModelCopyWith<$Res> {
       bool status,
       bool isVerified,
       String type,
+      DateTime createdAt,
       String? imageUrl,
       List<UpdateModel>? updates,
       String address,
@@ -81,6 +83,7 @@ class _$ReportModelCopyWithImpl<$Res, $Val extends ReportModel>
     Object? status = null,
     Object? isVerified = null,
     Object? type = null,
+    Object? createdAt = null,
     Object? imageUrl = freezed,
     Object? updates = freezed,
     Object? address = null,
@@ -113,6 +116,10 @@ class _$ReportModelCopyWithImpl<$Res, $Val extends ReportModel>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       imageUrl: freezed == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -164,6 +171,7 @@ abstract class _$$_ReportModelCopyWith<$Res>
       bool status,
       bool isVerified,
       String type,
+      DateTime createdAt,
       String? imageUrl,
       List<UpdateModel>? updates,
       String address,
@@ -192,6 +200,7 @@ class __$$_ReportModelCopyWithImpl<$Res>
     Object? status = null,
     Object? isVerified = null,
     Object? type = null,
+    Object? createdAt = null,
     Object? imageUrl = freezed,
     Object? updates = freezed,
     Object? address = null,
@@ -224,6 +233,10 @@ class __$$_ReportModelCopyWithImpl<$Res>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       imageUrl: freezed == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -262,6 +275,7 @@ class _$_ReportModel implements _ReportModel {
       required this.status,
       required this.isVerified,
       required this.type,
+      required this.createdAt,
       this.imageUrl,
       final List<UpdateModel>? updates,
       required this.address,
@@ -286,6 +300,8 @@ class _$_ReportModel implements _ReportModel {
   @override
   final String type;
   @override
+  final DateTime createdAt;
+  @override
   final String? imageUrl;
   final List<UpdateModel>? _updates;
   @override
@@ -308,7 +324,7 @@ class _$_ReportModel implements _ReportModel {
 
   @override
   String toString() {
-    return 'ReportModel(id: $id, userId: $userId, description: $description, status: $status, isVerified: $isVerified, type: $type, imageUrl: $imageUrl, updates: $updates, address: $address, landmark: $landmark, ratings: $ratings, position: $position)';
+    return 'ReportModel(id: $id, userId: $userId, description: $description, status: $status, isVerified: $isVerified, type: $type, createdAt: $createdAt, imageUrl: $imageUrl, updates: $updates, address: $address, landmark: $landmark, ratings: $ratings, position: $position)';
   }
 
   @override
@@ -324,6 +340,8 @@ class _$_ReportModel implements _ReportModel {
             (identical(other.isVerified, isVerified) ||
                 other.isVerified == isVerified) &&
             (identical(other.type, type) || other.type == type) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
             const DeepCollectionEquality().equals(other._updates, _updates) &&
@@ -345,6 +363,7 @@ class _$_ReportModel implements _ReportModel {
       status,
       isVerified,
       type,
+      createdAt,
       imageUrl,
       const DeepCollectionEquality().hash(_updates),
       address,
@@ -374,6 +393,7 @@ abstract class _ReportModel implements ReportModel {
       required final bool status,
       required final bool isVerified,
       required final String type,
+      required final DateTime createdAt,
       final String? imageUrl,
       final List<UpdateModel>? updates,
       required final String address,
@@ -396,6 +416,8 @@ abstract class _ReportModel implements ReportModel {
   bool get isVerified;
   @override
   String get type;
+  @override
+  DateTime get createdAt;
   @override
   String? get imageUrl;
   @override

@@ -277,15 +277,19 @@ class _MapPageState extends ConsumerState<MapPage> {
               ),
               centerTitle: true,
               actions: [
-                Consumer(
-                  builder: (context, ref, child) {
-                    return IconButton(
-                        onPressed: () {
-                          ref.read(authControllerProvider.notifier).signOut();
+                user!.isAnonymous
+                    ? Consumer(
+                        builder: (context, ref, child) {
+                          return IconButton(
+                              onPressed: () {
+                                ref
+                                    .read(authControllerProvider.notifier)
+                                    .signOut();
+                              },
+                              icon: const Icon(Icons.exit_to_app));
                         },
-                        icon: const Icon(Icons.exit_to_app));
-                  },
-                )
+                      )
+                    : const SizedBox()
               ],
             ),
       body: _initialPosition == null
