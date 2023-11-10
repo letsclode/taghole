@@ -8,16 +8,21 @@ part 'report_stream_provider.g.dart';
 
 @riverpod
 Stream<List<ReportModel>> reports(ReportsRef ref) async* {
-  final stream = FirebaseFirestore.instance
-      .collection('reports')
-      .snapshots()
-      .map((querySnapshot) {
-    return querySnapshot.docs
-        .map((doc) => ReportModel.fromJson(doc.data()))
-        .toList();
-  });
+  try {
+    print('streaming reports');
+    final stream = FirebaseFirestore.instance
+        .collection('reports')
+        .snapshots()
+        .map((querySnapshot) {
+      return querySnapshot.docs
+          .map((doc) => ReportModel.fromJson(doc.data()))
+          .toList();
+    });
 
-  await for (final event in stream) {
-    yield event;
+    await for (final event in stream) {
+      yield event;
+    }
+  } catch (e) {
+    print(e);
   }
 }

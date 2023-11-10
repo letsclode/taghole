@@ -72,7 +72,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
     point = geo.point(latitude: pos.latitude!, longitude: pos.longitude!);
   }
 
-  void uploadform(String userId) async {
+  void addReport(String userId) async {
     final generatedId = uuid.v1();
 
     //TODO: make it reportmodel
@@ -88,7 +88,9 @@ class _ComplaintFormState extends State<ComplaintForm> {
       'description': _description,
       'userId': userId,
       'landmark': _landmark,
-      'createdAt': DateTime.now().toString()
+      'createdAt': DateTime.now().toString(),
+      'updatedAt': DateTime.now().toString(),
+      'updates': []
     });
   }
 
@@ -379,7 +381,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
                           if (_formKey.currentState!.validate()) {
                             toastMessage(
                                 "Thank You Your Response has been submitted");
-                            uploadform(user.uid);
+                            addReport(user.uid);
                             await Future.delayed(const Duration(seconds: 3));
                             Navigator.pop(context);
                           }

@@ -21,33 +21,29 @@ class ReportProvider extends _$ReportProvider {
     final filter = ref.watch(filterReportTypeProvider);
     final json = await FirebaseFirestore.instance
         .collection('reports')
-        .orderBy('date', descending: true)
+        .orderBy('updatedAt', descending: true)
         .get();
-    final reports = json.docs;
+
+    List<ReportModel> reports =
+        json.docs.map((e) => ReportModel.fromJson(e.data())).toList();
+
+    print('reports: $reports');
 
     switch (filter) {
       case ReportFilterType.verified:
-        return reports
-            .map((e) => ReportModel.fromJson(e.data()))
-            .where((element) => element.isVerified)
-            .toList();
+        return reports.where((element) => element.isVerified).toList();
       case ReportFilterType.unverified:
-        return reports
-            .map((e) => ReportModel.fromJson(e.data()))
-            .where((element) => !element.isVerified)
-            .toList();
+        return reports.where((element) => !element.isVerified).toList();
       case ReportFilterType.complete:
         return reports
-            .map((e) => ReportModel.fromJson(e.data()))
             .where((element) => element.status && element.isVerified)
             .toList();
       case ReportFilterType.ongoing:
         return reports
-            .map((e) => ReportModel.fromJson(e.data()))
             .where((element) => !element.status && element.isVerified)
             .toList();
       case ReportFilterType.all:
-        return reports.map((e) => ReportModel.fromJson(e.data())).toList();
+        return reports;
     }
   }
 
