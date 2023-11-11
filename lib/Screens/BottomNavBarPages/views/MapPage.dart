@@ -239,14 +239,17 @@ class _MapPageState extends ConsumerState<MapPage> {
                               ],
                             ),
                           ),
+                          // if (!value[i].isVerified)
                           MaterialButton(
                             color: Colors.black,
                             onPressed: () {
                               Navigator.push(
-                                context,
+                                scaffoldKey.currentState!.context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        ComplaintForm(report: data)),
+                                    builder: (scaffoldKey) => ComplaintForm(
+                                          report: data,
+                                          additionalHeight: 150,
+                                        )),
                               );
                             },
                             child: const Text(

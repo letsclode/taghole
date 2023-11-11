@@ -72,12 +72,21 @@ class _StatusListState extends ConsumerState<StatusList> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(
-                                          width: double.infinity,
-                                          height: 200,
-                                          child: Image.network(
-                                            value[i].imageUrl!,
-                                            fit: BoxFit.cover,
-                                          )),
+                                        height: 200,
+                                        width: double.infinity,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          child: FadeInImage(
+                                            placeholder: const AssetImage(
+                                                'assets/images/map.png'), // Placeholder image
+                                            image: NetworkImage(
+                                                value[i].imageUrl!),
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
+                                      ),
+
                                       const SizedBox(
                                         height: 10,
                                       ),
@@ -144,31 +153,30 @@ class _StatusListState extends ConsumerState<StatusList> {
                                               ],
                                             )
                                           : const SizedBox(),
-                                      if (!value[i].isVerified)
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            MaterialButton(
-                                              color: Colors.black,
-                                              onPressed: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ComplaintForm(
-                                                              report:
-                                                                  value[i])),
-                                                );
-                                              },
-                                              child: const Text(
-                                                "Repost",
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
+                                      // if (!value[i].isVerified)
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          MaterialButton(
+                                            color: Colors.black,
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ComplaintForm(
+                                                            report: value[i])),
+                                              );
+                                            },
+                                            child: const Text(
+                                              "Repost",
+                                              style: TextStyle(
+                                                  color: Colors.white),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
+                                      ),
                                       value[i].status == true &&
                                               value[i].ratings == null
                                           ? Row(
