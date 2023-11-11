@@ -10,6 +10,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../adminweb/models/feedback/feedback_model.dart';
 import '../../../adminweb/providers/feedback/feedback_provider.dart';
+import '../../HomeMenuPages/views/ComplaintForm.dart';
 
 class StatusList extends ConsumerStatefulWidget {
   const StatusList({super.key});
@@ -21,6 +22,7 @@ class StatusList extends ConsumerStatefulWidget {
 class _StatusListState extends ConsumerState<StatusList> {
   TextEditingController feedbackDescription = TextEditingController();
   double ratings = 5;
+
   @override
   Widget build(BuildContext context) {
     final reportProvider = ref.watch(reportsProvider);
@@ -49,18 +51,6 @@ class _StatusListState extends ConsumerState<StatusList> {
                               8.0), // Adjust the border radius as needed
                         ),
                         child: ExpansionTile(
-                          leading: Builder(builder: (context) {
-                            if (value[i].status) {
-                              return CircleAvatar(
-                                  backgroundImage:
-                                      NetworkImage(value[i].imageUrl ?? ''),
-                                  // backgroundColor: Colors.grey,
-                                  radius: 20);
-                            } else {
-                              return const CircleAvatar(
-                                  backgroundColor: Colors.grey, radius: 20);
-                            }
-                          }),
                           textColor: secondaryColor,
                           title: Text(value[i].address),
                           children: <Widget>[
@@ -81,6 +71,16 @@ class _StatusListState extends ConsumerState<StatusList> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
+                                      SizedBox(
+                                          width: double.infinity,
+                                          height: 200,
+                                          child: Image.network(
+                                            value[i].imageUrl!,
+                                            fit: BoxFit.cover,
+                                          )),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
                                       value[i].isVerified == true
                                           ? value[i].status == true
                                               ? const Text(
@@ -121,7 +121,7 @@ class _StatusListState extends ConsumerState<StatusList> {
                                       const SizedBox(
                                         height: 20,
                                       ),
-                                      value[i].updates != null
+                                      value[i].updates.isEmpty
                                           ? Column(
                                               children: [
                                                 const Text(
@@ -144,6 +144,29 @@ class _StatusListState extends ConsumerState<StatusList> {
                                               ],
                                             )
                                           : const SizedBox(),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          MaterialButton(
+                                            color: Colors.black,
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ComplaintForm(
+                                                            report: value[i])),
+                                              );
+                                            },
+                                            child: const Text(
+                                              "Repost",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                       value[i].status == true &&
                                               value[i].ratings == null
                                           ? Row(
@@ -319,6 +342,9 @@ class _StatusListState extends ConsumerState<StatusList> {
                 );
               },
             ),
+      AsyncLoading(:final isLoading) => const Center(
+          child: CircularProgressIndicator(),
+        ),
       AsyncError(:final error) => Center(
           child: Text("$error"),
         ),

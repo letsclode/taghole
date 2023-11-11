@@ -11,6 +11,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart' as loc;
 import 'package:taghole/Screens/BottomNavBarPages/views/map_picker.dart';
+import 'package:taghole/adminweb/models/report/report_model.dart';
 import 'package:taghole/constant/color.dart';
 import 'package:uuid/uuid.dart';
 
@@ -18,7 +19,9 @@ import '../../../repositories/auth_repository.dart';
 import '../services/toast.dart';
 
 class ComplaintForm extends StatefulWidget {
-  const ComplaintForm({super.key});
+  final ReportModel? report;
+
+  const ComplaintForm({super.key, this.report});
 
   @override
   _ComplaintFormState createState() => _ComplaintFormState();
@@ -37,9 +40,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
   var uuid = const Uuid();
 
   String? _potholetype, _address, _description, _landmark;
-
   final bool _work = false;
-
   String? imageurl;
   XFile? image;
   final picker = ImagePicker();
@@ -72,12 +73,23 @@ class _ComplaintFormState extends State<ComplaintForm> {
     point = geo.point(latitude: pos.latitude!, longitude: pos.longitude!);
   }
 
-  void addReport(String userId) async {
-    final generatedId = uuid.v1();
+  Future updateReport() async {
+    await _firestore.collection('reports').doc(widget.report!.id).update({
+      'position': point.data,
+      'type': _potholetype,
+      'address': _address,
+      'imageUrl': imageurl,
+      'description': _description,
+      'landmark': _landmark,
+      'updatedAt': DateTime.now().toString(),
+    });
+  }
 
+  Future addReport(String userId) async {
+    final generatedId = uuid.v1();
     //TODO: make it reportmodel
 
-    _firestore.collection('reports').doc(generatedId).set({
+    await _firestore.collection('reports').doc(generatedId).set({
       'id': generatedId,
       'position': point.data,
       'type': _potholetype,
@@ -97,6 +109,15 @@ class _ComplaintFormState extends State<ComplaintForm> {
   @override
   void initState() {
     setLocation();
+    if (widget.report != null) {
+      setState(() {
+        _address = widget.report!.address;
+        _description = widget.report!.description;
+        _landmark = widget.report!.landmark;
+        _potholetype = widget.report!.type;
+        imageurl = widget.report!.imageUrl;
+      });
+    }
     super.initState();
   }
 
@@ -222,6 +243,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
                   autofocus: true,
                   textCapitalization: TextCapitalization.words,
                   keyboardType: TextInputType.text,
+                  initialValue: _potholetype,
                   decoration: const InputDecoration(
                     labelText: "Pothole Type",
                     hintText: "e.g pothole,cracks,deformation,deep etc",
@@ -249,6 +271,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
                   height: 20.0,
                 ),
                 TextFormField(
+                  initialValue: _description,
                   focusNode: _descriptionFocusNode,
                   autofocus: true,
                   textCapitalization: TextCapitalization.words,
@@ -280,6 +303,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
                   height: 20.0,
                 ),
                 TextFormField(
+                  initialValue: _landmark,
                   focusNode: _landmarkFocusNode,
                   autofocus: true,
                   textCapitalization: TextCapitalization.words,
@@ -381,8 +405,11 @@ class _ComplaintFormState extends State<ComplaintForm> {
                           if (_formKey.currentState!.validate()) {
                             toastMessage(
                                 "Thank You Your Response has been submitted");
-                            addReport(user.uid);
-                            await Future.delayed(const Duration(seconds: 3));
+                            if (widget.report != null) {
+                              await updateReport();
+                            } else {
+                              await addReport(user.uid);
+                            }
                             Navigator.pop(context);
                           }
                         }
