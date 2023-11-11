@@ -144,29 +144,31 @@ class _StatusListState extends ConsumerState<StatusList> {
                                               ],
                                             )
                                           : const SizedBox(),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          MaterialButton(
-                                            color: Colors.black,
-                                            onPressed: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ComplaintForm(
-                                                            report: value[i])),
-                                              );
-                                            },
-                                            child: const Text(
-                                              "Repost",
-                                              style: TextStyle(
-                                                  color: Colors.white),
+                                      if (!value[i].isVerified)
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            MaterialButton(
+                                              color: Colors.black,
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ComplaintForm(
+                                                              report:
+                                                                  value[i])),
+                                                );
+                                              },
+                                              child: const Text(
+                                                "Repost",
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
+                                          ],
+                                        ),
                                       value[i].status == true &&
                                               value[i].ratings == null
                                           ? Row(
