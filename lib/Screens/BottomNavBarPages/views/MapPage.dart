@@ -13,6 +13,7 @@ import 'package:taghole/constant/color.dart';
 import 'package:taghole/controllers/auth_controller.dart';
 
 import '../../../adminweb/providers/report/report_provider.dart';
+import '../../HomeMenuPages/views/ComplaintForm.dart';
 
 class MapPage extends ConsumerStatefulWidget {
   const MapPage({super.key});
@@ -153,14 +154,14 @@ class _MapPageState extends ConsumerState<MapPage> {
                     SizedBox(
                       width: kIsWeb ? 150 : 120,
                       height: kIsWeb ? 150 : 120,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: Image.network(
-                                  data.imageUrl ?? '',
-                                ).image,
-                                fit: BoxFit.cover),
-                            borderRadius: BorderRadius.circular(10)),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: FadeInImage(
+                          placeholder: const AssetImage(
+                              'assets/images/map.png'), // Placeholder image
+                          image: NetworkImage(data.imageUrl ?? ''),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                     const SizedBox(
@@ -236,6 +237,21 @@ class _MapPageState extends ConsumerState<MapPage> {
                                   text: data.landmark,
                                 ),
                               ],
+                            ),
+                          ),
+                          MaterialButton(
+                            color: Colors.black,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ComplaintForm(report: data)),
+                              );
+                            },
+                            child: const Text(
+                              "Repost",
+                              style: TextStyle(color: Colors.white),
                             ),
                           ),
                         ],
