@@ -376,7 +376,7 @@ class ReportProvider extends _$ReportProvider {
                                             style: TextStyle(color: Colors.red),
                                           ),
                                         ),
-                                        row.status == true
+                                        row.status == 'completed'
                                             ? const SizedBox()
                                             : Row(
                                                 children: [
