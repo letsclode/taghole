@@ -9,9 +9,10 @@ part of 'report_model.dart';
 _$_ReportModel _$$_ReportModelFromJson(Map<String, dynamic> json) =>
     _$_ReportModel(
       id: json['id'] as String,
+      title: json['title'] as String,
       userId: json['userId'] as String,
       description: json['description'] as String,
-      status: json['status'] as bool,
+      status: json['status'] as String,
       isVerified: json['isVerified'] as bool,
       type: json['type'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
@@ -30,6 +31,7 @@ _$_ReportModel _$$_ReportModelFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$_ReportModelToJson(_$_ReportModel instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'title': instance.title,
       'userId': instance.userId,
       'description': instance.description,
       'status': instance.status,

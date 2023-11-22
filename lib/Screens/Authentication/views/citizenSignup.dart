@@ -143,6 +143,7 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
                                       await userProvider.storeNewUser(
                                           email: _email,
                                           uid: value!,
+                                          number: result.user!.phoneNumber,
                                           role: role);
                                       print('user created');
                                       Navigator.pop(context);

@@ -31,6 +31,7 @@ class _UpdateFormState extends State<UpdateForm> {
 
   String? _description;
   String? imageurl;
+
   final picker = ImagePicker();
 
   late GeoFirePoint point;
@@ -207,6 +208,7 @@ class _UpdateFormState extends State<UpdateForm> {
                               toastMessage("Updates uploaded");
                               reportProvider
                                   .addUpdate(
+                                      title: widget.report.title,
                                       reportId: widget.report.id,
                                       imageurl: imageurl!,
                                       description: _description!)

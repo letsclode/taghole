@@ -185,11 +185,11 @@ class _MapPageState extends ConsumerState<MapPage> {
                                         text: 'Unverfied',
                                         style: TextStyle(color: Colors.grey))
                                     : TextSpan(
-                                        text: !data.status
+                                        text: data.status == 'ongoing'
                                             ? 'Ongoing'
                                             : 'Completed',
                                         style: TextStyle(
-                                          color: data.status
+                                          color: data.status == 'completed'
                                               ? Colors.green
                                               : Colors.orange,
                                         )),
@@ -239,24 +239,24 @@ class _MapPageState extends ConsumerState<MapPage> {
                               ],
                             ),
                           ),
-                          // if (!value[i].isVerified)
-                          MaterialButton(
-                            color: Colors.black,
-                            onPressed: () {
-                              Navigator.push(
-                                scaffoldKey.currentState!.context,
-                                MaterialPageRoute(
-                                    builder: (scaffoldKey) => ComplaintForm(
-                                          report: data,
-                                          additionalHeight: 150,
-                                        )),
-                              );
-                            },
-                            child: const Text(
-                              "Repost",
-                              style: TextStyle(color: Colors.white),
+                          if (!data.isVerified)
+                            MaterialButton(
+                              color: Colors.black,
+                              onPressed: () {
+                                Navigator.push(
+                                  scaffoldKey.currentState!.context,
+                                  MaterialPageRoute(
+                                      builder: (scaffoldKey) => ComplaintForm(
+                                            report: data,
+                                            additionalHeight: 150,
+                                          )),
+                                );
+                              },
+                              child: const Text(
+                                "Repost",
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
-                          ),
                         ],
                       ),
                     )

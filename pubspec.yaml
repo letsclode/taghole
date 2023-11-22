@@ -76,6 +76,7 @@ dependencies:
   file_picker: ^6.0.0
   carousel_slider: ^4.2.1
   flutter_rating_bar: ^4.0.1
+  grouped_list: ^5.1.2
  
 
 dev_dependencies:

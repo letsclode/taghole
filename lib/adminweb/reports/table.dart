@@ -64,7 +64,7 @@ class MyDataTableSource extends DataTableSource {
               'Unverified',
               style: TextStyle(color: Colors.grey),
             )
-          : row.status
+          : row.status == 'completed'
               ? const Text(
                   'Completed',
                   style: TextStyle(color: Colors.green),

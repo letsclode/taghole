@@ -40,6 +40,7 @@ class UserController extends StateNotifier<User?> {
   Future storeNewUser(
       {String? name,
       String? email,
+      String? number,
       required String uid,
       required String role}) async {
     FirebaseFirestore.instance.collection('users').add({
@@ -47,6 +48,7 @@ class UserController extends StateNotifier<User?> {
       'email': email ?? '',
       'uid': uid,
       'role': role,
+      'number': number
     }).catchError((e) {
       print(e);
     });

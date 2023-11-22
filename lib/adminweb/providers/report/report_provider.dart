@@ -8,6 +8,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:taghole/adminweb/providers/report/report_filter_type_provider.dart';
 import 'package:taghole/adminweb/widgets/update_form.dart';
 import 'package:taghole/constant/color.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../drawer/drawer_index_provider.dart';
 import '../../models/report/report_model.dart';
@@ -36,11 +37,13 @@ class ReportProvider extends _$ReportProvider {
         return reports.where((element) => !element.isVerified).toList();
       case ReportFilterType.complete:
         return reports
-            .where((element) => element.status && element.isVerified)
+            .where((element) =>
+                element.status == 'completed' && element.isVerified)
             .toList();
       case ReportFilterType.ongoing:
         return reports
-            .where((element) => !element.status && element.isVerified)
+            .where(
+                (element) => element.status == 'ongoing' && element.isVerified)
             .toList();
       case ReportFilterType.all:
         return reports;
@@ -58,7 +61,7 @@ class ReportProvider extends _$ReportProvider {
   }
 
   Future<void> updateStatus(
-      {required String reportId, required bool value}) async {
+      {required String reportId, required String value}) async {
     print('reportid');
     print(reportId);
     state = const AsyncValue.loading();
@@ -71,15 +74,11 @@ class ReportProvider extends _$ReportProvider {
     });
   }
 
-  Future<void> verifyReport(bool isVisible, String uid) async {
-    Map<Object, Object?> newData = {'isVerified': isVisible};
+  Future<void> verifyReport(String uid) async {
+    Map<Object, Object?> newData = {'isVerified': true, 'status': 'ongoing'};
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      FirebaseFirestore.instance
-          .collection('reports')
-          .doc(uid)
-          .update(newData)
-          .then((value) => isVisible);
+      FirebaseFirestore.instance.collection('reports').doc(uid).update(newData);
       return _fetchReports();
     });
   }
@@ -101,8 +100,27 @@ class ReportProvider extends _$ReportProvider {
     });
   }
 
+  Future addReport(ReportModel report) async {
+    state = const AsyncValue.loading();
+    var uuid = const Uuid();
+    final generatedId = uuid.v1();
+    //TODO: make it reportmodel
+    await FirebaseFirestore.instance
+        .collection('reports')
+        .doc(generatedId)
+        .set(report.copyWith(id: generatedId).toJson());
+  }
+
+  Future updateReport(ReportModel updateReport) async {
+    await FirebaseFirestore.instance
+        .collection('reports')
+        .doc(updateReport.id)
+        .update(updateReport.toJson());
+  }
+
   Future addUpdate(
-      {required String reportId,
+      {String? title,
+      required String reportId,
       required String imageurl,
       required String description}) async {
     //TODO: addd update in firestore
@@ -111,7 +129,7 @@ class ReportProvider extends _$ReportProvider {
     state = await AsyncValue.guard(() async {
       FirebaseFirestore.instance.collection('reports').doc(reportId).update({
         'updates': FieldValue.arrayUnion([
-          {'image': imageurl, 'description': description}
+          {'image': imageurl, 'description': description, title: 'title'}
         ])
       });
       return _fetchReports();
@@ -244,8 +262,8 @@ class ReportProvider extends _$ReportProvider {
                                                 //TODO: verify
                                                 Navigator.pop(context);
                                                 if (currentIndex == 1) {
-                                                  reportProvider.verifyReport(
-                                                      true, row.id);
+                                                  reportProvider
+                                                      .verifyReport(row.id);
                                                 } else {
                                                   showDialog(
                                                       context: context,
@@ -283,7 +301,7 @@ class ReportProvider extends _$ReportProvider {
                                                 enableInfiniteScroll: false,
                                                 height: 250.0),
                                             items:
-                                                row.updates!.map((updateValue) {
+                                                row.updates.map((updateValue) {
                                               return Builder(
                                                 builder:
                                                     (BuildContext context) {
@@ -350,7 +368,6 @@ class ReportProvider extends _$ReportProvider {
                                       children: [
                                         OutlinedButton(
                                           onPressed: () async {
-                                            //TODO: delete report
                                             Navigator.pop(context);
                                             reportProvider.deleteReport(row.id);
                                           },
@@ -369,18 +386,18 @@ class ReportProvider extends _$ReportProvider {
                                                   MaterialButton(
                                                     color: Colors.green,
                                                     onPressed: () {
-                                                      //TODO: verify
                                                       Navigator.pop(context);
                                                       if (currentIndex == 1) {
                                                         reportProvider
                                                             .verifyReport(
-                                                                true, row.id);
+                                                                row.id);
                                                       } else {
                                                         reportProvider
                                                             .updateStatus(
                                                                 reportId:
                                                                     row.id,
-                                                                value: true);
+                                                                value:
+                                                                    'completed');
                                                       }
                                                     },
                                                     child: Text(

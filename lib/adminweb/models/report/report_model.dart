@@ -10,9 +10,10 @@ part 'report_model.g.dart';
 class ReportModel with _$ReportModel {
   factory ReportModel(
       {required String id,
+      required String title,
       required String userId,
       required String description,
-      required bool status,
+      required String status,
       required bool isVerified,
       required String type,
       required DateTime createdAt,

@@ -21,9 +21,10 @@ ReportModel _$ReportModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ReportModel {
   String get id => throw _privateConstructorUsedError;
+  String get title => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
-  bool get status => throw _privateConstructorUsedError;
+  String get status => throw _privateConstructorUsedError;
   bool get isVerified => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
@@ -49,9 +50,10 @@ abstract class $ReportModelCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
+      String title,
       String userId,
       String description,
-      bool status,
+      String status,
       bool isVerified,
       String type,
       DateTime createdAt,
@@ -80,6 +82,7 @@ class _$ReportModelCopyWithImpl<$Res, $Val extends ReportModel>
   @override
   $Res call({
     Object? id = null,
+    Object? title = null,
     Object? userId = null,
     Object? description = null,
     Object? status = null,
@@ -99,6 +102,10 @@ class _$ReportModelCopyWithImpl<$Res, $Val extends ReportModel>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      title: null == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
       userId: null == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
@@ -110,7 +117,7 @@ class _$ReportModelCopyWithImpl<$Res, $Val extends ReportModel>
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as bool,
+              as String,
       isVerified: null == isVerified
           ? _value.isVerified
           : isVerified // ignore: cast_nullable_to_non_nullable
@@ -173,9 +180,10 @@ abstract class _$$_ReportModelCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
+      String title,
       String userId,
       String description,
-      bool status,
+      String status,
       bool isVerified,
       String type,
       DateTime createdAt,
@@ -203,6 +211,7 @@ class __$$_ReportModelCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? title = null,
     Object? userId = null,
     Object? description = null,
     Object? status = null,
@@ -222,6 +231,10 @@ class __$$_ReportModelCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      title: null == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
       userId: null == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
@@ -233,7 +246,7 @@ class __$$_ReportModelCopyWithImpl<$Res>
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as bool,
+              as String,
       isVerified: null == isVerified
           ? _value.isVerified
           : isVerified // ignore: cast_nullable_to_non_nullable
@@ -283,6 +296,7 @@ class __$$_ReportModelCopyWithImpl<$Res>
 class _$_ReportModel implements _ReportModel {
   _$_ReportModel(
       {required this.id,
+      required this.title,
       required this.userId,
       required this.description,
       required this.status,
@@ -304,11 +318,13 @@ class _$_ReportModel implements _ReportModel {
   @override
   final String id;
   @override
+  final String title;
+  @override
   final String userId;
   @override
   final String description;
   @override
-  final bool status;
+  final String status;
   @override
   final bool isVerified;
   @override
@@ -338,7 +354,7 @@ class _$_ReportModel implements _ReportModel {
 
   @override
   String toString() {
-    return 'ReportModel(id: $id, userId: $userId, description: $description, status: $status, isVerified: $isVerified, type: $type, createdAt: $createdAt, updatedAt: $updatedAt, imageUrl: $imageUrl, updates: $updates, address: $address, landmark: $landmark, ratings: $ratings, position: $position)';
+    return 'ReportModel(id: $id, title: $title, userId: $userId, description: $description, status: $status, isVerified: $isVerified, type: $type, createdAt: $createdAt, updatedAt: $updatedAt, imageUrl: $imageUrl, updates: $updates, address: $address, landmark: $landmark, ratings: $ratings, position: $position)';
   }
 
   @override
@@ -347,6 +363,7 @@ class _$_ReportModel implements _ReportModel {
         (other.runtimeType == runtimeType &&
             other is _$_ReportModel &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.title, title) || other.title == title) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.description, description) ||
                 other.description == description) &&
@@ -374,6 +391,7 @@ class _$_ReportModel implements _ReportModel {
   int get hashCode => Object.hash(
       runtimeType,
       id,
+      title,
       userId,
       description,
       status,
@@ -405,9 +423,10 @@ class _$_ReportModel implements _ReportModel {
 abstract class _ReportModel implements ReportModel {
   factory _ReportModel(
       {required final String id,
+      required final String title,
       required final String userId,
       required final String description,
-      required final bool status,
+      required final String status,
       required final bool isVerified,
       required final String type,
       required final DateTime createdAt,
@@ -425,11 +444,13 @@ abstract class _ReportModel implements ReportModel {
   @override
   String get id;
   @override
+  String get title;
+  @override
   String get userId;
   @override
   String get description;
   @override
-  bool get status;
+  String get status;
   @override
   bool get isVerified;
   @override

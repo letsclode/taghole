@@ -34,7 +34,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                           title: Text(value[index].address),
                           trailing: MaterialButton(
                             color: value[index].isVerified
-                                ? value[index].status
+                                ? value[index].status == 'completed'
                                     ? Colors.green
                                     : Colors.orange
                                 : Colors.grey,

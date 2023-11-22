@@ -11,9 +11,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart' as loc;
 import 'package:taghole/Screens/BottomNavBarPages/views/map_picker.dart';
+import 'package:taghole/adminweb/models/position/position_model.dart';
 import 'package:taghole/adminweb/models/report/report_model.dart';
+import 'package:taghole/adminweb/providers/report/report_provider.dart';
 import 'package:taghole/constant/color.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../../repositories/auth_repository.dart';
 import '../services/toast.dart';
@@ -34,14 +35,13 @@ class _ComplaintFormState extends State<ComplaintForm> {
   final FocusNode _potholetypeFocusNode = FocusNode();
   final FocusNode _descriptionFocusNode = FocusNode();
   final FocusNode _landmarkFocusNode = FocusNode();
+  final FocusNode _titleFocusNode = FocusNode();
 
   final _firestore = FirebaseFirestore.instance;
   GeoFlutterFire geo = GeoFlutterFire();
   loc.Location location = loc.Location();
-  var uuid = const Uuid();
 
-  String? _potholetype, _address, _description, _landmark;
-  final bool _work = false;
+  String? _potholetype, _address, _description, _landmark, _title;
   String? imageurl;
   XFile? image;
   final picker = ImagePicker();
@@ -72,39 +72,6 @@ class _ComplaintFormState extends State<ComplaintForm> {
   void setLocation() async {
     var pos = await location.getLocation();
     point = geo.point(latitude: pos.latitude!, longitude: pos.longitude!);
-  }
-
-  Future updateReport() async {
-    await _firestore.collection('reports').doc(widget.report!.id).update({
-      'position': point.data,
-      'type': _potholetype,
-      'address': _address,
-      'imageUrl': imageurl,
-      'description': _description,
-      'landmark': _landmark,
-      'updatedAt': DateTime.now().toString(),
-    });
-  }
-
-  Future addReport(String userId) async {
-    final generatedId = uuid.v1();
-    //TODO: make it reportmodel
-
-    await _firestore.collection('reports').doc(generatedId).set({
-      'id': generatedId,
-      'position': point.data,
-      'type': _potholetype,
-      'address': _address,
-      'status': _work,
-      'imageUrl': imageurl,
-      'isVerified': false,
-      'description': _description,
-      'userId': userId,
-      'landmark': _landmark,
-      'createdAt': DateTime.now().toString(),
-      'updatedAt': DateTime.now().toString(),
-      'updates': []
-    });
   }
 
   @override
@@ -251,6 +218,38 @@ class _ComplaintFormState extends State<ComplaintForm> {
                     ),
                     const SizedBox(height: 20.0),
                     const SizedBox(height: 20.0),
+                    TextFormField(
+                      initialValue: _title,
+                      focusNode: _titleFocusNode,
+                      autofocus: true,
+                      textCapitalization: TextCapitalization.words,
+                      keyboardType: TextInputType.text,
+                      decoration: const InputDecoration(
+                        labelText: "Title",
+                        hintText: "Title",
+                        focusColor: secondaryColor,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8.0),
+                          ),
+                          borderSide: BorderSide(
+                            color: secondaryColor,
+                            width: 1.0,
+                          ),
+                        ),
+                      ),
+                      textInputAction: TextInputAction.next,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the land mark';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) => _title = value,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     TextFormField(
                       focusNode: _potholetypeFocusNode,
                       autofocus: true,
@@ -401,6 +400,9 @@ class _ComplaintFormState extends State<ComplaintForm> {
                       builder: (context, ref, child) {
                         final user =
                             ref.read(authRepositoryProvider).getCurrentUser();
+
+                        final reportProvider =
+                            ref.read(reportProviderProvider.notifier);
                         print('user');
                         print(user!.uid);
                         return MaterialButton(
@@ -419,9 +421,38 @@ class _ComplaintFormState extends State<ComplaintForm> {
                                 toastMessage(
                                     "Thank You Your Response has been submitted");
                                 if (widget.report != null) {
-                                  await updateReport();
+                                  await reportProvider.updateReport(
+                                      widget.report!.copyWith(
+                                          title: _title!,
+                                          position: PositionModel(
+                                              geohash: point.data['geohash'],
+                                              geopoint: point.data['geopoint']),
+                                          type: _potholetype!,
+                                          address: _address!,
+                                          imageUrl: imageurl,
+                                          description: _description!,
+                                          landmark: _landmark!,
+                                          updatedAt: DateTime.now()));
                                 } else {
-                                  await addReport(user.uid);
+                                  ReportModel reportModel = ReportModel(
+                                      id: "",
+                                      title: _title!,
+                                      userId: user.uid,
+                                      description: _description!,
+                                      status: 'pending',
+                                      isVerified: false,
+                                      type: _potholetype!,
+                                      imageUrl: imageurl,
+                                      createdAt: DateTime.now(),
+                                      updatedAt: DateTime.now(),
+                                      updates: [],
+                                      address: _address!,
+                                      landmark: _landmark!,
+                                      position: PositionModel(
+                                          geohash: point.data['geohash'],
+                                          geopoint: point.data['geopoint']));
+
+                                  await reportProvider.addReport(reportModel);
                                 }
                                 Navigator.pop(context);
                               }
