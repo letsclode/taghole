@@ -24,8 +24,7 @@ _$_ReportModel _$$_ReportModelFromJson(Map<String, dynamic> json) =>
       address: json['address'] as String,
       landmark: json['landmark'] as String,
       ratings: (json['ratings'] as num?)?.toDouble(),
-      position:
-          PositionModel.fromJson(json['position'] as Map<String, dynamic>),
+      position: json['position'],
     );
 
 Map<String, dynamic> _$$_ReportModelToJson(_$_ReportModel instance) =>

@@ -34,7 +34,7 @@ mixin _$ReportModel {
   String get address => throw _privateConstructorUsedError;
   String get landmark => throw _privateConstructorUsedError;
   double? get ratings => throw _privateConstructorUsedError;
-  PositionModel get position => throw _privateConstructorUsedError;
+  dynamic get position => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -63,9 +63,7 @@ abstract class $ReportModelCopyWith<$Res> {
       String address,
       String landmark,
       double? ratings,
-      PositionModel position});
-
-  $PositionModelCopyWith<$Res> get position;
+      dynamic position});
 }
 
 /// @nodoc
@@ -95,7 +93,7 @@ class _$ReportModelCopyWithImpl<$Res, $Val extends ReportModel>
     Object? address = null,
     Object? landmark = null,
     Object? ratings = freezed,
-    Object? position = null,
+    Object? position = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -154,19 +152,11 @@ class _$ReportModelCopyWithImpl<$Res, $Val extends ReportModel>
           ? _value.ratings
           : ratings // ignore: cast_nullable_to_non_nullable
               as double?,
-      position: null == position
+      position: freezed == position
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
-              as PositionModel,
+              as dynamic,
     ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $PositionModelCopyWith<$Res> get position {
-    return $PositionModelCopyWith<$Res>(_value.position, (value) {
-      return _then(_value.copyWith(position: value) as $Val);
-    });
   }
 }
 
@@ -193,10 +183,7 @@ abstract class _$$_ReportModelCopyWith<$Res>
       String address,
       String landmark,
       double? ratings,
-      PositionModel position});
-
-  @override
-  $PositionModelCopyWith<$Res> get position;
+      dynamic position});
 }
 
 /// @nodoc
@@ -224,7 +211,7 @@ class __$$_ReportModelCopyWithImpl<$Res>
     Object? address = null,
     Object? landmark = null,
     Object? ratings = freezed,
-    Object? position = null,
+    Object? position = freezed,
   }) {
     return _then(_$_ReportModel(
       id: null == id
@@ -283,10 +270,10 @@ class __$$_ReportModelCopyWithImpl<$Res>
           ? _value.ratings
           : ratings // ignore: cast_nullable_to_non_nullable
               as double?,
-      position: null == position
+      position: freezed == position
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
-              as PositionModel,
+              as dynamic,
     ));
   }
 }
@@ -350,7 +337,7 @@ class _$_ReportModel implements _ReportModel {
   @override
   final double? ratings;
   @override
-  final PositionModel position;
+  final dynamic position;
 
   @override
   String toString() {
@@ -382,8 +369,7 @@ class _$_ReportModel implements _ReportModel {
             (identical(other.landmark, landmark) ||
                 other.landmark == landmark) &&
             (identical(other.ratings, ratings) || other.ratings == ratings) &&
-            (identical(other.position, position) ||
-                other.position == position));
+            const DeepCollectionEquality().equals(other.position, position));
   }
 
   @JsonKey(ignore: true)
@@ -404,7 +390,7 @@ class _$_ReportModel implements _ReportModel {
       address,
       landmark,
       ratings,
-      position);
+      const DeepCollectionEquality().hash(position));
 
   @JsonKey(ignore: true)
   @override
@@ -436,7 +422,7 @@ abstract class _ReportModel implements ReportModel {
       required final String address,
       required final String landmark,
       final double? ratings,
-      required final PositionModel position}) = _$_ReportModel;
+      required final dynamic position}) = _$_ReportModel;
 
   factory _ReportModel.fromJson(Map<String, dynamic> json) =
       _$_ReportModel.fromJson;
@@ -470,7 +456,7 @@ abstract class _ReportModel implements ReportModel {
   @override
   double? get ratings;
   @override
-  PositionModel get position;
+  dynamic get position;
   @override
   @JsonKey(ignore: true)
   _$$_ReportModelCopyWith<_$_ReportModel> get copyWith =>

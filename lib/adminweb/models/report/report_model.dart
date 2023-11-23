@@ -1,8 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:taghole/adminweb/models/update_model/update_model.dart';
 
-import '../position/position_model.dart';
-
 part 'report_model.freezed.dart';
 part 'report_model.g.dart';
 
@@ -23,7 +21,7 @@ class ReportModel with _$ReportModel {
       required String address,
       required String landmark,
       double? ratings,
-      required PositionModel position}) = _ReportModel;
+      required dynamic position}) = _ReportModel;
 
   factory ReportModel.fromJson(Map<String, dynamic> json) =>
       _$ReportModelFromJson(json);

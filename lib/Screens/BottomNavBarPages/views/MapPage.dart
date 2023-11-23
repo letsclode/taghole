@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -27,8 +26,7 @@ class _MapPageState extends ConsumerState<MapPage> {
       Completer<GoogleMapController>();
   LatLng? _initialPosition;
   MapType _currentMapType = MapType.normal;
-  List<Placemark> _placemark = [];
-  String? _address;
+  // final List<Placemark> _placemark = [];
   Position? _position;
   double? _lat;
   double? _lng;
@@ -65,8 +63,7 @@ class _MapPageState extends ConsumerState<MapPage> {
     try {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
-      List<Placemark> placemark =
-          await placemarkFromCoordinates(position.latitude, position.longitude);
+
       setState(() {
         _initialPosition = LatLng(position.latitude, position.longitude);
         if (_initialPosition == null) {
@@ -105,12 +102,9 @@ class _MapPageState extends ConsumerState<MapPage> {
     );
   }
 
-  Future getAddress(double latitude, double longitude) async {
-    _placemark = await placemarkFromCoordinates(latitude, longitude);
-    setState(() {
-      _address = "${_placemark[0].name},${_placemark[0].locality}";
-    });
-  }
+  // Future getAddress(double latitude, double longitude) async {
+  //   _placemark = await placemarkFromCoordinates(latitude, longitude);
+  // }
 
   void getCurrentLocation() async {
     Position res = await Geolocator.getCurrentPosition();
@@ -119,7 +113,7 @@ class _MapPageState extends ConsumerState<MapPage> {
       _lat = _position!.latitude;
       _lng = _position!.longitude;
     });
-    await getAddress(_lat!, _lng!);
+    // await getAddress(_lat!, _lng!);
   }
 
   Set<Marker> _createMarkers() {
@@ -268,14 +262,16 @@ class _MapPageState extends ConsumerState<MapPage> {
         );
       },
       markerId: markerId,
-      position: LatLng(
-          data.position.geopoint.latitude, data.position.geopoint.longitude),
+      position: LatLng(data.position['geopoint'].latitude,
+          data.position['geopoint'].longitude),
       infoWindow: InfoWindow(
         title: data.type,
         snippet: data.address,
       ),
     );
     setState(() {
+      print('hereeeee');
+      print(data.position['geopoint']);
       _markers[markerId] = marker;
     });
   }
