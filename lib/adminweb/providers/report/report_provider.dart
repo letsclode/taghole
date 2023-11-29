@@ -179,8 +179,11 @@ class ReportProvider extends _$ReportProvider {
                             borderRadius: BorderRadius.circular(10)),
                       ),
                       Container(
-                        height:
-                            row.updates == null && !row.isVerified ? 200 : 450,
+                        height: row.updates.isEmpty && !row.isVerified
+                            ? 200
+                            : row.updates.isNotEmpty
+                                ? 450
+                                : 250,
                         width: 500,
                         padding: const EdgeInsets.symmetric(
                             vertical: 20, horizontal: 20),
@@ -230,129 +233,157 @@ class ReportProvider extends _$ReportProvider {
                                 ],
                               ),
                             ),
-                            SizedBox(
-                                height: 300,
-                                width: 500,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Text(
-                                            'Ongoing Updates',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.orange),
+                            RichText(
+                              text: TextSpan(
+                                style: const TextStyle(color: Colors.black),
+                                children: <TextSpan>[
+                                  const TextSpan(
+                                      text: 'Description: ',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold)),
+                                  TextSpan(
+                                    text: row.description,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            row.status != 'ongoing'
+                                ? row.updates.isNotEmpty
+                                    ? const Padding(
+                                        padding: EdgeInsets.only(
+                                            top: 20, bottom: 10),
+                                        child: Text(
+                                          'Updates :',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                          Consumer(
-                                              builder: (context, ref, child) {
-                                            final reportProvider = ref.read(
-                                                reportProviderProvider
-                                                    .notifier);
-                                            final currentIndex =
-                                                ref.watch(drawerIndexProvider);
-                                            return MaterialButton(
-                                              color: primaryColor,
-                                              onPressed: () {
-                                                //TODO: verify
-                                                Navigator.pop(context);
-                                                if (currentIndex == 1) {
-                                                  reportProvider
-                                                      .verifyReport(row.id);
-                                                } else {
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (context) {
-                                                        return AlertDialog(
-                                                          content: UpdateForm(
-                                                            report: row,
-                                                          ),
-                                                        );
-                                                      });
-                                                }
-                                              },
-                                              child: const Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.add,
-                                                    color: Colors.white,
-                                                  ),
-                                                  Text(
-                                                    'Update',
-                                                    style: TextStyle(
-                                                        color: Colors.white),
-                                                  ),
-                                                ],
+                                        ),
+                                      )
+                                    : const SizedBox()
+                                : Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            if (row.updates.isNotEmpty)
+                                              const Text(
+                                                'Ongoing Updates',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.orange),
                                               ),
-                                            );
-                                          })
-                                        ],
-                                      ),
-                                    ),
-                                    row.updates == null
-                                        ? const SizedBox()
-                                        : CarouselSlider(
-                                            options: CarouselOptions(
-                                                enableInfiniteScroll: false,
-                                                height: 250.0),
-                                            items:
-                                                row.updates.map((updateValue) {
-                                              return Builder(
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return Container(
-                                                      decoration: BoxDecoration(
-                                                          image: DecorationImage(
-                                                              image: NetworkImage(
-                                                                  updateValue
-                                                                      .image),
-                                                              fit: BoxFit
-                                                                  .cover)),
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      margin: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 5.0),
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .end,
-                                                        children: [
-                                                          Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(10),
-                                                            color:
-                                                                Colors.black26,
-                                                            child: Row(
-                                                              children: [
-                                                                Text(
-                                                                  updateValue
-                                                                      .description,
-                                                                  style: const TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
-                                                                          16.0),
-                                                                ),
-                                                              ],
+                                            Consumer(
+                                                builder: (context, ref, child) {
+                                              final reportProvider = ref.read(
+                                                  reportProviderProvider
+                                                      .notifier);
+                                              final currentIndex = ref
+                                                  .watch(drawerIndexProvider);
+                                              return MaterialButton(
+                                                color: primaryColor,
+                                                onPressed: () {
+                                                  //TODO: verify
+                                                  Navigator.pop(context);
+                                                  if (currentIndex == 1) {
+                                                    reportProvider
+                                                        .verifyReport(row.id);
+                                                  } else {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return AlertDialog(
+                                                            content: UpdateForm(
+                                                              report: row,
                                                             ),
-                                                          ),
-                                                        ],
-                                                      ));
+                                                          );
+                                                        });
+                                                  }
                                                 },
+                                                child: const Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.add,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Text(
+                                                      'Update',
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                  ],
+                                                ),
                                               );
-                                            }).toList(),
-                                          )
-                                  ],
-                                )),
+                                            })
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                            Column(
+                              children: [
+                                row.updates.isEmpty
+                                    ? const SizedBox()
+                                    : SizedBox(
+                                        height: 250,
+                                        child: CarouselSlider(
+                                          options: CarouselOptions(
+                                              enableInfiniteScroll: false,
+                                              height: 250.0),
+                                          items: row.updates.map((updateValue) {
+                                            return Builder(
+                                              builder: (BuildContext context) {
+                                                return Container(
+                                                    decoration: BoxDecoration(
+                                                        image: DecorationImage(
+                                                            image: NetworkImage(
+                                                                updateValue
+                                                                    .image),
+                                                            fit: BoxFit.cover)),
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    margin: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 5.0),
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      children: [
+                                                        Container(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(10),
+                                                          color: Colors.black26,
+                                                          child: Row(
+                                                            children: [
+                                                              Text(
+                                                                updateValue
+                                                                    .description,
+                                                                style: const TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        16.0),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ));
+                                              },
+                                            );
+                                          }).toList(),
+                                        ),
+                                      )
+                              ],
+                            ),
                             Expanded(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -366,16 +397,16 @@ class ReportProvider extends _$ReportProvider {
                                     return Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        OutlinedButton(
-                                          onPressed: () async {
-                                            Navigator.pop(context);
-                                            reportProvider.deleteReport(row.id);
-                                          },
-                                          child: const Text(
-                                            "Delete Report",
-                                            style: TextStyle(color: Colors.red),
-                                          ),
-                                        ),
+                                        // OutlinedButton(
+                                        //   onPressed: () async {
+                                        //     Navigator.pop(context);
+                                        //     reportProvider.deleteReport(row.id);
+                                        //   },
+                                        //   child: const Text(
+                                        //     "Delete Report",
+                                        //     style: TextStyle(color: Colors.red),
+                                        //   ),
+                                        // ),
                                         row.status == 'completed'
                                             ? const SizedBox()
                                             : Row(
