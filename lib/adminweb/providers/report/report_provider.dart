@@ -18,7 +18,6 @@ part 'report_provider.g.dart';
 @riverpod
 class ReportProvider extends _$ReportProvider {
   Future<List<ReportModel>> _fetchReports() async {
-    print('fetch reports');
     final filter = ref.watch(filterReportTypeProvider);
     final json = await FirebaseFirestore.instance
         .collection('reports')
@@ -118,7 +117,6 @@ class ReportProvider extends _$ReportProvider {
 
   Future<int> onGoingReports() async {
     try {
-      print('ongoing fetch values');
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('reports')
           .where('status', isEqualTo: 'ongoing')
@@ -127,12 +125,8 @@ class ReportProvider extends _$ReportProvider {
       // Calculate the total report value
       int totalReport = 0;
       for (QueryDocumentSnapshot doc in querySnapshot.docs) {
-        print(doc);
-        // Assuming each document has a field 'value' that represents the report value
         totalReport++;
       }
-      print(totalReport);
-      print('here');
       return totalReport;
     } catch (e) {
       print(e);

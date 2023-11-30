@@ -26,10 +26,7 @@ class _MapPageState extends ConsumerState<MapPage> {
       Completer<GoogleMapController>();
   LatLng? _initialPosition;
   MapType _currentMapType = MapType.normal;
-  // final List<Placemark> _placemark = [];
-  Position? _position;
-  double? _lat;
-  double? _lng;
+
   final Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
   GlobalKey scaffoldKey = GlobalKey();
 
@@ -100,20 +97,6 @@ class _MapPageState extends ConsumerState<MapPage> {
       color: color,
       child: icon,
     );
-  }
-
-  // Future getAddress(double latitude, double longitude) async {
-  //   _placemark = await placemarkFromCoordinates(latitude, longitude);
-  // }
-
-  void getCurrentLocation() async {
-    Position res = await Geolocator.getCurrentPosition();
-    setState(() {
-      _position = res;
-      _lat = _position!.latitude;
-      _lng = _position!.longitude;
-    });
-    // await getAddress(_lat!, _lng!);
   }
 
   Set<Marker> _createMarkers() {
@@ -233,6 +216,27 @@ class _MapPageState extends ConsumerState<MapPage> {
                               ],
                             ),
                           ),
+                          RichText(
+                            overflow: TextOverflow.fade,
+                            maxLines: 4,
+                            text: TextSpan(
+                              style: const TextStyle(color: Colors.black),
+                              children: <TextSpan>[
+                                const TextSpan(
+                                    text: 'Description: ',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold)),
+                                TextSpan(
+                                  text:
+                                      '''${data.description}: slot 1 is dropped, handle=0x781997ed80
+I/BufferQueueProducer(10464): [ImageReader-720x1436f1m3-10464-0](this:0x7815188800,id:0,api:1,p:10464,c:10464) queueBuffer: fps=4.60 dur=1522.17 max=1308.97 min=14.01
+I/BufferQueueProducer(10464): [ImageReader-720x1436f1m3-10464-1](this:0x7814b00000,id:1,api:1,p:10464,c:10464) queueBuffer: fps=4.61 dur=1517.51 max=1310.83 min=11.75
+I/BufferQueueProducer(10464): [SurfaceTexture-0-10464-0](this:0x7814b01800,id:2,api:1,p:10464,c:10464) queueBuffer: slot 0 is dropped, handle=0x78199''',
+                                ),
+                              ],
+                            ),
+                          ),
                           if (!data.isVerified)
                             MaterialButton(
                               color: Colors.black,
@@ -270,8 +274,6 @@ class _MapPageState extends ConsumerState<MapPage> {
       ),
     );
     setState(() {
-      print('hereeeee');
-      print(data.position['geopoint']);
       _markers[markerId] = marker;
     });
   }

@@ -19,8 +19,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
-      child: Expanded(
+    return const Scaffold(
+      body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(20.0),
           child: Column(
@@ -29,7 +29,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               SizedBox(
                 height: 10,
               ),
-              Expanded(child: SizedBox(height: 300, child: MapPage()))
+              Expanded(child: MapPage())
             ],
           ),
         ),

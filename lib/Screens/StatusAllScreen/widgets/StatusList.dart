@@ -41,9 +41,31 @@ class _StatusListState extends ConsumerState<StatusList> {
               child: GroupedListView<dynamic, String>(
                 elements: value,
                 groupBy: (element) => element.status,
-                groupSeparatorBuilder: (String groupByValue) => Text(
-                  groupByValue.toUpperCase(),
-                  style: Theme.of(context).textTheme.titleLarge,
+                groupSeparatorBuilder: (String groupByValue) => Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.circle,
+                        size: 10,
+                        color: groupByValue == 'pending'
+                            ? Colors.grey
+                            : groupByValue == 'ongoing'
+                                ? Colors.orange
+                                : Colors.green,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        groupByValue.toUpperCase(),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(color: Colors.grey),
+                      ),
+                    ],
+                  ),
                 ),
                 itemBuilder: (context, dynamic element) => Card(
                   elevation: 4, // Adjust the elevation as needed
@@ -88,8 +110,8 @@ class _StatusListState extends ConsumerState<StatusList> {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                element.isVerified == true
-                                    ? element.status == true
+                                element.status != 'pending'
+                                    ? element.status == 'completed'
                                         ? const Text(
                                             "Status : Completed",
                                             style:
