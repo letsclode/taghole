@@ -62,7 +62,7 @@ class _KDrawerState extends ConsumerState<KDrawer> {
             selected: currentIndex == 0,
             selectedTileColor: Colors.grey[100],
             leading: const Icon(Icons.home),
-            title: const Text('Home'),
+            title: const Text('Dashboard'),
             onTap: () {
               onTabTapped(0);
             },

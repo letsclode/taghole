@@ -35,7 +35,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text([
-          'Home',
+          'Dashboard',
           'Latest Reports',
           'Ongoing Reports',
           'Completed Reports',
