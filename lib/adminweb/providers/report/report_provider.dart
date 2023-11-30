@@ -83,6 +83,97 @@ class ReportProvider extends _$ReportProvider {
     });
   }
 
+  Future<int> monthlyReport() async {
+    try {
+      // Get the current date
+      DateTime now = DateTime.now();
+
+      // Calculate the first day of the current month
+      DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
+
+      // Calculate the last day of the current month
+      DateTime lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
+
+      // Query the Firestore collection with a range filter on the timestamp
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('reports')
+          .where('timestamp', isGreaterThanOrEqualTo: firstDayOfMonth)
+          .where('timestamp', isLessThanOrEqualTo: lastDayOfMonth)
+          .get();
+
+      // Calculate the total report value
+      int totalReport = 0;
+      for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+        print(doc);
+        // Assuming each document has a field 'value' that represents the report value
+        totalReport++;
+      }
+
+      return totalReport;
+    } catch (e) {
+      print(e);
+    }
+    return 0;
+  }
+
+  Future<int> onGoingReports() async {
+    try {
+      print('ongoing fetch values');
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('reports')
+          .where('status', isEqualTo: 'ongoing')
+          .get();
+
+      // Calculate the total report value
+      int totalReport = 0;
+      for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+        print(doc);
+        // Assuming each document has a field 'value' that represents the report value
+        totalReport++;
+      }
+      print(totalReport);
+      print('here');
+      return totalReport;
+    } catch (e) {
+      print(e);
+    }
+
+    return 0;
+  }
+
+  Future<int> pendingReports() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('reports')
+        .where('status', isEqualTo: 'pending')
+        .get();
+
+    // Calculate the total report value
+    int totalReport = 0;
+    for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+      // Assuming each document has a field 'value' that represents the report value
+      totalReport++;
+    }
+
+    return totalReport;
+  }
+
+  Future<int> completedReports() async {
+    // Query the Firestore collection with a range filter on the timestamp
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('reports')
+        .where('status', isEqualTo: 'completed')
+        .get();
+
+    // Calculate the total report value
+    int totalReport = 0;
+    for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+      // Assuming each document has a field 'value' that represents the report value
+      totalReport++;
+    }
+
+    return totalReport;
+  }
+
   Future<void> rateReport(double rates, String uid) async {
     Map<Object, Object?> newData = {'ratings': rates};
     state = const AsyncValue.loading();
