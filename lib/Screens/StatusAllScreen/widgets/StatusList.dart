@@ -192,7 +192,7 @@ class _StatusListState extends ConsumerState<StatusList> {
                                       ),
                                     ],
                                   ),
-                                element.status == true &&
+                                element.status == 'completed' &&
                                         element.ratings == null
                                     ? Row(
                                         mainAxisAlignment:

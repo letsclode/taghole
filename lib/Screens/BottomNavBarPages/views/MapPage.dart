@@ -123,7 +123,7 @@ class _MapPageState extends ConsumerState<MapPage> {
               child: Container(
                 padding: const EdgeInsets.all(20),
                 width: MediaQuery.of(context).size.width,
-                height: kIsWeb ? 300 : 190,
+                height: kIsWeb ? 300 : 250,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,

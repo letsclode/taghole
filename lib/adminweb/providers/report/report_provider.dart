@@ -281,6 +281,21 @@ class ReportProvider extends _$ReportProvider {
                                 style: const TextStyle(color: Colors.black),
                                 children: <TextSpan>[
                                   const TextSpan(
+                                      text: 'Title: ',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold)),
+                                  TextSpan(
+                                    text: row.title,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                style: const TextStyle(color: Colors.black),
+                                children: <TextSpan>[
+                                  const TextSpan(
                                       text: 'Type: ',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),

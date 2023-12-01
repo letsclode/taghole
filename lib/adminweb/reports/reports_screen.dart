@@ -31,9 +31,9 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                       itemCount: value.length,
                       itemBuilder: (BuildContext context, int index) {
                         return ListTile(
-                          title: Text(value[index].address),
+                          title: Text(value[index].title),
                           trailing: MaterialButton(
-                            color: value[index].isVerified
+                            color: value[index].status != 'pending'
                                 ? value[index].status == 'completed'
                                     ? Colors.green
                                     : Colors.orange
