@@ -59,6 +59,7 @@ class MyDataTableSource extends DataTableSource {
   DataRow getRow(int index) {
     final ReportModel row = data[index];
     return DataRow(cells: [
+      DataCell(Text(row.title)),
       DataCell(!row.isVerified
           ? const Text(
               'Unverified',

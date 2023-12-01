@@ -123,7 +123,7 @@ class _MapPageState extends ConsumerState<MapPage> {
               child: Container(
                 padding: const EdgeInsets.all(20),
                 width: MediaQuery.of(context).size.width,
-                height: kIsWeb ? 200 : 180,
+                height: kIsWeb ? 300 : 190,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,6 +149,18 @@ class _MapPageState extends ConsumerState<MapPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
+                          RichText(
+                            text: TextSpan(
+                              style: const TextStyle(color: Colors.black),
+                              children: <TextSpan>[
+                                const TextSpan(
+                                    text: 'Title: ',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                TextSpan(text: data.title),
+                              ],
+                            ),
+                          ),
                           RichText(
                             text: TextSpan(
                               style: const TextStyle(color: Colors.black),
@@ -216,28 +228,24 @@ class _MapPageState extends ConsumerState<MapPage> {
                               ],
                             ),
                           ),
-                          RichText(
-                            overflow: TextOverflow.fade,
-                            maxLines: 4,
-                            text: TextSpan(
-                              style: const TextStyle(color: Colors.black),
-                              children: <TextSpan>[
-                                const TextSpan(
-                                    text: 'Description: ',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold)),
-                                TextSpan(
-                                  text:
-                                      '''${data.description}: slot 1 is dropped, handle=0x781997ed80
-I/BufferQueueProducer(10464): [ImageReader-720x1436f1m3-10464-0](this:0x7815188800,id:0,api:1,p:10464,c:10464) queueBuffer: fps=4.60 dur=1522.17 max=1308.97 min=14.01
-I/BufferQueueProducer(10464): [ImageReader-720x1436f1m3-10464-1](this:0x7814b00000,id:1,api:1,p:10464,c:10464) queueBuffer: fps=4.61 dur=1517.51 max=1310.83 min=11.75
-I/BufferQueueProducer(10464): [SurfaceTexture-0-10464-0](this:0x7814b01800,id:2,api:1,p:10464,c:10464) queueBuffer: slot 0 is dropped, handle=0x78199''',
-                                ),
-                              ],
+                          Container(
+                            child: RichText(
+                              overflow: TextOverflow.fade,
+                              maxLines: 3,
+                              text: TextSpan(
+                                style: const TextStyle(color: Colors.black),
+                                children: <TextSpan>[
+                                  const TextSpan(
+                                      text: 'Description: ',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold)),
+                                  TextSpan(text: data.description),
+                                ],
+                              ),
                             ),
                           ),
-                          if (!data.isVerified)
+                          if (data.status == 'pending')
                             MaterialButton(
                               color: Colors.black,
                               onPressed: () {
