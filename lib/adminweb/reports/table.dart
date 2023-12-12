@@ -61,10 +61,15 @@ class MyDataTableSource extends DataTableSource {
     return DataRow(cells: [
       DataCell(Text(row.title)),
       DataCell(!row.isVerified
-          ? const Text(
-              'Unverified',
-              style: TextStyle(color: Colors.grey),
-            )
+          ? row.status == 'pending'
+              ? const Text(
+                  'Unverified',
+                  style: TextStyle(color: Colors.grey),
+                )
+              : const Text(
+                  'Rejected',
+                  style: TextStyle(color: Colors.red),
+                )
           : row.status == 'completed'
               ? const Text(
                   'Completed',

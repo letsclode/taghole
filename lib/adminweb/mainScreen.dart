@@ -26,6 +26,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     ),
     const ReportsScreen(pageIndex: 2, title: KString.reportsOngoingTitle),
     const ReportsScreen(pageIndex: 3, title: KString.reportsCompletedTitle),
+    const ReportsScreen(pageIndex: 4, title: KString.reportsRejectedTitle),
     const FeedbackScreen(),
     const SettingsScreen()
   ];
@@ -39,6 +40,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           'Latest Reports',
           'Ongoing Reports',
           'Completed Reports',
+          'Rejected Reports',
           'Feedbacks',
           'Settings'
         ][currentIndex]),

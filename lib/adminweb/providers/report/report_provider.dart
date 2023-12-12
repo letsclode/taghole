@@ -33,7 +33,10 @@ class ReportProvider extends _$ReportProvider {
       case ReportFilterType.verified:
         return reports.where((element) => element.isVerified).toList();
       case ReportFilterType.unverified:
-        return reports.where((element) => !element.isVerified).toList();
+        return reports
+            .where((element) =>
+                !element.isVerified && element.status != 'rejected')
+            .toList();
       case ReportFilterType.complete:
         return reports
             .where((element) =>
@@ -46,6 +49,12 @@ class ReportProvider extends _$ReportProvider {
             .toList();
       case ReportFilterType.all:
         return reports;
+
+      case ReportFilterType.rejected:
+        return reports
+            .where((element) =>
+                element.status == 'rejected' && !element.isVerified)
+            .toList();
     }
   }
 
@@ -75,6 +84,15 @@ class ReportProvider extends _$ReportProvider {
 
   Future<void> verifyReport(String uid) async {
     Map<Object, Object?> newData = {'isVerified': true, 'status': 'ongoing'};
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      FirebaseFirestore.instance.collection('reports').doc(uid).update(newData);
+      return _fetchReports();
+    });
+  }
+
+  Future<void> rejectReport(String uid) async {
+    Map<Object, Object?> newData = {'status': 'rejected'};
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       FirebaseFirestore.instance.collection('reports').doc(uid).update(newData);
@@ -497,48 +515,56 @@ class ReportProvider extends _$ReportProvider {
                                     return Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        // OutlinedButton(
-                                        //   onPressed: () async {
-                                        //     Navigator.pop(context);
-                                        //     reportProvider.deleteReport(row.id);
-                                        //   },
-                                        //   child: const Text(
-                                        //     "Delete Report",
-                                        //     style: TextStyle(color: Colors.red),
-                                        //   ),
-                                        // ),
                                         row.status == 'completed'
                                             ? const SizedBox()
                                             : Row(
                                                 children: [
+                                                  if (currentIndex == 1)
+                                                    MaterialButton(
+                                                      color: Colors.red,
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                        reportProvider
+                                                            .rejectReport(
+                                                                row.id);
+                                                      },
+                                                      child: const Text(
+                                                        'Reject',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    ),
                                                   const SizedBox(
                                                     width: 10,
                                                   ),
-                                                  MaterialButton(
-                                                    color: Colors.green,
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                      if (currentIndex == 1) {
-                                                        reportProvider
-                                                            .verifyReport(
-                                                                row.id);
-                                                      } else {
-                                                        reportProvider
-                                                            .updateStatus(
-                                                                reportId:
-                                                                    row.id,
-                                                                value:
-                                                                    'completed');
-                                                      }
-                                                    },
-                                                    child: Text(
-                                                      currentIndex == 1
-                                                          ? 'Verify'
-                                                          : 'Complete Report',
-                                                      style: const TextStyle(
-                                                          color: Colors.white),
+                                                  if (currentIndex != 4)
+                                                    MaterialButton(
+                                                      color: Colors.green,
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                        if (currentIndex == 1) {
+                                                          reportProvider
+                                                              .verifyReport(
+                                                                  row.id);
+                                                        } else {
+                                                          reportProvider
+                                                              .updateStatus(
+                                                                  reportId:
+                                                                      row.id,
+                                                                  value:
+                                                                      'completed');
+                                                        }
+                                                      },
+                                                      child: Text(
+                                                        currentIndex == 1
+                                                            ? 'Verify'
+                                                            : 'Complete Report',
+                                                        style: const TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
                                                     ),
-                                                  ),
                                                 ],
                                               )
                                       ],

@@ -33,6 +33,10 @@ class _KDrawerState extends ConsumerState<KDrawer> {
       ref.read(filterReportTypeProvider.notifier).state =
           ReportFilterType.complete;
     }
+    if (index == 4) {
+      ref.read(filterReportTypeProvider.notifier).state =
+          ReportFilterType.rejected;
+    }
     if (Responsive.isMobile(context)) {
       Navigator.pop(context);
     }
@@ -97,8 +101,8 @@ class _KDrawerState extends ConsumerState<KDrawer> {
           ListTile(
             selected: currentIndex == 4,
             selectedTileColor: Colors.grey[100],
-            leading: const Icon(Icons.feedback),
-            title: const Text('Feedbacks'),
+            leading: const Icon(Icons.assignment),
+            title: const Text(KString.reportsRejectedTitle),
             onTap: () {
               onTabTapped(4);
             },
@@ -106,14 +110,23 @@ class _KDrawerState extends ConsumerState<KDrawer> {
           ListTile(
             selected: currentIndex == 5,
             selectedTileColor: Colors.grey[100],
-            leading: const Icon(Icons.settings),
-            title: const Text('Settings'),
+            leading: const Icon(Icons.feedback),
+            title: const Text('Feedbacks'),
             onTap: () {
               onTabTapped(5);
             },
           ),
           ListTile(
             selected: currentIndex == 6,
+            selectedTileColor: Colors.grey[100],
+            leading: const Icon(Icons.settings),
+            title: const Text('Settings'),
+            onTap: () {
+              onTabTapped(6);
+            },
+          ),
+          ListTile(
+            selected: currentIndex == 7,
             selectedTileColor: Colors.grey[100],
             leading: const Icon(Icons.exit_to_app),
             title: const Text('Logout'),
