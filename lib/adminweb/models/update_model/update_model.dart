@@ -8,6 +8,7 @@ class UpdateModel with _$UpdateModel {
   factory UpdateModel({
     required String description,
     required String image,
+    required DateTime createdAt,
   }) = _UpdateModel;
 
   factory UpdateModel.fromJson(Map<String, dynamic> json) =>

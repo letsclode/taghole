@@ -22,6 +22,7 @@ UpdateModel _$UpdateModelFromJson(Map<String, dynamic> json) {
 mixin _$UpdateModel {
   String get description => throw _privateConstructorUsedError;
   String get image => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +36,7 @@ abstract class $UpdateModelCopyWith<$Res> {
           UpdateModel value, $Res Function(UpdateModel) then) =
       _$UpdateModelCopyWithImpl<$Res, UpdateModel>;
   @useResult
-  $Res call({String description, String image});
+  $Res call({String description, String image, DateTime createdAt});
 }
 
 /// @nodoc
@@ -53,6 +54,7 @@ class _$UpdateModelCopyWithImpl<$Res, $Val extends UpdateModel>
   $Res call({
     Object? description = null,
     Object? image = null,
+    Object? createdAt = null,
   }) {
     return _then(_value.copyWith(
       description: null == description
@@ -63,6 +65,10 @@ class _$UpdateModelCopyWithImpl<$Res, $Val extends UpdateModel>
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
               as String,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ) as $Val);
   }
 }
@@ -75,7 +81,7 @@ abstract class _$$_UpdateModelCopyWith<$Res>
       __$$_UpdateModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String description, String image});
+  $Res call({String description, String image, DateTime createdAt});
 }
 
 /// @nodoc
@@ -91,6 +97,7 @@ class __$$_UpdateModelCopyWithImpl<$Res>
   $Res call({
     Object? description = null,
     Object? image = null,
+    Object? createdAt = null,
   }) {
     return _then(_$_UpdateModel(
       description: null == description
@@ -101,6 +108,10 @@ class __$$_UpdateModelCopyWithImpl<$Res>
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
               as String,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ));
   }
 }
@@ -108,7 +119,10 @@ class __$$_UpdateModelCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_UpdateModel implements _UpdateModel {
-  _$_UpdateModel({required this.description, required this.image});
+  _$_UpdateModel(
+      {required this.description,
+      required this.image,
+      required this.createdAt});
 
   factory _$_UpdateModel.fromJson(Map<String, dynamic> json) =>
       _$$_UpdateModelFromJson(json);
@@ -117,10 +131,12 @@ class _$_UpdateModel implements _UpdateModel {
   final String description;
   @override
   final String image;
+  @override
+  final DateTime createdAt;
 
   @override
   String toString() {
-    return 'UpdateModel(description: $description, image: $image)';
+    return 'UpdateModel(description: $description, image: $image, createdAt: $createdAt)';
   }
 
   @override
@@ -130,12 +146,14 @@ class _$_UpdateModel implements _UpdateModel {
             other is _$_UpdateModel &&
             (identical(other.description, description) ||
                 other.description == description) &&
-            (identical(other.image, image) || other.image == image));
+            (identical(other.image, image) || other.image == image) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, description, image);
+  int get hashCode => Object.hash(runtimeType, description, image, createdAt);
 
   @JsonKey(ignore: true)
   @override
@@ -154,7 +172,8 @@ class _$_UpdateModel implements _UpdateModel {
 abstract class _UpdateModel implements UpdateModel {
   factory _UpdateModel(
       {required final String description,
-      required final String image}) = _$_UpdateModel;
+      required final String image,
+      required final DateTime createdAt}) = _$_UpdateModel;
 
   factory _UpdateModel.fromJson(Map<String, dynamic> json) =
       _$_UpdateModel.fromJson;
@@ -163,6 +182,8 @@ abstract class _UpdateModel implements UpdateModel {
   String get description;
   @override
   String get image;
+  @override
+  DateTime get createdAt;
   @override
   @JsonKey(ignore: true)
   _$$_UpdateModelCopyWith<_$_UpdateModel> get copyWith =>

@@ -77,6 +77,7 @@ dependencies:
   carousel_slider: ^4.2.1
   flutter_rating_bar: ^4.0.1
   grouped_list: ^5.1.2
+  intl: ^0.19.0
  
 
 dev_dependencies:

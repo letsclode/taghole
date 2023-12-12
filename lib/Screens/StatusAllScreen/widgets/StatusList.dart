@@ -12,6 +12,7 @@ import 'package:taghole/controllers/auth_controller.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../adminweb/providers/report/report_provider.dart';
+import '../../../extensions/utils.dart';
 
 class StatusList extends ConsumerStatefulWidget {
   const StatusList({super.key});
@@ -129,15 +130,25 @@ class _StatusListState extends ConsumerState<StatusList> {
                                 const SizedBox(
                                   height: 5.0,
                                 ),
-                                Text("Type :${element.type}"),
+                                Text(
+                                    "Reported on: ${formatDate(element.createdAt)}"),
                                 const SizedBox(
                                   height: 5.0,
                                 ),
-                                Text("Address :${element.address}"),
+                                // Text(
+                                //     "Last update on: ${formatDate(element.updatedAt)}"),
+                                // const SizedBox(
+                                //   height: 5.0,
+                                // ),
+                                Text("Type : ${element.type}"),
                                 const SizedBox(
                                   height: 5.0,
                                 ),
-                                Text("Landmark :${element.landmark}"),
+                                Text("Address : ${element.address}"),
+                                const SizedBox(
+                                  height: 5.0,
+                                ),
+                                Text("Landmark : ${element.landmark}"),
                                 const SizedBox(
                                   height: 5.0,
                                 ),
@@ -162,8 +173,13 @@ class _StatusListState extends ConsumerState<StatusList> {
                                               child: ListTile(
                                                 title:
                                                     Image.network(data.image),
-                                                subtitle:
+                                                subtitle: Row(
+                                                  children: [
                                                     Text(data.description),
+                                                    // Text(formatDate(
+                                                    //     data.createdAt)),
+                                                  ],
+                                                ),
                                               ),
                                             )
                                           ]

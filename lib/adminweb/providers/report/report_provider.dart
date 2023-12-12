@@ -114,8 +114,8 @@ class ReportProvider extends _$ReportProvider {
       // Query the Firestore collection with a range filter on the timestamp
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('reports')
-          .where('timestamp', isGreaterThanOrEqualTo: firstDayOfMonth)
-          .where('timestamp', isLessThanOrEqualTo: lastDayOfMonth)
+          .where('createdAt', isGreaterThanOrEqualTo: firstDayOfMonth)
+          .where('createdAt', isLessThanOrEqualTo: lastDayOfMonth)
           .get();
 
       // Calculate the total report value
@@ -231,8 +231,14 @@ class ReportProvider extends _$ReportProvider {
 
     state = await AsyncValue.guard(() async {
       FirebaseFirestore.instance.collection('reports').doc(reportId).update({
+        'updatedAt': DateTime.now(),
         'updates': FieldValue.arrayUnion([
-          {'image': imageurl, 'description': description, title: 'title'}
+          {
+            'image': imageurl,
+            'description': description,
+            title: 'title',
+            'createdAt': DateTime.now()
+          }
         ])
       });
       return _fetchReports();

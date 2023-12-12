@@ -10,6 +10,8 @@ class FeedbackModel with _$FeedbackModel {
     required String userId,
     required String reportId,
     required String description,
+    required DateTime createdAt,
+    required DateTime updatedAt,
     required double ratings,
   }) = _FeedbackModel;
 
