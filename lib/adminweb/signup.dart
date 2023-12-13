@@ -21,7 +21,6 @@ class _SignupState extends ConsumerState<Signup> {
   String? _password;
   String? _name;
   String? _error;
-
   bool _loader = false;
 
   void switchFormState(String state) {
@@ -78,7 +77,7 @@ class _SignupState extends ConsumerState<Signup> {
           print("Signed up with new ID $uid");
           String role = "admin";
           await userProvider.storeNewUser(
-              name: _name!, email: _email!, uid: uid!, role: role);
+              firstName: _name!, email: _email!, uid: uid!, role: role);
         }
       } catch (e) {
         setState(() {

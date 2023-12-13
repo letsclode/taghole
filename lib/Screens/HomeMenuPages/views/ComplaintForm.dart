@@ -81,6 +81,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
   @override
   void initState() {
     setLocation();
+    _potholetype = 'pothole';
     if (widget.report != null) {
       setState(() {
         _address = widget.report!.address;
@@ -268,39 +269,6 @@ class _ComplaintFormState extends State<ComplaintForm> {
                             height: 20,
                           ),
                           TextFormField(
-                            focusNode: _potholetypeFocusNode,
-                            autofocus: true,
-                            textCapitalization: TextCapitalization.words,
-                            keyboardType: TextInputType.text,
-                            initialValue: _potholetype,
-                            decoration: const InputDecoration(
-                              labelText: "Pothole Type",
-                              hintText:
-                                  "e.g pothole,cracks,deformation,deep etc",
-                              focusColor: secondaryColor,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8.0),
-                                ),
-                                borderSide: BorderSide(
-                                  color: secondaryColor,
-                                  width: 1.0,
-                                ),
-                              ),
-                            ),
-                            textInputAction: TextInputAction.next,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter some text';
-                              }
-                              return null;
-                            },
-                            onSaved: (value) => _potholetype = value,
-                          ),
-                          const SizedBox(
-                            height: 20.0,
-                          ),
-                          TextFormField(
                             initialValue: _description,
                             focusNode: _descriptionFocusNode,
                             autofocus: true,
@@ -363,6 +331,49 @@ class _ComplaintFormState extends State<ComplaintForm> {
                           ),
                           const SizedBox(
                             height: 20,
+                          ),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Types',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                DropdownButton<String>(
+                                    hint: const Text("Types"),
+                                    isExpanded: true,
+                                    value: _potholetype,
+                                    focusNode: _potholetypeFocusNode,
+                                    items: const [
+                                      DropdownMenuItem(
+                                        value: 'pothole',
+                                        child: Text('pothole'),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'cracks',
+                                        child: Text('cracks'),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'deformation',
+                                        child: Text('deformation'),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'deep',
+                                        child: Text('deep'),
+                                      )
+                                    ],
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        _potholetype = newValue;
+                                      });
+                                    }),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20.0,
                           ),
                           Column(
                             children: [

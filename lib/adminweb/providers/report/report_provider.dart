@@ -8,6 +8,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:taghole/adminweb/providers/report/report_filter_type_provider.dart';
 import 'package:taghole/adminweb/widgets/update_form.dart';
 import 'package:taghole/constant/color.dart';
+import 'package:taghole/controllers/user_controller.dart';
+import 'package:taghole/models/user/user_model.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../drawer/drawer_index_provider.dart';
@@ -300,6 +302,37 @@ class ReportProvider extends _$ReportProvider {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
+                            Consumer(builder: (_, ref, child) {
+                              final user = ref
+                                  .watch(userControllerProvider.notifier)
+                                  .getUserById(id: row.userId);
+                              return FutureBuilder<UserModel>(
+                                  future: user,
+                                  builder: (_, snap) {
+                                    if (snap.hasData) {
+                                      return RichText(
+                                        text: TextSpan(
+                                          style: const TextStyle(
+                                              color: Colors.black),
+                                          children: <TextSpan>[
+                                            const TextSpan(
+                                                text: 'Posted by : ',
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            TextSpan(
+                                              text: snap.data!.email,
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  });
+                            }),
                             RichText(
                               text: TextSpan(
                                 style: const TextStyle(color: Colors.black),

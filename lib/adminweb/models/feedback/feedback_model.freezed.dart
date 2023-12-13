@@ -24,6 +24,8 @@ mixin _$FeedbackModel {
   String get userId => throw _privateConstructorUsedError;
   String get reportId => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
+  DateTime get updatedAt => throw _privateConstructorUsedError;
   double get ratings => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -43,6 +45,8 @@ abstract class $FeedbackModelCopyWith<$Res> {
       String userId,
       String reportId,
       String description,
+      DateTime createdAt,
+      DateTime updatedAt,
       double ratings});
 }
 
@@ -63,6 +67,8 @@ class _$FeedbackModelCopyWithImpl<$Res, $Val extends FeedbackModel>
     Object? userId = null,
     Object? reportId = null,
     Object? description = null,
+    Object? createdAt = null,
+    Object? updatedAt = null,
     Object? ratings = null,
   }) {
     return _then(_value.copyWith(
@@ -82,6 +88,14 @@ class _$FeedbackModelCopyWithImpl<$Res, $Val extends FeedbackModel>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       ratings: null == ratings
           ? _value.ratings
           : ratings // ignore: cast_nullable_to_non_nullable
@@ -103,6 +117,8 @@ abstract class _$$_FeedbackModelCopyWith<$Res>
       String userId,
       String reportId,
       String description,
+      DateTime createdAt,
+      DateTime updatedAt,
       double ratings});
 }
 
@@ -121,6 +137,8 @@ class __$$_FeedbackModelCopyWithImpl<$Res>
     Object? userId = null,
     Object? reportId = null,
     Object? description = null,
+    Object? createdAt = null,
+    Object? updatedAt = null,
     Object? ratings = null,
   }) {
     return _then(_$_FeedbackModel(
@@ -140,6 +158,14 @@ class __$$_FeedbackModelCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       ratings: null == ratings
           ? _value.ratings
           : ratings // ignore: cast_nullable_to_non_nullable
@@ -156,6 +182,8 @@ class _$_FeedbackModel implements _FeedbackModel {
       required this.userId,
       required this.reportId,
       required this.description,
+      required this.createdAt,
+      required this.updatedAt,
       required this.ratings});
 
   factory _$_FeedbackModel.fromJson(Map<String, dynamic> json) =>
@@ -170,11 +198,15 @@ class _$_FeedbackModel implements _FeedbackModel {
   @override
   final String description;
   @override
+  final DateTime createdAt;
+  @override
+  final DateTime updatedAt;
+  @override
   final double ratings;
 
   @override
   String toString() {
-    return 'FeedbackModel(id: $id, userId: $userId, reportId: $reportId, description: $description, ratings: $ratings)';
+    return 'FeedbackModel(id: $id, userId: $userId, reportId: $reportId, description: $description, createdAt: $createdAt, updatedAt: $updatedAt, ratings: $ratings)';
   }
 
   @override
@@ -188,13 +220,17 @@ class _$_FeedbackModel implements _FeedbackModel {
                 other.reportId == reportId) &&
             (identical(other.description, description) ||
                 other.description == description) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
             (identical(other.ratings, ratings) || other.ratings == ratings));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, userId, reportId, description, ratings);
+  int get hashCode => Object.hash(runtimeType, id, userId, reportId,
+      description, createdAt, updatedAt, ratings);
 
   @JsonKey(ignore: true)
   @override
@@ -216,6 +252,8 @@ abstract class _FeedbackModel implements FeedbackModel {
       required final String userId,
       required final String reportId,
       required final String description,
+      required final DateTime createdAt,
+      required final DateTime updatedAt,
       required final double ratings}) = _$_FeedbackModel;
 
   factory _FeedbackModel.fromJson(Map<String, dynamic> json) =
@@ -229,6 +267,10 @@ abstract class _FeedbackModel implements FeedbackModel {
   String get reportId;
   @override
   String get description;
+  @override
+  DateTime get createdAt;
+  @override
+  DateTime get updatedAt;
   @override
   double get ratings;
   @override

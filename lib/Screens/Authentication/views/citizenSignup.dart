@@ -5,6 +5,8 @@ import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:taghole/constant/color.dart';
 import 'package:taghole/constant/size.dart';
+import 'package:url_launcher/link.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../controllers/auth_controller.dart';
 import '../../../controllers/user_controller.dart';
@@ -22,10 +24,16 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
 
   bool isLoading = false;
   bool isSigningUp = false;
+  bool isAgree = false;
 
   String? _number;
   String? _email;
+  String? _fristName;
+  String? _lastName;
+  // String? _birthday;
+  // String? _gender;
   String? _password;
+  String? _confirmPassword;
   String? _error;
 
   bool _obscure = true;
@@ -141,6 +149,8 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
                                         .then((value) async {
                                       String role = "citizen";
                                       await userProvider.storeNewUser(
+                                          firstName: _fristName,
+                                          lastName: _lastName,
                                           email: _email,
                                           uid: value!,
                                           number: result.user!.phoneNumber,
@@ -213,23 +223,25 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
           child: SafeArea(
             child: isLoading
                 ? const Center(child: CircularProgressIndicator())
-                : Column(
-                    children: <Widget>[
-                      showAlert(),
-                      SizedBox(
-                        height: height * .025,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Form(
-                          key: formKey,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: buildInputs() + buildButtons(),
+                : SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        showAlert(),
+                        SizedBox(
+                          height: height * .025,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Form(
+                            key: formKey,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: buildInputs() + buildButtons(),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
           ),
         ),
@@ -351,7 +363,53 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
     textFields.add(const SizedBox(
       height: KXFontSize.small,
     ));
+
     if (isSigningUp) {
+      textFields.add(
+        TextFormField(
+          keyboardType: TextInputType.visiblePassword,
+          validator: (String? value) {
+            return ConfirmPasswordValidator.validate(value, _password);
+          },
+          decoration:
+              buildSignUpInputDecoration("Confirm Password", isPassword: true),
+          obscureText: _obscure,
+          onSaved: (value) {
+            _confirmPassword = value;
+          },
+        ),
+      );
+      textFields.add(const SizedBox(
+        height: KXFontSize.small,
+      ));
+      textFields.add(
+        TextFormField(
+          keyboardType: TextInputType.text,
+          validator: NameValidator.validate,
+          decoration: buildSignUpInputDecoration("First Name"),
+          onSaved: (value) {
+            _fristName = value;
+          },
+        ),
+      );
+
+      textFields.add(const SizedBox(
+        height: KXFontSize.small,
+      ));
+      textFields.add(
+        TextFormField(
+          keyboardType: TextInputType.text,
+          validator: NameValidator.validate,
+          decoration: buildSignUpInputDecoration("Last Name"),
+          onSaved: (value) {
+            _lastName = value;
+          },
+        ),
+      );
+
+      textFields.add(const SizedBox(
+        height: KXFontSize.small,
+      ));
       textFields.add(
         TextFormField(
           maxLength: 11,
@@ -371,6 +429,7 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
   List<Widget> buildButtons() {
     String switchButtonText;
     String submitButtonText;
+
     if (isSigningUp) {
       switchButtonText = "Already have account? Login";
       submitButtonText = "Register";
@@ -380,6 +439,32 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
     }
 
     return [
+      if (isSigningUp)
+        Row(
+          children: [
+            Checkbox(
+                value: isAgree,
+                onChanged: (x) {
+                  print('tap');
+                  setState(() {
+                    isAgree = x!;
+                  });
+                }),
+            InkWell(
+              onTap: () async {
+                await launchUrl(Uri(
+                    scheme: 'https',
+                    path: '//www.iubenda.com/privacy-policy/50131458'));
+              },
+              child: Link(
+                  uri: Uri(
+                      path: 'https://www.iubenda.com/privacy-policy/50131458'),
+                  builder: (_, f) {
+                    return const Text('Privacy Policy');
+                  }),
+            )
+          ],
+        ),
       TextButton(
           onPressed: () {
             setState(() {
@@ -398,7 +483,11 @@ class _CitizenSignupState extends ConsumerState<CitizenSignup> {
             borderRadius: BorderRadius.circular(30),
           ),
           color: secondaryColor,
-          onPressed: submit,
+          onPressed: isSigningUp
+              ? isAgree
+                  ? submit
+                  : null
+              : submit,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(

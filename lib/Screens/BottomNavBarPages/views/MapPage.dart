@@ -108,7 +108,9 @@ class _MapPageState extends ConsumerState<MapPage> {
         await ref.read(reportProviderProvider.notifier).getVisibleReports();
 
     for (ReportModel report in data) {
-      initMarker(data: report);
+      if (report.status != 'completed') {
+        initMarker(data: report);
+      }
     }
   }
 

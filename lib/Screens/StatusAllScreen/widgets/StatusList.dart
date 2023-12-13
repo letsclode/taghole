@@ -131,15 +131,15 @@ class _StatusListState extends ConsumerState<StatusList> {
                                   height: 5.0,
                                 ),
                                 Text(
-                                    "Reported on: ${formatDate(element.createdAt)}"),
+                                    "Reported : ${formatDate(element.createdAt)}"),
                                 const SizedBox(
                                   height: 5.0,
                                 ),
-                                // Text(
-                                //     "Last update on: ${formatDate(element.updatedAt)}"),
-                                // const SizedBox(
-                                //   height: 5.0,
-                                // ),
+                                Text(
+                                    "Last update : ${formatDate(element.updatedAt)}"),
+                                const SizedBox(
+                                  height: 5.0,
+                                ),
                                 Text("Type : ${element.type}"),
                                 const SizedBox(
                                   height: 5.0,
@@ -174,10 +174,13 @@ class _StatusListState extends ConsumerState<StatusList> {
                                                 title:
                                                     Image.network(data.image),
                                                 subtitle: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: [
                                                     Text(data.description),
-                                                    // Text(formatDate(
-                                                    //     data.createdAt)),
+                                                    Text(formatDate(
+                                                        data.createdAt)),
                                                   ],
                                                 ),
                                               ),
@@ -328,6 +331,12 @@ class _StatusListState extends ConsumerState<StatusList> {
                                                                             reportProviderProvider.notifier);
 
                                                                     await feedbackProvider.addFeedback(FeedbackModel(
+                                                                        createdAt:
+                                                                            DateTime
+                                                                                .now(),
+                                                                        updatedAt:
+                                                                            DateTime
+                                                                                .now(),
                                                                         id:
                                                                             generatedId,
                                                                         userId: userProvider!

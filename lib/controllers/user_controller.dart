@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:taghole/models/user/user_model.dart';
 
 import '../repositories/auth_repository.dart';
 
@@ -36,19 +37,31 @@ class UserController extends StateNotifier<User?> {
         .get();
   }
 
+  Future<UserModel> getUserById({required String id}) async {
+    final data = await FirebaseFirestore.instance
+        .collection('users')
+        .where('uid', isEqualTo: id)
+        .get();
+
+    print('userdata: ${data.docs.first.data()}');
+    return UserModel.fromJson(data.docs.first.data());
+  }
+
 //TODO: finish this
   Future storeNewUser(
-      {String? name,
+      {String? firstName,
+      String? lastName,
       String? email,
       String? number,
       required String uid,
       required String role}) async {
     FirebaseFirestore.instance.collection('users').add({
-      'name': name ?? '',
+      'firstName': firstName ?? '',
       'email': email ?? '',
       'uid': uid,
       'role': role,
-      'number': number
+      'number': number,
+      'lastName': lastName ?? '',
     }).catchError((e) {
       print(e);
     });
@@ -87,6 +100,18 @@ class PasswordValidator {
   static String? validate(String? value) {
     if (value == null || value.isEmpty) {
       return 'Password can\'t be empty';
+    }
+    return null;
+  }
+}
+
+class ConfirmPasswordValidator {
+  static String? validate(String? value, String? password) {
+    if (value != password) {
+      return 'Password not the same';
+    }
+    if (value == null || value.isEmpty) {
+      return 'Confirm Password can\'t be empty';
     }
     return null;
   }
