@@ -8,7 +8,7 @@ import '../firebase_options.dart';
 import 'signup.dart';
 
 void main() async {
-  await dotenv.load(fileName: "/Users/cloderaldopampanga/Desktop/taghole/.env");
+  await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
