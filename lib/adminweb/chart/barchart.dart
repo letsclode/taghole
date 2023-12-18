@@ -1,7 +1,10 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class BarChartSample2 extends StatefulWidget {
+import '../providers/report/report_provider.dart';
+
+class BarChartSample2 extends ConsumerStatefulWidget {
   const BarChartSample2({super.key});
   final Color ongoingColor = Colors.yellow;
   final Color rejectedColor = Colors.red;
@@ -9,10 +12,10 @@ class BarChartSample2 extends StatefulWidget {
   final Color pendingColor = Colors.green;
   final Color avgColor = Colors.orange;
   @override
-  State<StatefulWidget> createState() => BarChartSample2State();
+  ConsumerState<BarChartSample2> createState() => BarChartSample2State();
 }
 
-class BarChartSample2State extends State<BarChartSample2> {
+class BarChartSample2State extends ConsumerState<BarChartSample2> {
   final double width = 7;
 
   late List<BarChartGroupData> rawBarGroups;
@@ -20,9 +23,36 @@ class BarChartSample2State extends State<BarChartSample2> {
 
   int touchedGroupIndex = -1;
 
+   final titles = <String>[
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'June',
+      'July',
+      'Aug',
+      'Sept',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+
+  Future<void> setAllValues() async {
+    final reportProvider = ref.read(reportProviderProvider.notifier);
+    // totalPendingreport = await reportProvider.pendingReports();
+    // totalOngoingReport = await reportProvider.onGoingReports();
+    // totalCompletedReports = await reportProvider.completedReports();
+  }
+
   @override
   void initState() {
     super.initState();
+
+
+
+
+
     final barGroup1 = makeGroupData(
       0,
       5,
@@ -35,41 +65,103 @@ class BarChartSample2State extends State<BarChartSample2> {
       16,
       12,
       20,
-      10,
+      15,
     );
     final barGroup3 = makeGroupData(
       2,
       18,
       5,
       20,
-      10,
+      3,
     );
     final barGroup4 = makeGroupData(
       3,
       20,
       16,
       20,
-      10,
+      50,
     );
     final barGroup5 = makeGroupData(
-      3,
+      4,
       20,
       16,
       20,
-      10,
+      50,
+    );
+    final barGroup6 = makeGroupData(
+      5,
+      20,
+      16,
+      20,
+      50,
     );
 
-    final items = [barGroup1, barGroup2, barGroup3, barGroup4, barGroup5];
+    final barGroup7 = makeGroupData(
+      6,
+      20,
+      16,
+      20,
+      50,
+    );
+    final barGroup8 = makeGroupData(
+      7,
+      20,
+      16,
+      20,
+      50,
+    );
+    final barGroup9 = makeGroupData(
+      8,
+      20,
+      16,
+      20,
+      50,
+    );
+    final barGroup10 = makeGroupData(
+      9,
+      20,
+      16,
+      20,
+      50,
+    );
+    final barGroup11 = makeGroupData(
+      10,
+      20,
+      16,
+      20,
+      50,
+    );
+    final barGroup12 = makeGroupData(
+      11,
+      20,
+      16,
+      20,
+      50,
+    );
+
+    final items = [
+      barGroup1,
+      barGroup2,
+      barGroup3,
+      barGroup4,
+      barGroup5,
+      barGroup6,
+      barGroup7,
+      barGroup8,
+      barGroup9,
+      barGroup10,
+      barGroup11,
+      barGroup12,
+    ];
 
     rawBarGroups = items;
-
     showingBarGroups = rawBarGroups;
   }
 
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 2,
+      aspectRatio: 1,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -83,7 +175,7 @@ class BarChartSample2State extends State<BarChartSample2> {
                   width: 38,
                 ),
                 const Text(
-                  'Transactions',
+                  'Reports',
                   style: TextStyle(fontSize: 22),
                 ),
               ],
@@ -94,17 +186,10 @@ class BarChartSample2State extends State<BarChartSample2> {
             Expanded(
               child: BarChart(
                 BarChartData(
-                  maxY: 15,
+                  maxY: 50,
                   barTouchData: BarTouchData(
                     touchTooltipData: BarTouchTooltipData(
                       tooltipBgColor: Colors.grey,
-                      getTooltipItem: (
-                        a,
-                        b,
-                        c,
-                        d,
-                      ) =>
-                          null,
                     ),
                     touchCallback: (FlTouchEvent event, response) {
                       if (response == null || response.spot == null) {
@@ -157,6 +242,7 @@ class BarChartSample2State extends State<BarChartSample2> {
                       sideTitles: SideTitles(showTitles: false),
                     ),
                     bottomTitles: AxisTitles(
+                      axisNameSize: 4 * 12,
                       sideTitles: SideTitles(
                         showTitles: true,
                         getTitlesWidget: bottomTitles,
@@ -193,7 +279,7 @@ class BarChartSample2State extends State<BarChartSample2> {
     const style = TextStyle(
       color: Color(0xff7589a2),
       fontWeight: FontWeight.bold,
-      fontSize: 14,
+      fontSize: 12,
     );
     String text;
     if (value == 0) {
@@ -221,21 +307,7 @@ class BarChartSample2State extends State<BarChartSample2> {
   }
 
   Widget bottomTitles(double value, TitleMeta meta) {
-    final titles = <String>[
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'June',
-      'July',
-      'Aug',
-      'Sept',
-      'Oct',
-      'Nov',
-      'Dec'
-    ];
-
+   
     final Widget text = Text(
       titles[value.toInt()],
       style: const TextStyle(
@@ -255,7 +327,7 @@ class BarChartSample2State extends State<BarChartSample2> {
   BarChartGroupData makeGroupData(
       int x, double y1, double y2, double y3, double y4) {
     return BarChartGroupData(
-      barsSpace: 10,
+      barsSpace: 5,
       x: x,
       barRods: [
         BarChartRodData(
@@ -299,7 +371,7 @@ class BarChartSample2State extends State<BarChartSample2> {
         Container(
           width: width,
           height: 28,
-          color: Colors.red.withOpacity(0.8),
+          color: Colors.green.withOpacity(0.8),
         ),
         const SizedBox(
           width: space,
@@ -307,7 +379,7 @@ class BarChartSample2State extends State<BarChartSample2> {
         Container(
           width: width,
           height: 42,
-          color: Colors.red.withOpacity(1),
+          color: Colors.yellow.withOpacity(1),
         ),
         const SizedBox(
           width: space,
@@ -315,7 +387,7 @@ class BarChartSample2State extends State<BarChartSample2> {
         Container(
           width: width,
           height: 28,
-          color: Colors.red.withOpacity(0.8),
+          color: Colors.blue.withOpacity(0.8),
         ),
         const SizedBox(
           width: space,

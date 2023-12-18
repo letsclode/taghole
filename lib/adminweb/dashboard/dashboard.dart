@@ -24,10 +24,68 @@ class _DashboardScreenState extends State<DashboardScreen> {
           padding: EdgeInsets.all(20.0),
           child: Column(
             children: [
-             SizedBox(
-              height: 300,
-              child: Expanded(child: BarChartSample2())
-             ),
+              Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                        height: 300, child: Expanded(child: BarChartSample2())),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.circle,
+                            color: Colors.red,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text("Rejected reports"),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.circle,
+                            color: Colors.yellow,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text("Ongoing reports"),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.circle,
+                            color: Colors.blue,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text("Completed reports"),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.circle,
+                            color: Colors.green,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text("Pending reports")
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
               SizedBox(
                 height: 10,
               ),

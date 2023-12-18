@@ -9,8 +9,8 @@ import '../../providers/report/report_provider.dart';
 
 class MyFiles extends StatelessWidget {
   const MyFiles({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +35,10 @@ class MyFiles extends StatelessWidget {
 
 class FileInfoCardGridView extends ConsumerStatefulWidget {
   const FileInfoCardGridView({
-    Key? key,
+    super.key,
     this.crossAxisCount = 4,
     this.childAspectRatio = 1,
-  }) : super(key: key);
+  });
 
   final int crossAxisCount;
   final double childAspectRatio;
