@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../Screens/BottomNavBarPages/views/MapPage.dart';
-import 'widgets/myfile.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -25,7 +24,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           padding: EdgeInsets.all(20.0),
           child: Column(
             children: [
-              MyFiles(),
+              // SizedBox(height: 300, child: BarChartSample2()),
               SizedBox(
                 height: 10,
               ),
