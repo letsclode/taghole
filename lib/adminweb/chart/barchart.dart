@@ -23,139 +23,73 @@ class BarChartSample2State extends ConsumerState<BarChartSample2> {
 
   int touchedGroupIndex = -1;
 
-   final titles = <String>[
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'June',
-      'July',
-      'Aug',
-      'Sept',
-      'Oct',
-      'Nov',
-      'Dec'
-    ];
+  final titles = <String>[
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'June',
+    'July',
+    'Aug',
+    'Sept',
+    'Oct',
+    'Nov',
+    'Dec'
+  ];
 
-  Future<void> setAllValues() async {
+  Future<List<BarChartGroupData>> setAllValues() async {
     final reportProvider = ref.read(reportProviderProvider.notifier);
-    // totalPendingreport = await reportProvider.pendingReports();
-    // totalOngoingReport = await reportProvider.onGoingReports();
-    // totalCompletedReports = await reportProvider.completedReports();
+    print('setting all values');
+    List<BarChartGroupData> items = [];
+    titles.forEach((element) async {
+      int totalPendingreport = await reportProvider.reportCounter(
+          reportType: 'pending', month: titles.indexOf(element) + 1);
+      int totalOngoingReport = await reportProvider.reportCounter(
+          reportType: 'ongoing', month: titles.indexOf(element) + 1);
+      int totalCompletedReports = await reportProvider.reportCounter(
+          reportType: 'completed', month: titles.indexOf(element) + 1);
+      int totalRejectedReport = await reportProvider.reportCounter(
+          reportType: 'rejected', month: titles.indexOf(element) + 1);
+
+      items.add(makeGroupData(
+        titles.indexOf(element),
+        double.parse(totalPendingreport.toString()),
+        double.parse(totalOngoingReport.toString()),
+        double.parse(totalCompletedReports.toString()),
+        double.parse(totalRejectedReport.toString()),
+      ));
+    });
+
+    return items;
   }
 
   @override
   void initState() {
     super.initState();
 
+    var items = titles
+        .map((e) => makeGroupData(
+              titles.indexOf(e),
+              0,
+              0,
+              0,
+              0,
+            ))
+        .toList();
 
+    setState(() {
+      rawBarGroups = items;
+      showingBarGroups = rawBarGroups;
+    });
 
-
-
-    final barGroup1 = makeGroupData(
-      0,
-      5,
-      12,
-      20,
-      10,
-    );
-    final barGroup2 = makeGroupData(
-      1,
-      16,
-      12,
-      20,
-      15,
-    );
-    final barGroup3 = makeGroupData(
-      2,
-      18,
-      5,
-      20,
-      3,
-    );
-    final barGroup4 = makeGroupData(
-      3,
-      20,
-      16,
-      20,
-      50,
-    );
-    final barGroup5 = makeGroupData(
-      4,
-      20,
-      16,
-      20,
-      50,
-    );
-    final barGroup6 = makeGroupData(
-      5,
-      20,
-      16,
-      20,
-      50,
-    );
-
-    final barGroup7 = makeGroupData(
-      6,
-      20,
-      16,
-      20,
-      50,
-    );
-    final barGroup8 = makeGroupData(
-      7,
-      20,
-      16,
-      20,
-      50,
-    );
-    final barGroup9 = makeGroupData(
-      8,
-      20,
-      16,
-      20,
-      50,
-    );
-    final barGroup10 = makeGroupData(
-      9,
-      20,
-      16,
-      20,
-      50,
-    );
-    final barGroup11 = makeGroupData(
-      10,
-      20,
-      16,
-      20,
-      50,
-    );
-    final barGroup12 = makeGroupData(
-      11,
-      20,
-      16,
-      20,
-      50,
-    );
-
-    final items = [
-      barGroup1,
-      barGroup2,
-      barGroup3,
-      barGroup4,
-      barGroup5,
-      barGroup6,
-      barGroup7,
-      barGroup8,
-      barGroup9,
-      barGroup10,
-      barGroup11,
-      barGroup12,
-    ];
-
-    rawBarGroups = items;
-    showingBarGroups = rawBarGroups;
+    setAllValues().then((value) {
+      setState(() {
+        items = value;
+        rawBarGroups = items;
+        showingBarGroups = rawBarGroups;
+      });
+    });
   }
 
   @override
@@ -307,7 +241,6 @@ class BarChartSample2State extends ConsumerState<BarChartSample2> {
   }
 
   Widget bottomTitles(double value, TitleMeta meta) {
-   
     final Widget text = Text(
       titles[value.toInt()],
       style: const TextStyle(

@@ -59,9 +59,6 @@ class _FileInfoCardGridViewState extends ConsumerState<FileInfoCardGridView> {
   Future<void> setAllValues() async {
     final reportProvider = ref.read(reportProviderProvider.notifier);
     totalReports = await reportProvider.monthlyReport();
-    totalPendingreport = await reportProvider.pendingReports();
-    totalOngoingReport = await reportProvider.onGoingReports();
-    totalCompletedReports = await reportProvider.completedReports();
   }
 
   @override
