@@ -5,6 +5,7 @@ import 'package:bouncerwidget/bouncerwidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
 import 'package:map_picker/map_picker.dart';
@@ -14,7 +15,7 @@ import 'package:taghole/constant/color.dart';
 import 'package:taghole/constant/grid.dart';
 
 class KMapPicker extends StatefulWidget {
-  const KMapPicker({Key? key}) : super(key: key);
+  const KMapPicker({super.key});
 
   @override
   _KMapPickerState createState() => _KMapPickerState();
@@ -49,11 +50,11 @@ class _KMapPickerState extends State<KMapPicker> {
   }
 
   void _getUserLocation() async {
-    // Position position = await Geolocator.getCurrentPosition(
-    //     desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
 
     setState(() {
-      _initialPosition = const LatLng(12.0676, 124.5930);
+      _initialPosition = LatLng(position.latitude, position.longitude);
       // _initialPosition = LatLng(position.latitude, position.longitude);
       cameraPosition = CameraPosition(
         target: _initialPosition!,
