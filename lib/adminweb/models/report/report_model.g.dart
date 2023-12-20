@@ -17,6 +17,7 @@ _$_ReportModel _$$_ReportModelFromJson(Map<String, dynamic> json) =>
       type: json['type'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
+      reason: json['reason'] as String?,
       imageUrl: json['imageUrl'] as String?,
       updates: (json['updates'] as List<dynamic>)
           .map((e) => UpdateModel.fromJson(e as Map<String, dynamic>))
@@ -38,6 +39,7 @@ Map<String, dynamic> _$$_ReportModelToJson(_$_ReportModel instance) =>
       'type': instance.type,
       'createdAt': instance.createdAt.toIso8601String(),
       'updatedAt': instance.updatedAt.toIso8601String(),
+      'reason': instance.reason,
       'imageUrl': instance.imageUrl,
       'updates': instance.updates,
       'address': instance.address,

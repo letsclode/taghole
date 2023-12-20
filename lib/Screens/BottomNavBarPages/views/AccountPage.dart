@@ -36,8 +36,53 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                 color: secondaryColor,
                 onPressed: () async {
                   try {
-                    print(user);
-                    await authProvider.signOut();
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text("Signing Out"),
+                            content: SizedBox(
+                              height: MediaQuery.of(context).size.height / 6,
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                      'Are you sure you want to logout?'),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      OutlinedButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text("Cancel")),
+                                      const SizedBox(
+                                        width: 20,
+                                      ),
+                                      Consumer(
+                                        builder: (context, ref, child) {
+                                          return MaterialButton(
+                                            color: secondaryColor,
+                                            onPressed: () async {
+                                              Navigator.pop(context);
+                                              await authProvider.signOut();
+                                            },
+                                            child: const Text(
+                                              "Logout",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          );
+                                        },
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        });
                   } catch (e) {
                     print(e);
                   }

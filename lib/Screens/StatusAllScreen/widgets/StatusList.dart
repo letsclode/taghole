@@ -46,15 +46,15 @@ class _StatusListState extends ConsumerState<StatusList> {
                   padding: const EdgeInsets.only(bottom: 10.0),
                   child: Row(
                     children: [
-                      Icon(
-                        Icons.circle,
-                        size: 10,
-                        color: groupByValue == 'pending'
-                            ? Colors.grey
-                            : groupByValue == 'ongoing'
-                                ? Colors.orange
-                                : Colors.green,
-                      ),
+                      Icon(Icons.circle,
+                          size: 10,
+                          color: groupByValue == 'pending'
+                              ? Colors.grey
+                              : groupByValue == 'ongoing'
+                                  ? Colors.orange
+                                  : groupByValue == 'rejected'
+                                      ? Colors.red
+                                      : Colors.green),
                       const SizedBox(
                         width: 10,
                       ),
@@ -118,15 +118,31 @@ class _StatusListState extends ConsumerState<StatusList> {
                                             style:
                                                 TextStyle(color: Colors.green),
                                           )
-                                        : const Text(
-                                            "Status : Ongoing",
-                                            style:
-                                                TextStyle(color: Colors.orange),
-                                          )
+                                        : element.status == 'rejected'
+                                            ? const Text(
+                                                "Status : Rejected",
+                                                style: TextStyle(
+                                                    color: Colors.red),
+                                              )
+                                            : const Text(
+                                                "Status : Ongoing",
+                                                style: TextStyle(
+                                                    color: Colors.orange),
+                                              )
                                     : const Text(
                                         "Status : Not Verified",
                                         style: TextStyle(color: Colors.grey),
                                       ),
+                                if (element.status == 'rejected')
+                                  Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 5.0,
+                                      ),
+                                      Text(
+                                          "Reason of rejection: ${element.reason ?? ''}"),
+                                    ],
+                                  ),
                                 const SizedBox(
                                   height: 5.0,
                                 ),

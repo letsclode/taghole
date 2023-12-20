@@ -29,6 +29,7 @@ mixin _$ReportModel {
   String get type => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
+  String? get reason => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
   List<UpdateModel> get updates => throw _privateConstructorUsedError;
   String get address => throw _privateConstructorUsedError;
@@ -58,6 +59,7 @@ abstract class $ReportModelCopyWith<$Res> {
       String type,
       DateTime createdAt,
       DateTime updatedAt,
+      String? reason,
       String? imageUrl,
       List<UpdateModel> updates,
       String address,
@@ -88,6 +90,7 @@ class _$ReportModelCopyWithImpl<$Res, $Val extends ReportModel>
     Object? type = null,
     Object? createdAt = null,
     Object? updatedAt = null,
+    Object? reason = freezed,
     Object? imageUrl = freezed,
     Object? updates = null,
     Object? address = null,
@@ -132,6 +135,10 @@ class _$ReportModelCopyWithImpl<$Res, $Val extends ReportModel>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      reason: freezed == reason
+          ? _value.reason
+          : reason // ignore: cast_nullable_to_non_nullable
+              as String?,
       imageUrl: freezed == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -178,6 +185,7 @@ abstract class _$$_ReportModelCopyWith<$Res>
       String type,
       DateTime createdAt,
       DateTime updatedAt,
+      String? reason,
       String? imageUrl,
       List<UpdateModel> updates,
       String address,
@@ -206,6 +214,7 @@ class __$$_ReportModelCopyWithImpl<$Res>
     Object? type = null,
     Object? createdAt = null,
     Object? updatedAt = null,
+    Object? reason = freezed,
     Object? imageUrl = freezed,
     Object? updates = null,
     Object? address = null,
@@ -250,6 +259,10 @@ class __$$_ReportModelCopyWithImpl<$Res>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      reason: freezed == reason
+          ? _value.reason
+          : reason // ignore: cast_nullable_to_non_nullable
+              as String?,
       imageUrl: freezed == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -291,6 +304,7 @@ class _$_ReportModel implements _ReportModel {
       required this.type,
       required this.createdAt,
       required this.updatedAt,
+      this.reason,
       this.imageUrl,
       required final List<UpdateModel> updates,
       required this.address,
@@ -321,6 +335,8 @@ class _$_ReportModel implements _ReportModel {
   @override
   final DateTime updatedAt;
   @override
+  final String? reason;
+  @override
   final String? imageUrl;
   final List<UpdateModel> _updates;
   @override
@@ -341,7 +357,7 @@ class _$_ReportModel implements _ReportModel {
 
   @override
   String toString() {
-    return 'ReportModel(id: $id, title: $title, userId: $userId, description: $description, status: $status, isVerified: $isVerified, type: $type, createdAt: $createdAt, updatedAt: $updatedAt, imageUrl: $imageUrl, updates: $updates, address: $address, landmark: $landmark, ratings: $ratings, position: $position)';
+    return 'ReportModel(id: $id, title: $title, userId: $userId, description: $description, status: $status, isVerified: $isVerified, type: $type, createdAt: $createdAt, updatedAt: $updatedAt, reason: $reason, imageUrl: $imageUrl, updates: $updates, address: $address, landmark: $landmark, ratings: $ratings, position: $position)';
   }
 
   @override
@@ -362,6 +378,7 @@ class _$_ReportModel implements _ReportModel {
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
+            (identical(other.reason, reason) || other.reason == reason) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
             const DeepCollectionEquality().equals(other._updates, _updates) &&
@@ -385,6 +402,7 @@ class _$_ReportModel implements _ReportModel {
       type,
       createdAt,
       updatedAt,
+      reason,
       imageUrl,
       const DeepCollectionEquality().hash(_updates),
       address,
@@ -417,6 +435,7 @@ abstract class _ReportModel implements ReportModel {
       required final String type,
       required final DateTime createdAt,
       required final DateTime updatedAt,
+      final String? reason,
       final String? imageUrl,
       required final List<UpdateModel> updates,
       required final String address,
@@ -445,6 +464,8 @@ abstract class _ReportModel implements ReportModel {
   DateTime get createdAt;
   @override
   DateTime get updatedAt;
+  @override
+  String? get reason;
   @override
   String? get imageUrl;
   @override

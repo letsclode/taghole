@@ -93,8 +93,11 @@ class ReportProvider extends _$ReportProvider {
     });
   }
 
-  Future<void> rejectReport(String uid) async {
-    Map<Object, Object?> newData = {'status': 'rejected'};
+  Future<void> rejectReport(String uid, String? reason) async {
+    Map<Object, Object?> newData = {
+      'status': 'rejected',
+      'reason': reason ?? ''
+    };
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       FirebaseFirestore.instance.collection('reports').doc(uid).update(newData);
@@ -542,9 +545,72 @@ class ReportProvider extends _$ReportProvider {
                                                       color: Colors.red,
                                                       onPressed: () {
                                                         Navigator.pop(context);
-                                                        reportProvider
-                                                            .rejectReport(
-                                                                row.id);
+
+                                                        TextEditingController
+                                                            reasonController =
+                                                            TextEditingController();
+                                                        showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return AlertDialog(
+                                                                title: const Text(
+                                                                    "Rejecting report"),
+                                                                content:
+                                                                    SizedBox(
+                                                                  height: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .height /
+                                                                      6,
+                                                                  child: Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    children: [
+                                                                      const Text(
+                                                                          'Are you sure you want to reejct this report?'),
+                                                                      TextField(
+                                                                        controller:
+                                                                            reasonController,
+                                                                        decoration:
+                                                                            const InputDecoration(hintText: 'Reasons of rejection'),
+                                                                      ),
+                                                                      Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.end,
+                                                                        children: [
+                                                                          OutlinedButton(
+                                                                              onPressed: () {
+                                                                                Navigator.pop(context);
+                                                                              },
+                                                                              child: const Text("Cancel")),
+                                                                          const SizedBox(
+                                                                            width:
+                                                                                20,
+                                                                          ),
+                                                                          Consumer(
+                                                                            builder: (context,
+                                                                                ref,
+                                                                                child) {
+                                                                              return MaterialButton(
+                                                                                color: secondaryColor,
+                                                                                onPressed: () async {
+                                                                                  reportProvider.rejectReport(row.id, reasonController.text);
+                                                                                },
+                                                                                child: const Text(
+                                                                                  "Reject",
+                                                                                  style: TextStyle(color: Colors.white),
+                                                                                ),
+                                                                              );
+                                                                            },
+                                                                          )
+                                                                        ],
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            });
                                                       },
                                                       child: const Text(
                                                         'Reject',

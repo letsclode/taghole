@@ -16,6 +16,7 @@ class ReportModel with _$ReportModel {
       required String type,
       required DateTime createdAt,
       required DateTime updatedAt,
+      String? reason,
       String? imageUrl,
       required List<UpdateModel> updates,
       required String address,

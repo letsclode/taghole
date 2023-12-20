@@ -17,6 +17,8 @@ import 'package:taghole/firebase_options.dart';
 import 'Screens/Authentication/views/citizenSignup.dart';
 import 'Screens/Authentication/views/home.dart';
 import 'Screens/Authentication/welcome_screen.dart';
+import 'adminweb/models/report/report_model.dart';
+import 'adminweb/providers/report/report_provider.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotifications =
     FlutterLocalNotificationsPlugin();
@@ -73,22 +75,15 @@ void onDidReceiveNotificationResponse(
   if (notificationResponse.payload != null) {
     debugPrint('notification payload: $payload');
   }
-  // await Navigator.push(
-  //   context,
-  //   MaterialPageRoute<void>(builder: (context) => SecondScreen(payload)),
-  // );
 }
 
 Timer? distanceTimer;
-
-List<Map<String, double>> pinnedLocations = [
-  {'latitude': 12.068911155497386, 'longitude': 124.58896791555435},
-  {'latitude': 41.90280, 'longitude': 72.58083},
-];
+List<Map<String, double>> pinnedLocations = [];
 
 Future<void> startDistanceMonitoringTimer() async {
   if (await _checkLocationPermission()) {
-    distanceTimer = Timer.periodic(const Duration(minutes: 1), (timer) async {
+    distanceTimer = Timer.periodic(const Duration(seconds: 30), (timer) async {
+      print("pined top: $pinnedLocations");
       for (Map<String, double> location in pinnedLocations) {
         double distance = await _getDistanceToPinnedLocation(
             location['latitude']!, location['longitude']!);
@@ -126,18 +121,47 @@ Future<void> _showNearbyLocationNotification() async {
       'You are within 500m of your pinned location!', notificationDetails);
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  ConsumerState<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends ConsumerState<MyApp> {
+  @override
+  void initState() {
+    setData();
+    super.initState();
+  }
+
+  Future setData() async {
+    final data =
+        await ref.read(reportProviderProvider.notifier).getVisibleReports();
+    setState(() {
+      print('data here');
+      print(data);
+      pinnedLocations.clear();
+      for (ReportModel report in data) {
+        if (report.status == 'ongoing') {
+          pinnedLocations.add(
+            {
+              'latitude': report.position['geopoint'].latitude,
+              'longitude': report.position['geopoint'].longitude
+            },
+          );
+        }
+      }
+
+      print('pineed: $pinnedLocations');
+    });
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
     stopDistanceMonitoring();
+
     super.dispose();
   }
 
