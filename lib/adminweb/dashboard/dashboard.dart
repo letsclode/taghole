@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:taghole/adminweb/chart/barchart.dart';
+import 'package:taghole/responsive.dart';
+
 import '../../Screens/BottomNavBarPages/views/MapPage.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -18,78 +20,140 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: SizedBox(
-                        height: 300, child: Expanded(child: BarChartSample2())),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.circle,
-                            color: Colors.red,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text("Rejected reports"),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.circle,
-                            color: Colors.yellow,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text("Ongoing reports"),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.circle,
-                            color: Colors.blue,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text("Completed reports"),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.circle,
-                            color: Colors.green,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text("Pending reports")
-                        ],
-                      )
-                    ],
-                  )
-                ],
+              Responsive(
+                mobile: Column(
+                  children: [
+                    const Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.circle,
+                              color: Colors.red,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text("Rejected reports"),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.circle,
+                              color: Colors.yellow,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text("Ongoing reports"),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.circle,
+                              color: Colors.blue,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text("Completed reports"),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.circle,
+                              color: Colors.green,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text("Pending reports")
+                          ],
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                        height: 300,
+                        width: MediaQuery.of(context).size.width,
+                        child: const BarChartSample2()),
+                  ],
+                ),
+                desktop: const Row(
+                  children: [
+                    SizedBox(
+                        height: 300, width: 1000, child: BarChartSample2()),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.circle,
+                              color: Colors.red,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text("Rejected reports"),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.circle,
+                              color: Colors.yellow,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text("Ongoing reports"),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.circle,
+                              color: Colors.blue,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text("Completed reports"),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.circle,
+                              color: Colors.green,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text("Pending reports")
+                          ],
+                        )
+                      ],
+                    )
+                  ],
+                ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Expanded(child: MapPage())
+              const Expanded(child: MapPage())
             ],
           ),
         ),
