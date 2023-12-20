@@ -152,14 +152,16 @@ class ReportProvider extends _$ReportProvider {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('reports')
           .where('status', isEqualTo: reportType)
-          .where('createdAt', isGreaterThanOrEqualTo: firstDayOfMonth)
-          .where('createdAt', isLessThanOrEqualTo: lastDayOfMonth)
           .get();
 
       // Calculate the total report value
       int totalReport = 0;
       for (QueryDocumentSnapshot doc in querySnapshot.docs) {
-        totalReport++;
+        var creatdAt = (doc.data() as Map<String, Object?>)['createdAt'];
+        if (DateTime.parse(creatdAt.toString()).isAfter(firstDayOfMonth) &&
+            DateTime.parse(creatdAt.toString()).isBefore(lastDayOfMonth)) {
+          totalReport++;
+        }
       }
       print(totalReport);
       return totalReport;

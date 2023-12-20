@@ -59,6 +59,8 @@ class BarChartSample2State extends ConsumerState<BarChartSample2> {
         double.parse(totalCompletedReports.toString()),
         double.parse(totalRejectedReport.toString()),
       ));
+      print(
+          'data : $totalPendingreport $totalOngoingReport $totalCompletedReports $totalRejectedReport');
     });
 
     return items;
