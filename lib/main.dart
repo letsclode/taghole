@@ -17,7 +17,6 @@ import 'package:taghole/firebase_options.dart';
 import 'Screens/Authentication/views/citizenSignup.dart';
 import 'Screens/Authentication/views/home.dart';
 import 'Screens/Authentication/welcome_screen.dart';
-import 'adminweb/models/report/report_model.dart';
 import 'adminweb/providers/report/report_provider.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotifications =
@@ -30,9 +29,12 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  await _initializeLocalNotifications();
+  flutterLocalNotifications
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.requestNotificationsPermission();
 
-  await startDistanceMonitoringTimer();
+  await _initializeLocalNotifications();
 
   return runApp(const ProviderScope(child: MyApp()));
 }
@@ -60,13 +62,17 @@ Future<bool> _checkLocationPermission() async {
 }
 
 Future _initializeLocalNotifications() async {
-  var initializationSettingsAndroid =
-      const AndroidInitializationSettings('app_icon');
+  try {
+    var initializationSettingsAndroid =
+        const AndroidInitializationSettings('app_icon');
 
-  InitializationSettings initializationSettings =
-      InitializationSettings(android: initializationSettingsAndroid);
-  await flutterLocalNotifications.initialize(initializationSettings,
-      onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
+    InitializationSettings initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
+    await flutterLocalNotifications.initialize(initializationSettings,
+        onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
+  } catch (e) {
+    print(e);
+  }
 }
 
 void onDidReceiveNotificationResponse(
@@ -78,25 +84,7 @@ void onDidReceiveNotificationResponse(
 }
 
 Timer? distanceTimer;
-List<Map<String, double>> pinnedLocations = [];
-
-Future<void> startDistanceMonitoringTimer() async {
-  if (await _checkLocationPermission()) {
-    distanceTimer = Timer.periodic(const Duration(seconds: 30), (timer) async {
-      print("pined top: $pinnedLocations");
-      for (Map<String, double> location in pinnedLocations) {
-        double distance = await _getDistanceToPinnedLocation(
-            location['latitude']!, location['longitude']!);
-
-        print(distance);
-        if (distance <= 500) {
-          await _showNearbyLocationNotification();
-          break; // Stop processing other locations when one is within range
-        }
-      }
-    });
-  }
-}
+// List<Map<String, double>> pinnedLocations = [];
 
 Future<void> stopDistanceMonitoring() async {
   distanceTimer?.cancel();
@@ -104,21 +92,26 @@ Future<void> stopDistanceMonitoring() async {
 }
 
 Future<void> _showNearbyLocationNotification() async {
-  const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-    'nearby_location',
-    'Nearby Location Alert',
-    channelDescription: 'Notifies when approaching a pinned location.',
-    priority: Priority.high,
-    importance: Importance.high,
-    playSound: true,
-    largeIcon: DrawableResourceAndroidBitmap('app_icon'),
-  );
+  try {
+    const AndroidNotificationDetails androidDetails =
+        AndroidNotificationDetails(
+      'nearby_location',
+      'Nearby Location Alert',
+      channelDescription: 'Notifies when approaching a pinned location.',
+      priority: Priority.high,
+      importance: Importance.high,
+      playSound: true,
+      largeIcon: DrawableResourceAndroidBitmap('app_icon'),
+    );
 
-  const NotificationDetails notificationDetails = NotificationDetails(
-    android: androidDetails,
-  );
-  await flutterLocalNotifications.show(0, 'Nearby Location Alert!',
-      'You are within 500m of your pinned location!', notificationDetails);
+    const NotificationDetails notificationDetails = NotificationDetails(
+      android: androidDetails,
+    );
+    await flutterLocalNotifications.show(0, 'Nearby Location Alert!',
+        'You are within 500m of your pinned location!', notificationDetails);
+  } catch (e) {
+    print('_showNearbyLocationNotification $e');
+  }
 }
 
 class MyApp extends ConsumerStatefulWidget {
@@ -129,32 +122,31 @@ class MyApp extends ConsumerStatefulWidget {
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
-  @override
-  void initState() {
-    setData();
-    super.initState();
+  Future<void> startDistanceMonitoringTimer() async {
+    if (await _checkLocationPermission()) {
+      distanceTimer =
+          Timer.periodic(const Duration(seconds: 30), (timer) async {
+        List pinnedLocations =
+            await ref.read(reportProviderProvider.notifier).pinnedLocation();
+        for (Map<String, double> location in pinnedLocations) {
+          double distance = await _getDistanceToPinnedLocation(
+              location['latitude']!, location['longitude']!);
+
+          print(distance);
+          if (distance <= 500) {
+            print('shownerby');
+            await _showNearbyLocationNotification();
+            break; // Stop processing other locations when one is within range
+          }
+        }
+      });
+    }
   }
 
-  Future setData() async {
-    final data =
-        await ref.read(reportProviderProvider.notifier).getVisibleReports();
-    setState(() {
-      print('data here');
-      print(data);
-      pinnedLocations.clear();
-      for (ReportModel report in data) {
-        if (report.status == 'ongoing') {
-          pinnedLocations.add(
-            {
-              'latitude': report.position['geopoint'].latitude,
-              'longitude': report.position['geopoint'].longitude
-            },
-          );
-        }
-      }
-
-      print('pineed: $pinnedLocations');
-    });
+  @override
+  void initState() {
+    startDistanceMonitoringTimer();
+    super.initState();
   }
 
   @override

@@ -50,10 +50,12 @@ class _ComplaintFormState extends State<ComplaintForm> {
 
   Future _getImage({required source}) async {
     var selectedImage = await ImagePicker().pickImage(source: source);
+
     setState(() {
       image = selectedImage;
     });
-    uploadImage();
+
+    await uploadImage();
   }
 
   Future uploadImage() async {
@@ -62,11 +64,11 @@ class _ComplaintFormState extends State<ComplaintForm> {
 
     var downUrl =
         await (await uploadTask.whenComplete(() => null)).ref.getDownloadURL();
-    var url = downUrl.toString();
+
     setState(() {
-      imageurl = url;
+      imageurl = downUrl.toString();
     });
-    print('url is $imageurl');
+    debugPrint('url is $imageurl');
   }
 
   void setLocation() async {
@@ -439,55 +441,63 @@ class _ComplaintFormState extends State<ComplaintForm> {
                               return MaterialButton(
                                 color: secondaryColor,
                                 onPressed: () async {
-                                  setState(() {
-                                    loader = true;
-                                  });
                                   _formKey.currentState!.save();
-                                  if (image == null) {
+                                  print(image);
+                                  if (image == null && imageurl == null) {
                                     toastMessage('Please Select an Image');
-                                  } else if (_potholetype == null ||
-                                      _potholetype!.isEmpty) {
-                                    toastMessage(
-                                        'Please provide a pothole type');
-                                  } else if (_address == null) {
-                                    toastMessage('Please set a location');
                                   } else {
-                                    if (_formKey.currentState!.validate()) {
+                                    if (_potholetype == null ||
+                                        _potholetype!.isEmpty) {
                                       toastMessage(
-                                          "Thank You Your Response has been submitted");
-                                      if (widget.report != null) {
-                                        await reportProvider.updateReport(
-                                            widget.report!.copyWith(
-                                                title: _title!,
-                                                position: point.data,
-                                                type: _potholetype!,
-                                                address: _address!,
-                                                imageUrl: imageurl,
-                                                description: _description!,
-                                                landmark: _landmark!,
-                                                updatedAt: DateTime.now()));
-                                      } else {
-                                        ReportModel reportModel = ReportModel(
-                                            id: "",
-                                            title: _title!,
-                                            userId: user.uid,
-                                            description: _description!,
-                                            status: 'pending',
-                                            isVerified: false,
-                                            type: _potholetype!,
-                                            imageUrl: imageurl,
-                                            createdAt: DateTime.now(),
-                                            updatedAt: DateTime.now(),
-                                            updates: [],
-                                            address: _address!,
-                                            landmark: _landmark!,
-                                            position: point.data);
-                                        await reportProvider
-                                            .addReport(reportModel);
+                                          'Please provide a pothole type');
+                                    } else if (_address == null) {
+                                      toastMessage('Please set a location');
+                                    } else {
+                                      if (_formKey.currentState!.validate()) {
+                                        setState(() {
+                                          loader = true;
+                                        });
+                                        toastMessage(
+                                            "Thank You Your Response has been submitted");
+                                        if (widget.report != null) {
+                                          await reportProvider.updateReport(
+                                              widget.report!.copyWith(
+                                                  title: _title!,
+                                                  position: point.data,
+                                                  type: _potholetype!,
+                                                  address: _address!,
+                                                  imageUrl: imageurl,
+                                                  description: _description!,
+                                                  landmark: _landmark!,
+                                                  updatedAt: DateTime.now()));
+                                        } else {
+                                          print('imageurl is $imageurl');
+                                          ReportModel reportModel = ReportModel(
+                                              id: "",
+                                              title: _title!,
+                                              userId: user.uid,
+                                              description: _description!,
+                                              status: 'pending',
+                                              isVerified: false,
+                                              type: _potholetype!,
+                                              imageUrl: imageurl,
+                                              createdAt: DateTime.now(),
+                                              updatedAt: DateTime.now(),
+                                              updates: [],
+                                              address: _address!,
+                                              landmark: _landmark!,
+                                              position: point.data);
+                                          await reportProvider
+                                              .addReport(reportModel);
+                                        }
+                                        setState(() {
+                                          loader = false;
+                                          image = null;
+                                        });
+                                        setState(() {
+                                          pop();
+                                        });
                                       }
-                                      setState(() {
-                                        pop();
-                                      });
                                     }
                                   }
                                 },

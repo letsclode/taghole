@@ -89,11 +89,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         child: const BarChartSample2()),
                   ],
                 ),
-                desktop: const Row(
+                desktop: Row(
                   children: [
                     SizedBox(
-                        height: 300, width: 1000, child: BarChartSample2()),
-                    Column(
+                        height: 300,
+                        width: MediaQuery.of(context).size.width - 500,
+                        child: const BarChartSample2()),
+                    const Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

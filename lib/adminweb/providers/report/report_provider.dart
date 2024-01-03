@@ -12,6 +12,7 @@ import 'package:taghole/controllers/user_controller.dart';
 import 'package:taghole/models/user/user_model.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../extensions/utils.dart';
 import '../../drawer/drawer_index_provider.dart';
 import '../../models/report/report_model.dart';
 
@@ -68,6 +69,33 @@ class ReportProvider extends _$ReportProvider {
 
   Future<List<ReportModel>> getVisibleReports() async {
     return _fetchReports();
+  }
+
+  Future pinnedLocation() async {
+    List<Map<String, double>> pinnedLocations = [];
+    try {
+      final data = await getVisibleReports();
+
+      print('data here');
+      print(data);
+      pinnedLocations.clear();
+      for (ReportModel report in data) {
+        if (report.status == 'ongoing') {
+          pinnedLocations.add(
+            {
+              'latitude': report.position['geopoint'].latitude,
+              'longitude': report.position['geopoint'].longitude
+            },
+          );
+        }
+      }
+
+      print('pineed: $pinnedLocations');
+
+      return pinnedLocations;
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> updateStatus(
@@ -217,13 +245,13 @@ class ReportProvider extends _$ReportProvider {
 
     state = await AsyncValue.guard(() async {
       FirebaseFirestore.instance.collection('reports').doc(reportId).update({
-        'updatedAt': DateTime.now(),
+        'updatedAt': DateTime.now().toString(),
         'updates': FieldValue.arrayUnion([
           {
             'image': imageurl,
             'description': description,
             title: 'title',
-            'createdAt': DateTime.now()
+            'createdAt': DateTime.now().toString()
           }
         ])
       });
@@ -277,7 +305,7 @@ class ReportProvider extends _$ReportProvider {
                         height: row.updates.isEmpty && !row.isVerified
                             ? 200
                             : row.updates.isNotEmpty
-                                ? 450
+                                ? 500
                                 : 250,
                         width: 500,
                         padding: const EdgeInsets.symmetric(
@@ -503,15 +531,34 @@ class ReportProvider extends _$ReportProvider {
                                                                   .all(10),
                                                           color: Colors.black26,
                                                           child: Row(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
                                                             children: [
-                                                              Text(
-                                                                updateValue
-                                                                    .description,
-                                                                style: const TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        16.0),
+                                                              Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Text(
+                                                                    updateValue
+                                                                        .description,
+                                                                    style: const TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontSize:
+                                                                            16.0),
+                                                                  ),
+                                                                  Text(
+                                                                      style: const TextStyle(
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontSize:
+                                                                              13.0),
+                                                                      formatDate(
+                                                                          updateValue
+                                                                              .createdAt)),
+                                                                ],
                                                               ),
                                                             ],
                                                           ),
@@ -541,6 +588,9 @@ class ReportProvider extends _$ReportProvider {
                                         row.status == 'completed'
                                             ? const SizedBox()
                                             : Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
                                                   if (currentIndex == 1)
                                                     MaterialButton(
@@ -570,7 +620,7 @@ class ReportProvider extends _$ReportProvider {
                                                                             .spaceBetween,
                                                                     children: [
                                                                       const Text(
-                                                                          'Are you sure you want to reejct this report?'),
+                                                                          'Are you sure you want to reject this report?'),
                                                                       TextField(
                                                                         controller:
                                                                             reasonController,
