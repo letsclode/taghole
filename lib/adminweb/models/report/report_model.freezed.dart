@@ -26,6 +26,7 @@ mixin _$ReportModel {
   String get description => throw _privateConstructorUsedError;
   String get status => throw _privateConstructorUsedError;
   bool get isVerified => throw _privateConstructorUsedError;
+  DateTime? get verifiedDate => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
@@ -56,6 +57,7 @@ abstract class $ReportModelCopyWith<$Res> {
       String description,
       String status,
       bool isVerified,
+      DateTime? verifiedDate,
       String type,
       DateTime createdAt,
       DateTime updatedAt,
@@ -87,6 +89,7 @@ class _$ReportModelCopyWithImpl<$Res, $Val extends ReportModel>
     Object? description = null,
     Object? status = null,
     Object? isVerified = null,
+    Object? verifiedDate = freezed,
     Object? type = null,
     Object? createdAt = null,
     Object? updatedAt = null,
@@ -123,6 +126,10 @@ class _$ReportModelCopyWithImpl<$Res, $Val extends ReportModel>
           ? _value.isVerified
           : isVerified // ignore: cast_nullable_to_non_nullable
               as bool,
+      verifiedDate: freezed == verifiedDate
+          ? _value.verifiedDate
+          : verifiedDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -182,6 +189,7 @@ abstract class _$$_ReportModelCopyWith<$Res>
       String description,
       String status,
       bool isVerified,
+      DateTime? verifiedDate,
       String type,
       DateTime createdAt,
       DateTime updatedAt,
@@ -211,6 +219,7 @@ class __$$_ReportModelCopyWithImpl<$Res>
     Object? description = null,
     Object? status = null,
     Object? isVerified = null,
+    Object? verifiedDate = freezed,
     Object? type = null,
     Object? createdAt = null,
     Object? updatedAt = null,
@@ -247,6 +256,10 @@ class __$$_ReportModelCopyWithImpl<$Res>
           ? _value.isVerified
           : isVerified // ignore: cast_nullable_to_non_nullable
               as bool,
+      verifiedDate: freezed == verifiedDate
+          ? _value.verifiedDate
+          : verifiedDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -301,6 +314,7 @@ class _$_ReportModel implements _ReportModel {
       required this.description,
       required this.status,
       required this.isVerified,
+      this.verifiedDate,
       required this.type,
       required this.createdAt,
       required this.updatedAt,
@@ -328,6 +342,8 @@ class _$_ReportModel implements _ReportModel {
   final String status;
   @override
   final bool isVerified;
+  @override
+  final DateTime? verifiedDate;
   @override
   final String type;
   @override
@@ -357,7 +373,7 @@ class _$_ReportModel implements _ReportModel {
 
   @override
   String toString() {
-    return 'ReportModel(id: $id, title: $title, userId: $userId, description: $description, status: $status, isVerified: $isVerified, type: $type, createdAt: $createdAt, updatedAt: $updatedAt, reason: $reason, imageUrl: $imageUrl, updates: $updates, address: $address, landmark: $landmark, ratings: $ratings, position: $position)';
+    return 'ReportModel(id: $id, title: $title, userId: $userId, description: $description, status: $status, isVerified: $isVerified, verifiedDate: $verifiedDate, type: $type, createdAt: $createdAt, updatedAt: $updatedAt, reason: $reason, imageUrl: $imageUrl, updates: $updates, address: $address, landmark: $landmark, ratings: $ratings, position: $position)';
   }
 
   @override
@@ -373,6 +389,8 @@ class _$_ReportModel implements _ReportModel {
             (identical(other.status, status) || other.status == status) &&
             (identical(other.isVerified, isVerified) ||
                 other.isVerified == isVerified) &&
+            (identical(other.verifiedDate, verifiedDate) ||
+                other.verifiedDate == verifiedDate) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
@@ -399,6 +417,7 @@ class _$_ReportModel implements _ReportModel {
       description,
       status,
       isVerified,
+      verifiedDate,
       type,
       createdAt,
       updatedAt,
@@ -432,6 +451,7 @@ abstract class _ReportModel implements ReportModel {
       required final String description,
       required final String status,
       required final bool isVerified,
+      final DateTime? verifiedDate,
       required final String type,
       required final DateTime createdAt,
       required final DateTime updatedAt,
@@ -458,6 +478,8 @@ abstract class _ReportModel implements ReportModel {
   String get status;
   @override
   bool get isVerified;
+  @override
+  DateTime? get verifiedDate;
   @override
   String get type;
   @override

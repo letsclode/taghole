@@ -59,15 +59,26 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
             ))
           : TableScreen(
               title: widget.title,
-              headers: const [
-                'Title',
-                'Status',
-                'Type',
-                'Address',
-                'Created',
-                'Updated',
-                'Actions'
-              ],
+              headers: widget.pageIndex == 2 || widget.pageIndex == 3
+                  ? [
+                      'Reported by',
+                      'Title',
+                      'Status',
+                      'Type',
+                      'Address',
+                      'Date created',
+                      'Date verified',
+                      'Actions'
+                    ]
+                  : [
+                      'Reported by',
+                      'Title',
+                      'Status',
+                      'Type',
+                      'Address',
+                      'Date created',
+                      'Actions'
+                    ],
               data: value,
             ),
       AsyncError(:final error) => Text('Error: $error'),

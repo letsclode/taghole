@@ -113,7 +113,11 @@ class ReportProvider extends _$ReportProvider {
   }
 
   Future<void> verifyReport(String uid) async {
-    Map<Object, Object?> newData = {'isVerified': true, 'status': 'ongoing'};
+    Map<Object, Object?> newData = {
+      'isVerified': true,
+      'status': 'ongoing',
+      'verifiedDate': DateTime.now().toString()
+    };
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       FirebaseFirestore.instance.collection('reports').doc(uid).update(newData);

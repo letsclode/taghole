@@ -13,6 +13,7 @@ class ReportModel with _$ReportModel {
       required String description,
       required String status,
       required bool isVerified,
+      DateTime? verifiedDate,
       required String type,
       required DateTime createdAt,
       required DateTime updatedAt,

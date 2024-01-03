@@ -86,6 +86,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
     _potholetype = 'pothole';
     if (widget.report != null) {
       setState(() {
+        _title = widget.report!.title;
         _address = widget.report!.address;
         _description = widget.report!.description;
         _landmark = widget.report!.landmark;
@@ -140,15 +141,27 @@ class _ComplaintFormState extends State<ComplaintForm> {
                               child: Stack(
                                 children: [
                                   image != null
-                                      ? SizedBox(
-                                          height: 200,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          child: Image.file(
-                                            File(image!.path),
-                                            fit: BoxFit.fill,
-                                          ),
-                                        )
+                                      ? imageurl != null
+                                          ? SizedBox(
+                                              height: 200,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              child: Image.network(
+                                                imageurl!,
+                                                fit: BoxFit.fill,
+                                              ),
+                                            )
+                                          : SizedBox(
+                                              height: 200,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              child: Image.file(
+                                                File(image!.path),
+                                                fit: BoxFit.fill,
+                                              ),
+                                            )
                                       : Center(
                                           child: Center(
                                             child: Column(

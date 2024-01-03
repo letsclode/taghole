@@ -151,8 +151,10 @@ class _StatusListState extends ConsumerState<StatusList> {
                                 const SizedBox(
                                   height: 5.0,
                                 ),
-                                Text(
-                                    "Last update : ${formatDate(element.updatedAt)}"),
+                                if (element.status == 'ongoing' ||
+                                    element.status == 'completed')
+                                  Text(
+                                      "Date Verified : ${element.verifiedDate == null ? "--/--/--" : formatDate(element.verifiedDate)}"),
                                 const SizedBox(
                                   height: 5.0,
                                 ),

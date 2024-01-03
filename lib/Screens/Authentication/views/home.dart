@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../BottomNavBarPages/views/AccountPage.dart';
 import '../../BottomNavBarPages/views/ComplaintPage.dart';
 import '../../BottomNavBarPages/views/MapPage.dart';
+import '../../HomeMenuPages/views/ComplaintForm.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -35,6 +36,18 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _children[_currentIndex],
+      floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.red,
+          child: const Icon(
+            Icons.report,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ComplaintForm()),
+            );
+          }),
       bottomNavigationBar: BottomNavigationBar(
         onTap: onTabTapped,
         currentIndex: _currentIndex,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:taghole/adminweb/providers/report/report_provider.dart';
+import 'package:taghole/controllers/user_controller.dart';
 import 'package:taghole/extensions/utils.dart';
 
 import '../models/report/report_model.dart';
@@ -24,6 +25,7 @@ class TableScreen extends ConsumerStatefulWidget {
 class _TableScreenState extends ConsumerState<TableScreen> {
   @override
   Widget build(BuildContext context) {
+    final userService = ref.watch(userControllerProvider.notifier);
     final reportProvider = ref.read(reportProviderProvider.notifier);
     return PaginatedDataTable(
       onPageChanged: (value) {},
@@ -41,7 +43,10 @@ class _TableScreenState extends ConsumerState<TableScreen> {
               )))
           .toList(),
       source: MyDataTableSource(
-          context: context, data: widget.data, reportProvider: reportProvider),
+          context: context,
+          data: widget.data,
+          reportProvider: reportProvider,
+          userController: userService),
       rowsPerPage: 10, // Adjust the number of rows per page
     );
   }
@@ -51,15 +56,26 @@ class MyDataTableSource extends DataTableSource {
   final List<ReportModel> data;
   final BuildContext context;
   final ReportProvider reportProvider;
-  MyDataTableSource(
-      {required this.data,
-      required this.context,
-      required this.reportProvider});
+  final UserController userController;
+  MyDataTableSource({
+    required this.data,
+    required this.context,
+    required this.reportProvider,
+    required this.userController,
+  });
 
   @override
   DataRow getRow(int index) {
     final ReportModel row = data[index];
     return DataRow(cells: [
+      DataCell(FutureBuilder(
+          future: userController.getUserById(id: row.userId),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator.adaptive();
+            }
+            return Text(snapshot.data!.email ?? "");
+          })),
       DataCell(Text(row.title)),
       DataCell(!row.isVerified
           ? row.status == 'pending'
@@ -83,7 +99,10 @@ class MyDataTableSource extends DataTableSource {
       DataCell(Text(row.type)),
       DataCell(Text(row.address)),
       DataCell(Text(formatDate(row.createdAt))),
-      DataCell(Text(formatDate(row.updatedAt))),
+      if (row.status == 'ongoing' || row.status == 'completed')
+        DataCell(Text(row.verifiedDate == null
+            ? '--/--/--'
+            : formatDate(row.verifiedDate!))),
       DataCell(Row(
         children: [
           OutlinedButton(
