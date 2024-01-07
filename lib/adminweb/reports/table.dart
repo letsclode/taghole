@@ -74,7 +74,7 @@ class MyDataTableSource extends DataTableSource {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator.adaptive();
             }
-            return Text(snapshot.data!.email ?? "");
+            return Text(snapshot.data == null ? "" : snapshot.data!.email!);
           })),
       DataCell(Text(row.title)),
       DataCell(!row.isVerified

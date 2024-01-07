@@ -107,8 +107,11 @@ Future<void> _showNearbyLocationNotification() async {
     const NotificationDetails notificationDetails = NotificationDetails(
       android: androidDetails,
     );
-    await flutterLocalNotifications.show(0, 'Nearby Location Alert!',
-        'You are within 500m of your pinned location!', notificationDetails);
+    await flutterLocalNotifications.show(
+        0,
+        'ALERT',
+        'POTHOLE DETECTED IN YOUR VICINITY. DRIVE CAUTIOUSLY ANF BE AWARE OF ROA CONDITIONS. STAY SAFE ON THE ROAD!',
+        notificationDetails);
   } catch (e) {
     print('_showNearbyLocationNotification $e');
   }
