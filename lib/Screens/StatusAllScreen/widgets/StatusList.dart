@@ -95,19 +95,23 @@ class _StatusListState extends ConsumerState<StatusList> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(
-                                  height: 200,
-                                  width: double.infinity,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(5),
-                                    child: FadeInImage(
-                                      placeholder: const AssetImage(
-                                          'assets/images/map.png'), // Placeholder image
-                                      image: NetworkImage(element.imageUrl!),
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                ),
+                                element.imageUrl == null
+                                    ? const SizedBox()
+                                    : SizedBox(
+                                        height: 200,
+                                        width: double.infinity,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          child: FadeInImage(
+                                            placeholder: const AssetImage(
+                                                'assets/images/map.png'), // Placeholder image
+                                            image:
+                                                NetworkImage(element.imageUrl),
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
+                                      ),
                                 const SizedBox(
                                   height: 10,
                                 ),

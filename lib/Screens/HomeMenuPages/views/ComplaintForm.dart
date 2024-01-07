@@ -418,8 +418,6 @@ class _ComplaintFormState extends State<ComplaintForm> {
                                         point.longitude,
                                       );
 
-                                      // update the ui with the address
-
                                       setState(() {
                                         _address =
                                             '${placemarks.first.thoroughfare} ${placemarks.first.street}';
@@ -475,6 +473,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
                                         if (widget.report != null) {
                                           await reportProvider.updateReport(
                                               widget.report!.copyWith(
+                                                  userId: widget.report!.id,
                                                   title: _title!,
                                                   position: point.data,
                                                   type: _potholetype!,
