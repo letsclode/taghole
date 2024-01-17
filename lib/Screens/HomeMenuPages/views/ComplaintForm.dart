@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +35,6 @@ class _ComplaintFormState extends State<ComplaintForm> {
   final FocusNode _landmarkFocusNode = FocusNode();
   final FocusNode _titleFocusNode = FocusNode();
 
-  final _firestore = FirebaseFirestore.instance;
   GeoFlutterFire geo = GeoFlutterFire();
   loc.Location location = loc.Location();
 
@@ -47,6 +45,25 @@ class _ComplaintFormState extends State<ComplaintForm> {
 
   late GeoFirePoint point;
   bool loader = false;
+
+  List<String> menuItems = [
+    'Deformation',
+    'Deep',
+    'Trench pothole',
+    'Upside-down pothole',
+    'Manicured pothole',
+    'Run of the mill pothole',
+    'Camouflage pothole',
+    'Scatter shot pothole',
+    'Raveling',
+    'Patching longitudinal cracking',
+    'Transverse cracking',
+    'Alligator cracking',
+    'Block cracking',
+    'Edge cracking',
+    'Joint reflection cracking',
+    'Slippage cracking',
+  ];
 
   Future _getImage({required source}) async {
     var selectedImage = await ImagePicker().pickImage(source: source);
@@ -83,7 +100,7 @@ class _ComplaintFormState extends State<ComplaintForm> {
   @override
   void initState() {
     setLocation();
-    _potholetype = 'pothole';
+    _potholetype = menuItems.first;
     if (widget.report != null) {
       setState(() {
         _title = widget.report!.title;
@@ -361,24 +378,12 @@ class _ComplaintFormState extends State<ComplaintForm> {
                                     isExpanded: true,
                                     value: _potholetype,
                                     focusNode: _potholetypeFocusNode,
-                                    items: const [
-                                      DropdownMenuItem(
-                                        value: 'pothole',
-                                        child: Text('pothole'),
-                                      ),
-                                      DropdownMenuItem(
-                                        value: 'cracks',
-                                        child: Text('cracks'),
-                                      ),
-                                      DropdownMenuItem(
-                                        value: 'deformation',
-                                        child: Text('deformation'),
-                                      ),
-                                      DropdownMenuItem(
-                                        value: 'deep',
-                                        child: Text('deep'),
-                                      )
-                                    ],
+                                    items: menuItems
+                                        .map((e) => DropdownMenuItem(
+                                              value: e,
+                                              child: Text(e),
+                                            ))
+                                        .toList(),
                                     onChanged: (newValue) {
                                       setState(() {
                                         _potholetype = newValue;

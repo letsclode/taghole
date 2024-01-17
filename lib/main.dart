@@ -135,9 +135,7 @@ class _MyAppState extends ConsumerState<MyApp> {
           double distance = await _getDistanceToPinnedLocation(
               location['latitude']!, location['longitude']!);
 
-          print(distance);
           if (distance <= 500) {
-            print('shownerby');
             await _showNearbyLocationNotification();
             break; // Stop processing other locations when one is within range
           }

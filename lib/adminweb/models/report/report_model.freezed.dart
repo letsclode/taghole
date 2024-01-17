@@ -27,6 +27,8 @@ mixin _$ReportModel {
   String get status => throw _privateConstructorUsedError;
   bool get isVerified => throw _privateConstructorUsedError;
   DateTime? get verifiedDate => throw _privateConstructorUsedError;
+  DateTime? get completedDate => throw _privateConstructorUsedError;
+  DateTime? get rejectedDate => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   DateTime get updatedAt => throw _privateConstructorUsedError;
@@ -58,6 +60,8 @@ abstract class $ReportModelCopyWith<$Res> {
       String status,
       bool isVerified,
       DateTime? verifiedDate,
+      DateTime? completedDate,
+      DateTime? rejectedDate,
       String type,
       DateTime createdAt,
       DateTime updatedAt,
@@ -90,6 +94,8 @@ class _$ReportModelCopyWithImpl<$Res, $Val extends ReportModel>
     Object? status = null,
     Object? isVerified = null,
     Object? verifiedDate = freezed,
+    Object? completedDate = freezed,
+    Object? rejectedDate = freezed,
     Object? type = null,
     Object? createdAt = null,
     Object? updatedAt = null,
@@ -129,6 +135,14 @@ class _$ReportModelCopyWithImpl<$Res, $Val extends ReportModel>
       verifiedDate: freezed == verifiedDate
           ? _value.verifiedDate
           : verifiedDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      completedDate: freezed == completedDate
+          ? _value.completedDate
+          : completedDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      rejectedDate: freezed == rejectedDate
+          ? _value.rejectedDate
+          : rejectedDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       type: null == type
           ? _value.type
@@ -190,6 +204,8 @@ abstract class _$$_ReportModelCopyWith<$Res>
       String status,
       bool isVerified,
       DateTime? verifiedDate,
+      DateTime? completedDate,
+      DateTime? rejectedDate,
       String type,
       DateTime createdAt,
       DateTime updatedAt,
@@ -220,6 +236,8 @@ class __$$_ReportModelCopyWithImpl<$Res>
     Object? status = null,
     Object? isVerified = null,
     Object? verifiedDate = freezed,
+    Object? completedDate = freezed,
+    Object? rejectedDate = freezed,
     Object? type = null,
     Object? createdAt = null,
     Object? updatedAt = null,
@@ -259,6 +277,14 @@ class __$$_ReportModelCopyWithImpl<$Res>
       verifiedDate: freezed == verifiedDate
           ? _value.verifiedDate
           : verifiedDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      completedDate: freezed == completedDate
+          ? _value.completedDate
+          : completedDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      rejectedDate: freezed == rejectedDate
+          ? _value.rejectedDate
+          : rejectedDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       type: null == type
           ? _value.type
@@ -315,6 +341,8 @@ class _$_ReportModel implements _ReportModel {
       required this.status,
       required this.isVerified,
       this.verifiedDate,
+      this.completedDate,
+      this.rejectedDate,
       required this.type,
       required this.createdAt,
       required this.updatedAt,
@@ -345,6 +373,10 @@ class _$_ReportModel implements _ReportModel {
   @override
   final DateTime? verifiedDate;
   @override
+  final DateTime? completedDate;
+  @override
+  final DateTime? rejectedDate;
+  @override
   final String type;
   @override
   final DateTime createdAt;
@@ -373,7 +405,7 @@ class _$_ReportModel implements _ReportModel {
 
   @override
   String toString() {
-    return 'ReportModel(id: $id, title: $title, userId: $userId, description: $description, status: $status, isVerified: $isVerified, verifiedDate: $verifiedDate, type: $type, createdAt: $createdAt, updatedAt: $updatedAt, reason: $reason, imageUrl: $imageUrl, updates: $updates, address: $address, landmark: $landmark, ratings: $ratings, position: $position)';
+    return 'ReportModel(id: $id, title: $title, userId: $userId, description: $description, status: $status, isVerified: $isVerified, verifiedDate: $verifiedDate, completedDate: $completedDate, rejectedDate: $rejectedDate, type: $type, createdAt: $createdAt, updatedAt: $updatedAt, reason: $reason, imageUrl: $imageUrl, updates: $updates, address: $address, landmark: $landmark, ratings: $ratings, position: $position)';
   }
 
   @override
@@ -391,6 +423,10 @@ class _$_ReportModel implements _ReportModel {
                 other.isVerified == isVerified) &&
             (identical(other.verifiedDate, verifiedDate) ||
                 other.verifiedDate == verifiedDate) &&
+            (identical(other.completedDate, completedDate) ||
+                other.completedDate == completedDate) &&
+            (identical(other.rejectedDate, rejectedDate) ||
+                other.rejectedDate == rejectedDate) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
@@ -409,25 +445,28 @@ class _$_ReportModel implements _ReportModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      title,
-      userId,
-      description,
-      status,
-      isVerified,
-      verifiedDate,
-      type,
-      createdAt,
-      updatedAt,
-      reason,
-      imageUrl,
-      const DeepCollectionEquality().hash(_updates),
-      address,
-      landmark,
-      ratings,
-      const DeepCollectionEquality().hash(position));
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        title,
+        userId,
+        description,
+        status,
+        isVerified,
+        verifiedDate,
+        completedDate,
+        rejectedDate,
+        type,
+        createdAt,
+        updatedAt,
+        reason,
+        imageUrl,
+        const DeepCollectionEquality().hash(_updates),
+        address,
+        landmark,
+        ratings,
+        const DeepCollectionEquality().hash(position)
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -452,6 +491,8 @@ abstract class _ReportModel implements ReportModel {
       required final String status,
       required final bool isVerified,
       final DateTime? verifiedDate,
+      final DateTime? completedDate,
+      final DateTime? rejectedDate,
       required final String type,
       required final DateTime createdAt,
       required final DateTime updatedAt,
@@ -480,6 +521,10 @@ abstract class _ReportModel implements ReportModel {
   bool get isVerified;
   @override
   DateTime? get verifiedDate;
+  @override
+  DateTime? get completedDate;
+  @override
+  DateTime? get rejectedDate;
   @override
   String get type;
   @override

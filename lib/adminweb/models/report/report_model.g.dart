@@ -17,6 +17,12 @@ _$_ReportModel _$$_ReportModelFromJson(Map<String, dynamic> json) =>
       verifiedDate: json['verifiedDate'] == null
           ? null
           : DateTime.parse(json['verifiedDate'] as String),
+      completedDate: json['completedDate'] == null
+          ? null
+          : DateTime.parse(json['completedDate'] as String),
+      rejectedDate: json['rejectedDate'] == null
+          ? null
+          : DateTime.parse(json['rejectedDate'] as String),
       type: json['type'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
@@ -40,6 +46,8 @@ Map<String, dynamic> _$$_ReportModelToJson(_$_ReportModel instance) =>
       'status': instance.status,
       'isVerified': instance.isVerified,
       'verifiedDate': instance.verifiedDate?.toIso8601String(),
+      'completedDate': instance.completedDate?.toIso8601String(),
+      'rejectedDate': instance.rejectedDate?.toIso8601String(),
       'type': instance.type,
       'createdAt': instance.createdAt.toIso8601String(),
       'updatedAt': instance.updatedAt.toIso8601String(),

@@ -66,8 +66,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                       'Status',
                       'Type',
                       'Address',
-                      'Date created',
-                      'Date verified',
+                      'Date reported',
                       'Actions'
                     ]
                   : [
@@ -76,7 +75,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
                       'Status',
                       'Type',
                       'Address',
-                      'Date created',
+                      'Date reported',
                       'Actions'
                     ],
               data: value,

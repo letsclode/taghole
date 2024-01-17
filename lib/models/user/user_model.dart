@@ -8,10 +8,15 @@ part 'user_model.g.dart';
 abstract class UserModel implements _$UserModel {
   const UserModel._();
 
-  const factory UserModel(
-      {String? id, String? name, String? number, String? email}) = _UserModel;
+  const factory UserModel({
+    String? id,
+    String? firstName,
+    String? lastName,
+    String? number,
+    String? email,
+  }) = _UserModel;
 
-  factory UserModel.empty() => const UserModel(name: '');
+  factory UserModel.empty() => const UserModel(firstName: '', lastName: '');
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);

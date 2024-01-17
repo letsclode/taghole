@@ -76,8 +76,6 @@ class ReportProvider extends _$ReportProvider {
     try {
       final data = await getVisibleReports();
 
-      print('data here');
-      print(data);
       pinnedLocations.clear();
       for (ReportModel report in data) {
         if (report.status == 'ongoing') {
@@ -90,7 +88,7 @@ class ReportProvider extends _$ReportProvider {
         }
       }
 
-      print('pineed: $pinnedLocations');
+      debugPrint('pineed: $pinnedLocations');
 
       return pinnedLocations;
     } catch (e) {
@@ -100,14 +98,12 @@ class ReportProvider extends _$ReportProvider {
 
   Future<void> updateStatus(
       {required String reportId, required String value}) async {
-    print('reportid');
-    print(reportId);
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       await FirebaseFirestore.instance
           .collection('reports')
           .doc(reportId)
-          .update({'status': value});
+          .update({'status': value, 'completedDate': DateTime.now()});
       return _fetchReports();
     });
   }
@@ -128,7 +124,8 @@ class ReportProvider extends _$ReportProvider {
   Future<void> rejectReport(String uid, String? reason) async {
     Map<Object, Object?> newData = {
       'status': 'rejected',
-      'reason': reason ?? ''
+      'reason': reason ?? '',
+      'rejectedDate': DateTime.now().toString()
     };
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
@@ -158,21 +155,19 @@ class ReportProvider extends _$ReportProvider {
       // Calculate the total report value
       int totalReport = 0;
       for (QueryDocumentSnapshot doc in querySnapshot.docs) {
-        print(doc);
         // Assuming each document has a field 'value' that represents the report value
         totalReport++;
       }
 
       return totalReport;
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
     return 0;
   }
 
   Future<int> reportCounter(
       {required String reportType, required int month}) async {
-    print(month);
     DateTime now = DateTime.now();
     // Build the timestamp range based on arguments
     DateTime firstDayOfMonth = DateTime(now.year, month, 1);
@@ -195,10 +190,10 @@ class ReportProvider extends _$ReportProvider {
           totalReport++;
         }
       }
-      print(totalReport);
+
       return totalReport;
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
 
     return 0;
@@ -421,6 +416,69 @@ class ReportProvider extends _$ReportProvider {
                                 ],
                               ),
                             ),
+                            RichText(
+                              text: TextSpan(
+                                style: const TextStyle(color: Colors.black),
+                                children: <TextSpan>[
+                                  const TextSpan(
+                                      text: 'Date Reported: ',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold)),
+                                  TextSpan(
+                                    text: formatDate(row.createdAt),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            if (row.verifiedDate != null)
+                              RichText(
+                                text: TextSpan(
+                                  style: const TextStyle(color: Colors.black),
+                                  children: <TextSpan>[
+                                    const TextSpan(
+                                        text: 'Date Verified: ',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold)),
+                                    TextSpan(
+                                      text: formatDate(row.verifiedDate!),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            if (row.completedDate != null)
+                              RichText(
+                                text: TextSpan(
+                                  style: const TextStyle(color: Colors.black),
+                                  children: <TextSpan>[
+                                    const TextSpan(
+                                        text: 'Date Completed: ',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold)),
+                                    TextSpan(
+                                      text: formatDate(row.completedDate!),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            if (row.rejectedDate != null)
+                              RichText(
+                                text: TextSpan(
+                                  style: const TextStyle(color: Colors.black),
+                                  children: <TextSpan>[
+                                    const TextSpan(
+                                        text: 'Date Rejected: ',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold)),
+                                    TextSpan(
+                                      text: formatDate(row.rejectedDate!),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             row.status != 'ongoing'
                                 ? row.updates.isNotEmpty
                                     ? const Padding(

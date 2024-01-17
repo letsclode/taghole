@@ -150,15 +150,75 @@ class _StatusListState extends ConsumerState<StatusList> {
                                 const SizedBox(
                                   height: 5.0,
                                 ),
-                                Text(
-                                    "Reported : ${formatDate(element.createdAt)}"),
-                                const SizedBox(
-                                  height: 5.0,
+                                RichText(
+                                  text: TextSpan(
+                                    style: const TextStyle(color: Colors.black),
+                                    children: <TextSpan>[
+                                      const TextSpan(
+                                          text: 'Date Reported: ',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold)),
+                                      TextSpan(
+                                        text: formatDate(element.createdAt),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                if (element.status == 'ongoing' ||
-                                    element.status == 'completed')
-                                  Text(
-                                      "Date Verified : ${element.verifiedDate == null ? "--/--/--" : formatDate(element.verifiedDate)}"),
+                                if (element.verifiedDate != null)
+                                  RichText(
+                                    text: TextSpan(
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                      children: <TextSpan>[
+                                        const TextSpan(
+                                            text: 'Date Verified: ',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold)),
+                                        TextSpan(
+                                          text:
+                                              formatDate(element.verifiedDate!),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                if (element.completedDate != null)
+                                  RichText(
+                                    text: TextSpan(
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                      children: <TextSpan>[
+                                        const TextSpan(
+                                            text: 'Date Completed: ',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold)),
+                                        TextSpan(
+                                          text: formatDate(
+                                              element.completedDate!),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                if (element.rejectedDate != null)
+                                  RichText(
+                                    text: TextSpan(
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                      children: <TextSpan>[
+                                        const TextSpan(
+                                            text: 'Date Rejected: ',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold)),
+                                        TextSpan(
+                                          text:
+                                              formatDate(element.rejectedDate!),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 const SizedBox(
                                   height: 5.0,
                                 ),

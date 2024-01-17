@@ -19,7 +19,8 @@ class _SignupState extends ConsumerState<Signup> {
   final formKey = GlobalKey<FormState>();
   String? _email;
   String? _password;
-  String? _name;
+  String? _firstName;
+  String? _lastName;
   String? _error;
   bool _loader = false;
 
@@ -38,10 +39,6 @@ class _SignupState extends ConsumerState<Signup> {
 
   bool validate() {
     final form = formKey.currentState;
-    print('validate');
-    print(_email);
-    print(_password);
-    print(_name);
     form!.save();
     if (form.validate()) {
       form.save();
@@ -77,7 +74,11 @@ class _SignupState extends ConsumerState<Signup> {
           print("Signed up with new ID $uid");
           String role = "admin";
           await userProvider.storeNewUser(
-              firstName: _name!, email: _email!, uid: uid!, role: role);
+              firstName: _firstName!,
+              lastName: _lastName,
+              email: _email!,
+              uid: uid!,
+              role: role);
         }
       } catch (e) {
         setState(() {
@@ -133,8 +134,10 @@ class _SignupState extends ConsumerState<Signup> {
                           padding: const EdgeInsets.all(20.0),
                           child: Form(
                             key: formKey,
-                            child: Column(
-                              children: buildInputs() + buildButtons(),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: buildInputs() + buildButtons(),
+                              ),
                             ),
                           ),
                         ),
@@ -239,15 +242,27 @@ class _SignupState extends ConsumerState<Signup> {
       textFields.add(
         TextFormField(
           validator: NameValidator.validate,
-          decoration: buildSignUpInputDecoration("Name"),
+          decoration: buildSignUpInputDecoration("First Name"),
           onSaved: (value) {
-            _name = value;
+            _firstName = value;
+          },
+        ),
+      );
+
+      textFields.add(const SizedBox(height: 20));
+      textFields.add(
+        TextFormField(
+          validator: NameValidator.validate,
+          decoration: buildSignUpInputDecoration("Last Name"),
+          onSaved: (value) {
+            _lastName = value;
           },
         ),
       );
 
       textFields.add(const SizedBox(height: 20));
     }
+
     textFields.add(
       TextFormField(
         validator: EmailValidator.validate,

@@ -74,7 +74,11 @@ class MyDataTableSource extends DataTableSource {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator.adaptive();
             }
-            return Text(snapshot.data == null ? "" : snapshot.data!.email!);
+            return Text(snapshot.data == null
+                ? ""
+                : snapshot.data!.firstName != null
+                    ? "${snapshot.data!.firstName!} ${snapshot.data!.lastName!}"
+                    : snapshot.data!.email!);
           })),
       DataCell(Text(row.title)),
       DataCell(!row.isVerified
@@ -99,10 +103,6 @@ class MyDataTableSource extends DataTableSource {
       DataCell(Text(row.type)),
       DataCell(Text(row.address)),
       DataCell(Text(formatDate(row.createdAt))),
-      if (row.status == 'ongoing' || row.status == 'completed')
-        DataCell(Text(row.verifiedDate == null
-            ? '--/--/--'
-            : formatDate(row.verifiedDate!))),
       DataCell(Row(
         children: [
           OutlinedButton(
