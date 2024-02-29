@@ -18,6 +18,8 @@ import 'Screens/Authentication/views/citizenSignup.dart';
 import 'Screens/Authentication/views/home.dart';
 import 'Screens/Authentication/welcome_screen.dart';
 import 'adminweb/providers/report/report_provider.dart';
+import 'controllers/location_clicked/location_clicked_controller.dart';
+import 'controllers/page/page_controller.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotifications =
     FlutterLocalNotificationsPlugin();
@@ -33,8 +35,6 @@ void main() async {
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
       ?.requestNotificationsPermission();
-
-  await _initializeLocalNotifications();
 
   return runApp(const ProviderScope(child: MyApp()));
 }
@@ -61,28 +61,6 @@ Future<bool> _checkLocationPermission() async {
   }
 }
 
-Future _initializeLocalNotifications() async {
-  try {
-    var initializationSettingsAndroid =
-        const AndroidInitializationSettings('app_icon');
-
-    InitializationSettings initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid);
-    await flutterLocalNotifications.initialize(initializationSettings,
-        onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
-  } catch (e) {
-    print(e);
-  }
-}
-
-void onDidReceiveNotificationResponse(
-    NotificationResponse notificationResponse) async {
-  final String? payload = notificationResponse.payload;
-  if (notificationResponse.payload != null) {
-    debugPrint('notification payload: $payload');
-  }
-}
-
 Timer? distanceTimer;
 // List<Map<String, double>> pinnedLocations = [];
 
@@ -91,7 +69,8 @@ Future<void> stopDistanceMonitoring() async {
   distanceTimer = null;
 }
 
-Future<void> _showNearbyLocationNotification() async {
+Future<void> _showNearbyLocationNotification(
+    {required String address, required String latlong}) async {
   try {
     const AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
@@ -107,11 +86,13 @@ Future<void> _showNearbyLocationNotification() async {
     const NotificationDetails notificationDetails = NotificationDetails(
       android: androidDetails,
     );
+
     await flutterLocalNotifications.show(
         0,
-        'ALERT',
-        'POTHOLE DETECTED IN YOUR VICINITY. DRIVE CAUTIOUSLY ANF BE AWARE OF ROA CONDITIONS. STAY SAFE ON THE ROAD!',
-        notificationDetails);
+        'ALERT - $address',
+        'POTHOLE DETECTED IN YOUR VICINITY. DRIVE CAUTIOUSLY AND BE AWARE OF ROAD CONDITIONS. STAY SAFE ON THE ROAD!',
+        notificationDetails,
+        payload: latlong);
   } catch (e) {
     print('_showNearbyLocationNotification $e');
   }
@@ -131,22 +112,72 @@ class _MyAppState extends ConsumerState<MyApp> {
           Timer.periodic(const Duration(seconds: 30), (timer) async {
         List pinnedLocations =
             await ref.read(reportProviderProvider.notifier).pinnedLocation();
-        for (Map<String, double> location in pinnedLocations) {
-          double distance = await _getDistanceToPinnedLocation(
-              location['latitude']!, location['longitude']!);
 
-          if (distance <= 500) {
-            await _showNearbyLocationNotification();
-            break; // Stop processing other locations when one is within range
+        List locationClicked = await ref.read(locationClickedProvider);
+
+        if (locationClicked.isEmpty) {
+          for (Map<String, dynamic> location in pinnedLocations) {
+            double distance = await _getDistanceToPinnedLocation(
+                location['latitude']!, location['longitude']!);
+
+            if (distance <= 500) {
+              await _showNearbyLocationNotification(
+                  address: location['address'],
+                  latlong:
+                      '${location['latitude']!},${location['longitude']!}');
+              break; // Stop processing other locations when one is within range
+            }
           }
         }
       });
     }
   }
 
+  Future _initializeLocalNotifications() async {
+    try {
+      var initializationSettingsAndroid =
+          const AndroidInitializationSettings('app_icon');
+
+      InitializationSettings initializationSettings =
+          InitializationSettings(android: initializationSettingsAndroid);
+      await flutterLocalNotifications.initialize(initializationSettings,
+          onDidReceiveBackgroundNotificationResponse:
+              onDidReceiveNotificationResponse,
+          onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void onDidReceiveBackgroundNotificationResponse(
+      NotificationResponse notificationResponse) async {
+    final Map<String, dynamic> payload =
+        notificationResponse.payload as Map<String, dynamic>;
+    if (notificationResponse.payload != null) {
+      debugPrint(
+          'onDidReceiveBackgroundNotificationResponse notification payload: $payload');
+    }
+  }
+
+  void onDidReceiveNotificationResponse(
+      NotificationResponse notificationResponse) async {
+    final String? payload = notificationResponse.payload;
+    if (notificationResponse.payload != null) {
+      debugPrint(
+          'onDidReceiveNotificationResponse notification payload:  $payload');
+      print(
+          "SPLITTED ${payload!.split(',').map((e) => double.parse(e)).toList()}");
+      ref.watch(locationClickedProvider.notifier).setLocationClicked(
+          newValue: payload.split(',').map((e) => double.parse(e)).toList());
+      ref.read(pageIndexProvider.notifier).setPage(newValue: 1);
+    }
+  }
+
   @override
   void initState() {
+    _initializeLocalNotifications();
     startDistanceMonitoringTimer();
+
     super.initState();
   }
 

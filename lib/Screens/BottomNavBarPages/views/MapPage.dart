@@ -10,6 +10,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:taghole/adminweb/models/report/report_model.dart';
 import 'package:taghole/constant/color.dart';
 import 'package:taghole/controllers/auth_controller.dart';
+import 'package:taghole/controllers/location_clicked/location_clicked_controller.dart';
 
 import '../../../adminweb/providers/report/report_provider.dart';
 import '../../HomeMenuPages/views/ComplaintForm.dart';
@@ -29,6 +30,12 @@ class _MapPageState extends ConsumerState<MapPage> {
 
   final Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
   GlobalKey scaffoldKey = GlobalKey();
+
+  @override
+  void dispose() {
+    ref.read(locationClickedProvider.notifier).setLocationClicked(newValue: []);
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -291,7 +298,7 @@ class _MapPageState extends ConsumerState<MapPage> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(authControllerProvider);
-    ref.watch(reportProviderProvider);
+    final locationClicked = ref.watch(locationClickedProvider);
 
     return Scaffold(
       key: scaffoldKey,
@@ -354,6 +361,23 @@ class _MapPageState extends ConsumerState<MapPage> {
                   markers: _createMarkers(),
                   onMapCreated: (GoogleMapController controller) {
                     _controller.complete(controller);
+                    print('LOCATION CLICKED $locationClicked');
+
+                    if (locationClicked.isNotEmpty) {
+                      controller.moveCamera(
+                        CameraUpdate.newCameraPosition(
+                          CameraPosition(
+                            //[0] is latitude
+                            //[1] is longitude
+                            target: LatLng(
+                                locationClicked[0],
+                                locationClicked[
+                                    1]), // Set the target to the marker's position
+                            zoom: 14.4746, // Adjust the zoom level as needed
+                          ),
+                        ),
+                      );
+                    }
                   },
                 ),
                 Align(

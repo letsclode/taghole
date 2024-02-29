@@ -22,7 +22,6 @@ class _FeedbackScreenState extends ConsumerState<FeedbackScreen> {
             'User ID',
             'Description',
             'Rating',
-            'Actions',
           ],
           data: value,
         ),

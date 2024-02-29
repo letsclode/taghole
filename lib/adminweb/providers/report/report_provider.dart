@@ -72,7 +72,7 @@ class ReportProvider extends _$ReportProvider {
   }
 
   Future pinnedLocation() async {
-    List<Map<String, double>> pinnedLocations = [];
+    List<Map<String, dynamic>> pinnedLocations = [];
     try {
       final data = await getVisibleReports();
 
@@ -82,7 +82,8 @@ class ReportProvider extends _$ReportProvider {
           pinnedLocations.add(
             {
               'latitude': report.position['geopoint'].latitude,
-              'longitude': report.position['geopoint'].longitude
+              'longitude': report.position['geopoint'].longitude,
+              'address': report.address
             },
           );
         }
@@ -103,7 +104,8 @@ class ReportProvider extends _$ReportProvider {
       await FirebaseFirestore.instance
           .collection('reports')
           .doc(reportId)
-          .update({'status': value, 'completedDate': DateTime.now()});
+          .update(
+              {'status': value, 'completedDate': DateTime.now().toString()});
       return _fetchReports();
     });
   }

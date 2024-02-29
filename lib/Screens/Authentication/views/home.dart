@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:taghole/controllers/page/page_controller.dart';
 
 import '../../BottomNavBarPages/views/AccountPage.dart';
 import '../../BottomNavBarPages/views/ComplaintPage.dart';
 import '../../BottomNavBarPages/views/MapPage.dart';
 
-class Home extends StatefulWidget {
+class Home extends ConsumerStatefulWidget {
   const Home({super.key});
 
   @override
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
-  int _currentIndex = 0;
-
+class _HomeState extends ConsumerState<Home> {
   final List<Widget> _children = [
     const ComplaintPage(),
     const MapPage(),
@@ -21,8 +21,9 @@ class _HomeState extends State<Home> {
   ];
 
   void onTabTapped(int index) {
+    final pageController = ref.read(pageIndexProvider.notifier);
     setState(() {
-      _currentIndex = index;
+      pageController.setPage(newValue: index);
     });
   }
 
@@ -33,11 +34,12 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final index = ref.watch(pageIndexProvider);
     return Scaffold(
-      body: _children[_currentIndex],
+      body: _children[index],
       bottomNavigationBar: BottomNavigationBar(
         onTap: onTabTapped,
-        currentIndex: _currentIndex,
+        currentIndex: index,
         items: [
           BottomNavigationBarItem(
               activeIcon: Tab(

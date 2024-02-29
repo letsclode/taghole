@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:taghole/adminweb/models/feedback/feedback_model.dart';
-import 'package:taghole/adminweb/providers/feedback/feedback_provider.dart';
 
 class FeedbackTable extends ConsumerStatefulWidget {
   final String title;
@@ -60,25 +59,6 @@ class MyDataTableSource extends DataTableSource {
       DataCell(Text(row.userId)),
       DataCell(Text(row.description)),
       DataCell(Text(row.ratings.toString())),
-      DataCell(Row(
-        children: [
-          Consumer(builder: (context, ref, child) {
-            final feedbackProvider =
-                ref.read(feedbackContollerProvider.notifier);
-            return MaterialButton(
-              onPressed: () async {
-                await feedbackProvider.deleteFeedback(row.id);
-              },
-              child: const Row(
-                children: [
-                  Icon(Icons.delete),
-                  Text('Delete'),
-                ],
-              ),
-            );
-          }),
-        ],
-      )),
     ]);
   }
 
